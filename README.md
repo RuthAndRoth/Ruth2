@@ -25,3 +25,10 @@ directories in the repo.  These have been archived into a git branch named
 'archive-rc2' and the directories renamed 'Release' in that branch.  These
 'Previous Release' directories will be removed from the master branch in the
 near future.
+
+## Personal Directories
+
+We have moved all personal directories under the new top-level directory
+'Contrib'.  These continue to be used as they always have, as a place for
+team members to put things that are still under development before (or until)
+they are merged into the master release directories.
