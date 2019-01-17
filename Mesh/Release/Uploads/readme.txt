@@ -4,3 +4,4 @@ DAE exports created by Sean Heavy for his "Ruth Too" based on the .blend file fo
 Available via https://github.com/ocsean/RuthToo
 
 Previous RC#2 Collada (.dae) files in Ruth\Mesh\Avatar Ruth\Previous Release\Ruth RC2\Uploads
+Available from https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc2/Mesh/Avatar%20Ruth/Previous%20Release/Uploads

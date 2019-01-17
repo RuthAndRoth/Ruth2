@@ -22,7 +22,7 @@ release they belong to.
 
 The Ruth 2.0 RC2 release files have been kept in a number of 'Previous Release'
 directories in the repo.  These have been archived into a git branch named
-'archive-rc2' and the directories renamed 'Release' in that branch.  These
+'archive-ruth-rc2' and the directories renamed 'Release' in that branch.  These
 'Previous Release' directories will be removed from the master branch in the
 near future.
 
