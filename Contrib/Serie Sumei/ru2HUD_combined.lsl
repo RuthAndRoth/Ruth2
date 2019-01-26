@@ -20,7 +20,7 @@
 // ss-c 31Dec2018 <seriesumei@avimail.org> - Combined HUD
 // ss-d 03Jan2019 <seriesumei@avimail.org> - Add skin panel
 // ss-d.2 06Jan2019 <seriesumei@avimail.org> - Fix OpenSim compatibility
-
+// ss-e 04Jan2019 <seriesumei@avimail.org> - New skin panel
 
 integer r2chan;
 integer appID = 20181024;
@@ -130,6 +130,148 @@ list              commandButtonList =    [
 "heels::feet::29::6"
     ];
 
+// The list stride is 3
+integer num_tex = 3;
+
+// These skin textures were uploaded to SL by seriesumei and are full-perm
+// from Linda Kellie's set
+// Set these to the full-perm texture UUIDs
+list tex_1 = [
+    // Female 1 shaved
+    "aebcf034-b7b5-c682-5877-9e6037db9799",
+    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
+    "0be30f69-6c17-358e-3419-38aeb92540ae",
+
+    // Female 1 bushy
+    "aebcf034-b7b5-c682-5877-9e6037db9799",
+    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
+    "24b7eae1-403f-7346-b899-d34dde0f3d01",
+
+    // Female 1 landing strip
+    "aebcf034-b7b5-c682-5877-9e6037db9799",
+    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
+    "acadebf3-c9d7-5f3a-320f-ed210d901699",
+
+    // Female 1 extra bushy
+    "aebcf034-b7b5-c682-5877-9e6037db9799",
+    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
+    "3022144c-087a-1f0a-b6a3-36142cdf4b14"
+];
+
+list tex_2 = [
+    // Female 2 shaved
+    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
+    "83172ffd-2431-e629-7b19-f67e689288b5",
+    "63d9c443-e815-070b-18e7-5db998af28e5",
+
+    // Female 2 bushy
+    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
+    "83172ffd-2431-e629-7b19-f67e689288b5",
+    "ae90997b-5fd9-b047-acca-ac4e7adb3fa1",
+
+    // Female 2 landing strip
+    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
+    "83172ffd-2431-e629-7b19-f67e689288b5",
+    "b0d6e00c-f14e-46aa-5ad8-7989e7b8ac53",
+
+    // Female 2 extra bushy
+    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
+    "83172ffd-2431-e629-7b19-f67e689288b5",
+    "a5c97deb-dafd-385e-2883-e698e2ebac3c"
+];
+
+list tex_3 = [
+    // Female 3 shaved
+    "44d47200-8f4e-1220-2b74-2be1ee8e9ac5",
+    "a276d547-8de0-8326-c603-49cbcc509cb8",
+    "7ea4efe7-c0f9-3c56-3326-c87e5a2f19c3",
+
+    // Female 3 bushy
+    "44d47200-8f4e-1220-2b74-2be1ee8e9ac5",
+    "a276d547-8de0-8326-c603-49cbcc509cb8",
+    "b9690079-5734-c01b-5bc2-95c2e41c375f",
+
+    // Female 3 landing strip
+    "44d47200-8f4e-1220-2b74-2be1ee8e9ac5",
+    "a276d547-8de0-8326-c603-49cbcc509cb8",
+    "8421cf09-bb4a-9ba5-8087-911746b00ced"
+];
+
+list tex_4 = [
+    // Female 4 shaved
+    "096ee6f2-717b-fec3-4ed8-39f636fec964",
+    "a3243796-87eb-78a7-cbe1-15a29c78ca5a",
+    "7ea4efe7-c0f9-3c56-3326-c87e5a2f19c3",
+
+    // Female 4 bushy
+    "096ee6f2-717b-fec3-4ed8-39f636fec964",
+    "a3243796-87eb-78a7-cbe1-15a29c78ca5a",
+    "a656222d-73e2-2663-5472-8ccd85d3adf5",
+
+    // Female 4 landing strip
+    "096ee6f2-717b-fec3-4ed8-39f636fec964",
+    "a3243796-87eb-78a7-cbe1-15a29c78ca5a",
+    "225c1668-b82d-aea1-40fb-1e421f37ab11"
+];
+
+list tex_5 = [
+    // Female 5 shaved
+    "5dd60e66-f8a3-6dcb-50c6-23e52939e86b",
+    "e9af3504-70e5-80c7-d332-7fc3272ab23a",
+    "68f829d1-d736-269b-1577-e8b768795638",
+
+    // Female 5 bushy
+    "5dd60e66-f8a3-6dcb-50c6-23e52939e86b",
+    "e9af3504-70e5-80c7-d332-7fc3272ab23a",
+    "b2b1a848-377b-031c-d5c4-fd30b49c4fb3",
+
+    // Female 5 landing strip
+    "5dd60e66-f8a3-6dcb-50c6-23e52939e86b",
+    "e9af3504-70e5-80c7-d332-7fc3272ab23a",
+    "d2062972-ee1b-4826-d35e-e00eb5b55320"
+];
+
+list tex_6 = [
+    // Female 6 shaved
+    "374ec125-5968-33a9-eca3-c9b9ee3cb262",
+    "cc92325a-aa11-d6c1-6c46-db2ea4a56885",
+    "9ef029ff-65fc-76f4-432d-f013c4a593c5",
+
+    // Female 6 bushy
+    "374ec125-5968-33a9-eca3-c9b9ee3cb262",
+    "cc92325a-aa11-d6c1-6c46-db2ea4a56885",
+    "8e83a25f-bef9-2724-943f-1aecbc79d3b4",
+
+    // Female 6 landing strip
+    "374ec125-5968-33a9-eca3-c9b9ee3cb262",
+    "cc92325a-aa11-d6c1-6c46-db2ea4a56885",
+    "365df245-4b69-8e18-a315-bc6420db5798"
+];
+
+list tex_7 = [
+    // Female 7 shaved
+    "31b85c7e-5294-76ec-b83b-854581240e74",
+    "c40b8624-8cd0-d877-4fab-ce96e31ae446",
+    "79f1c337-8549-5d4e-cba8-842512add3b8",
+
+    // Female 7 bushy
+    "31b85c7e-5294-76ec-b83b-854581240e74",
+    "c40b8624-8cd0-d877-4fab-ce96e31ae446",
+    "1a15673d-8d0a-1fa3-a17a-6b284023dcce",
+
+    // Female 7 shaved
+    "31b85c7e-5294-76ec-b83b-854581240e74",
+    "c40b8624-8cd0-d877-4fab-ce96e31ae446",
+    "d2094f99-48f0-0aab-8b50-eebd09da5fca"
+];
+
+list tex_8 = [
+    // CMFF Template
+    "0585d463-b6e4-2c6c-46a3-19aa9c512a3c",
+    "fb9bbbc9-dadf-026f-bf87-7937ec470f5d",
+    "4f0aa9d0-1591-fd43-bae3-7e11a6c9c45d"
+];
+
 // Keep a mapping of link number to prim name
 list prim_map = [];
 
@@ -148,7 +290,7 @@ vector SKIN_HUD = <PI_BY_TWO, 0.0, 0.0>;
 vector alpha_rot;
 vector last_rot;
 
-integer VERBOSE = FALSE;
+integer VERBOSE = TRUE;
 
 log(string msg) {
     if (VERBOSE == 1) {
@@ -195,6 +337,10 @@ adjust_pos() {
     }
 }
 
+send(string msg) {
+    llSay(r2chan, msg);
+}
+
 resetallalpha()
 {
     integer i;
@@ -207,7 +353,7 @@ resetallalpha()
             list paramList = llGetLinkPrimitiveParams(i,[PRIM_NAME]);
             string primName = llList2String(paramList,0);
             string message = "ALPHA," + (string)primName + "," + "-1" + "," + "1";
-            llSay(r2chan,message);
+            send(message);
         }
     }
 }
@@ -236,12 +382,12 @@ colorDoll(string commandFilter, integer alphaVal)
                     if (alphaVal == 0)
                     {
                         llSetLinkPrimitiveParamsFast(primLink, [PRIM_COLOR, primFace, alphaOnColor, 1.0]);
-                        llSay(r2chan,message);
+                        send(message);
                     }
                     else
                     {
                         llSetLinkPrimitiveParamsFast(primLink, [PRIM_COLOR, primFace, offColor, 1.0]);
-                        llSay(r2chan,message);
+                        send(message);
                     }
                 }
             }
@@ -274,11 +420,20 @@ doButtonPress(list buttons, integer link, integer face) {
     colorDoll(commandButton, alphaVal);
 }
 
+apply_texture(list tex) {
+    send("TEXTURE,head," + llList2String(tex, 0));
+    send("TEXTURE,upper," + llList2String(tex, 1));
+    send("TEXTURE,lower," + llList2String(tex, 2));
+}
+
 default
 {
     state_entry()
     {
         r2chan = keyapp2chan();
+        llListen(r2chan+1,"","","");
+        llSleep(2.0);
+        llRegionSay(r2chan, "STATUS,x,x,x");
 
         // Create map of all links to prim names
         integer i;
@@ -296,9 +451,15 @@ default
         last_rot = MIN_BAR;
     }
 
-    on_rez(integer param)
+    listen(integer channel,string name,key id,string message)
     {
-//        llResetScript();
+//        log("raw message: channel="+(string)channel+" name:"+name+" id="+(string)id+" msg="+message);
+                list msglist = llParseString2List(message, ["|"], []);
+                integer listLenght = llGetListLength(msglist);
+                    string command = llToUpper(llList2String(msglist, 0));
+                    if (command == "STATUS") {
+                        llOwnerSay("STATUS: " + llList2String(msglist, 1));
+                    }
     }
 
     touch_start(integer total_number)
@@ -309,6 +470,7 @@ default
         string name = llGetLinkName(link);
         string message;
 
+        log("link=" + (string)link + " face=" + (string)face + " name=" + name);
         if (name == "rotatebar") {
             if(face == 1||face == 3||face == 5||face == 7)
             {
@@ -419,41 +581,108 @@ default
         {
             //ignore click on backboard
         }
-        else
-        {
-            list paramList = llGetLinkPrimitiveParams(
-                link, [
-                    PRIM_NAME,
-                    PRIM_DESC,
-                    PRIM_COLOR, face,
-                    PRIM_TEXTURE, face
-                ]
-            );
-            string primName = llList2String(paramList, 0);
-            string primDesc = llList2String(paramList, 1);
-            vector primColor = llList2Vector(paramList, 2);
-            string primTexture = llList2String(paramList, 4);
+        else if (llGetSubString(name, 0, 3) == "skin") {
+            integer b = (integer)llGetSubString(name, 4, -1);
+            if (b == 1 && face == 0) {
+                integer i = ((1 - 1) * num_tex);
+                apply_texture(llList2List(tex_1, i, i+num_tex-1));
+            }
+            else if (b == 1 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_1, i, i+num_tex-1));
+            }
+            else if (b == 1 && face == 4) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_1, i, i+num_tex-1));
+            }
+            else if (b == 2 && face == 0) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_2, i, i+num_tex-1));
+            }
+            else if (b == 2 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_2, i, i+num_tex-1));
+            }
+            else if (b == 2 && face == 4) {
+                integer i = ((1 - 1) * num_tex);
+                apply_texture(llList2List(tex_2, i, i+num_tex-1));
+            }
+            else if (b == 3 && face == 0) {
+                integer i = ((1 - 1) * num_tex);
+                apply_texture(llList2List(tex_3, i, i+num_tex-1));
+            }
+            else if (b == 3 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_3, i, i+num_tex-1));
+            }
+            else if (b == 3 && face == 4) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_3, i, i+num_tex-1));
+            }
+            else if (b == 4 && face == 0) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_4, i, i+num_tex-1));
+            }
+            else if (b == 4 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_4, i, i+num_tex-1));
+            }
+            else if (b == 4 && face == 4) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_4, i, i+num_tex-1));
+            }
+            else if (b == 5 && face == 0) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_5, i, i+num_tex-1));
+            }
+            else if (b == 5 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_5, i, i+num_tex-1));
+            }
+            else if (b == 5 && face == 4) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_5, i, i+num_tex-1));
+            }
+            else if (b == 6 && face == 0) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_6, i, i+num_tex-1));
+            }
+            else if (b == 6 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_6, i, i+num_tex-1));
+            }
+            else if (b == 6 && face == 4) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_6, i, i+num_tex-1));
+            }
+            else if (b == 7 && face == 0) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_7, i, i+num_tex-1));
+            }
+            else if (b == 7 && face == 2) {
+                integer i = ((2 - 1) * num_tex);
+                apply_texture(llList2List(tex_7, i, i+num_tex-1));
+            }
+            else if (b == 7 && face == 4) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_7, i, i+num_tex-1));
+            }
+            else if (b == 3 && face == 0) {
+                integer i = ((3 - 1) * num_tex);
+                apply_texture(llList2List(tex_3, i, i+num_tex-1));
+            }
+            else if (b == 8) {
+                integer i = ((1 - 1) * num_tex);
+                apply_texture(llList2List(tex_8, i, i+num_tex-1));
+            }
+        }
+        else {
+            list paramList = llGetLinkPrimitiveParams(link,[PRIM_NAME,PRIM_COLOR,face]);
+            string primName = llList2String(paramList,0);
+            vector primColor = llList2Vector(paramList,1);
             integer alphaVal;
 
-            if (primDesc == "head" || primDesc == "upper" || primDesc == "lower") {
-                integer i;
-                for (; i < num_links; ++i) {
-                    if (i != link) {
-                        list linkParamList = llGetLinkPrimitiveParams(i,[PRIM_DESC]);
-                        string desc = llList2String(linkParamList,0);
-
-                        if (desc == primDesc) {
-                            llSetLinkPrimitiveParamsFast(i, [PRIM_COLOR, ALL_SIDES, tglOffColor, 1.0]);
-                        }
-                    }
-                }
-                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, ALL_SIDES, tglOnColor, 1.0]);
-
-                message = "TEXTURE," + primDesc  + "," + primTexture;
-                llSay(r2chan,message);
-                log("link=" + (string)link + " face=" + (string)face + " name=" + primName + " desc=" + primDesc + " tex=" + primTexture);
-            }
-            else if (primColor == offColor) {
+            if (primColor == offColor) {
                 alphaVal=0;
                 llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
             }
@@ -463,7 +692,7 @@ default
                 llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
             }
             message = "ALPHA," + (string)primName + "," + (string)face + "," + (string)alphaVal;
-            llSay(r2chan,message);
+            send(message);
         }
     }
 
