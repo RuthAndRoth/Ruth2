@@ -16,9 +16,16 @@
 //*********************************************************************************
 
 // ss-a 07Jan2019 <seriesumei@avimail.org> - Streamline prim lookups
+// ss-b 24Jan2019 <seriesumei@avimail.org> - Add part-specific bits
 
 list prim_map = [];
 list prim_desc = [];
+
+integer PART_TYPE_NULL = 0;
+integer PART_TYPE_BODY = 1;
+integer PART_TYPE_HANDS = 2;
+integer PART_TYPE_FEET = 3;
+integer part_type = PART_TYPE_NULL;
 
 integer r2chan;
 integer appID = 20181024;
@@ -40,6 +47,17 @@ default
             prim_desc += [llToUpper(llList2String(p, 1))];
         }
 
+        // Deduce part type from the linked names
+        if (~llListFindList(prim_map, ["CHEST"])) {
+            part_type = PART_TYPE_BODY;
+        }
+        else if (~llListFindList(prim_map, ["HANDS"])) {
+            part_type = PART_TYPE_HANDS;
+        }
+        else if (~llListFindList(prim_map, ["FEET"])) {
+            part_type = PART_TYPE_FEET;
+        }
+
         r2chan = keyapp2chan();
         llListen(r2chan,"","","");
         llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
@@ -53,8 +71,7 @@ default
 
     run_time_permissions(integer perm)
     {
-        if (perm & PERMISSION_TRIGGER_ANIMATION)
-        {
+        if (part_type == PART_TYPE_BODY && (perm & PERMISSION_TRIGGER_ANIMATION)) {
             llStopAnimation("bentohandrelaxedP1");
             llStartAnimation("bentohandrelaxedP1");
             llSetTimerEvent(3);
@@ -105,8 +122,23 @@ default
                         integer face2change = llList2Integer(msglist, 2);
                         integer alphaval = llList2Integer(msglist, 3);
                         integer prim = llListFindList(prim_map, [prim2change]);
+                        integer found = FALSE;
                         if (prim > -1) {
-                            llSetLinkPrimitiveParamsFast(prim, [PRIM_COLOR, face2change, <1.0,1.0,1.0>, alphaval]);
+                            // Found a matching part name, use it
+                            found = TRUE;
+                        }
+                        // Override link on hands and feet
+                        if (part_type == PART_TYPE_HANDS && prim2change == "HANDS") {
+                            prim = LINK_ALL_CHILDREN;
+                            found = TRUE;
+                        }
+                        else if (part_type == PART_TYPE_FEET && prim2change == "FEET") {
+                            prim = LINK_ALL_CHILDREN;
+                            found = TRUE;
+                        }
+                        if (found) {
+                            llSetLinkAlpha(prim, alphaval, face2change);
+//                            llSetLinkPrimitiveParamsFast(prim, [PRIM_COLOR, face2change, <1.0,1.0,1.0>, alphaval]);
                         }
                         //llSay(0,"I heard your ALPHA command.");
                     }
