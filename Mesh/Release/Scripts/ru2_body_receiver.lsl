@@ -1,4 +1,4 @@
-//*********************************************************************************    
+//*********************************************************************************
 //**   Copyright (C) 2017  Shin Ingen
 //**
 //**   This program is free software: you can redistribute it and/or modify
@@ -13,11 +13,11 @@
 //**
 //**   You should have received a copy of the GNU Affero General Public License
 //**   along with this program.  If not, see <https://www.gnu.org/licenses/>
-//*********************************************************************************    
+//*********************************************************************************
 
 integer r2chan;
 integer appID = 20181024;
-integer keyapp2chan() 
+integer keyapp2chan()
 {
     return 0x80000000 | ((integer)("0x"+(string)llGetOwner()) ^ appID);
 }
@@ -30,13 +30,13 @@ default
         llListen(r2chan,"","","");
         llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
     }
-    
-    on_rez(integer param) 
+
+    on_rez(integer param)
     {
         llResetScript();
         llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
     }
-        
+
     run_time_permissions(integer perm)
     {
         if (perm & PERMISSION_TRIGGER_ANIMATION)
@@ -47,15 +47,15 @@ default
         }
     }
 
-    timer() 
+    timer()
     {
         llSetTimerEvent(0);
         llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
-    }    
+    }
 
     listen(integer channel,string name,key id,string message)
     {
-        if (llGetOwnerKey(id) == llGetOwner()) 
+        if (llGetOwnerKey(id) == llGetOwner())
         {
             if (channel == r2chan)
             {
@@ -65,13 +65,13 @@ default
                 if (listLenght >= 3)
                 {
                     string command = llToUpper(llList2String(msglist, 0));
-                    
+
                     if (command == "TEXTURE")
                     {
                         string descflag = llStringTrim(llToUpper(llList2String(msglist, 1)), STRING_TRIM);
                         string textureid = llList2String(msglist, 2);
-                        integer i; 
-                        integer x = llGetNumberOfPrims()+1; 
+                        integer i;
+                        integer x = llGetNumberOfPrims()+1;
 
                         for (; i < x; ++i)
                         {
@@ -106,11 +106,11 @@ default
                                 llSetLinkPrimitiveParamsFast(i, [PRIM_COLOR, face2change, <1.0,1.0,1.0>, alphaval]);
                                 //llOwnerSay("Alpha for " + objname + " changed.");
                             }
-                        }                    
+                        }
                         //llSay(0,"I heard your ALPHA command.");
                     }
                 }
             }
         }
-    } 
+    }
 }

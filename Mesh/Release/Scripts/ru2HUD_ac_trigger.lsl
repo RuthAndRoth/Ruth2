@@ -111,7 +111,7 @@ list              commandButtonList =    [
 "soles::feet::29::5",
 "heels::feet::29::6"
     ];
-    
+
 resetallalpha()
 {
     integer i;

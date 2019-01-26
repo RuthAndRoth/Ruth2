@@ -1,4 +1,4 @@
-//*********************************************************************************    
+//*********************************************************************************
 //**   Copyright (C) 2017  Shin Ingen
 //**
 //**   This program is free software: you can redistribute it and/or modify
@@ -13,11 +13,11 @@
 //**
 //**   You should have received a copy of the GNU Affero General Public License
 //**   along with this program.  If not, see <https://www.gnu.org/licenses/>
-//*********************************************************************************    
-    
+//*********************************************************************************
+
 integer r2chan;
 integer appID = 20181024;
-integer keyapp2chan() 
+integer keyapp2chan()
 {
     return 0x80000000 | ((integer)("0x"+(string)llGetOwner()) ^ appID);
 }
@@ -32,7 +32,7 @@ ToggleOff(integer i,integer x,integer l,string flagDesc)
         {
             list linkParamList = llGetLinkPrimitiveParams(i,[PRIM_DESC]);
             string primDesc = llList2String(linkParamList,0);
-        
+
             if (primDesc == flagDesc)
             {
                 llSetLinkPrimitiveParamsFast(i, [PRIM_COLOR, ALL_SIDES, tglOffColor, 1.0]);
@@ -48,10 +48,10 @@ default
         r2chan = keyapp2chan();
     }
 
-    on_rez(integer param) 
+    on_rez(integer param)
     {
         llResetScript();
-    }    
+    }
 
     touch_start(integer num_detected)
     {
@@ -71,7 +71,7 @@ default
                 ToggleOff(i,x,l,primDesc);
                 string message = "TEXTURE," + primDesc  + "," + primTexture;
                 llSay(r2chan,message);
-                //llSay(0,"Link number clicked: " + (string)l + " " + primName + " " + primDesc + " " + primTexture);  
+                //llSay(0,"Link number clicked: " + (string)l + " " + primName + " " + primDesc + " " + primTexture);
             }
         }
     }

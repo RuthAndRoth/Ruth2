@@ -8,7 +8,7 @@
 // :MORE INFORMATION:
 //      Ruth Discussion Forum: https://plus.google.com/communities/103360253120662433219
 //      Ruth GitHub Site: https://github.com/Outworldz/Ruth
-// :COPYRIGHT: AGPL - When used, please do three things: 1. credit the author 
+// :COPYRIGHT: AGPL - When used, please do three things: 1. credit the author
 //      2. include the author's web link, and 3. tell me if you find ways of improving
 //      the code - and we can learn from each other.
 //
@@ -39,8 +39,8 @@ vector CalcFreeAreaColor (vector vColorInput)
     float G;
     float B;
     //convert from SL color to RGB
-    vector vColorRGB;    
-    if (vColorInput.x > 1 || vColorInput.y > 1 || vColorInput.z > 1)    
+    vector vColorRGB;
+    if (vColorInput.x > 1 || vColorInput.y > 1 || vColorInput.z > 1)
     {
         //llOwnerSay("Error in Calculate Free Area:  "+(string)vColorRGB);
         vColorRGB = <0.0,0.0,0.0>;
@@ -55,63 +55,63 @@ vector CalcFreeAreaColor (vector vColorInput)
         //float nTotRGB = 100 * gPreviewColorHSL.z ;  //next version - will use LUM for this
         //llOwnerSay("Color in Usual RGB BEFORE conversion:  "+(string)vColorRGB);
         //llOwnerSay("nTotRGB is: " + (string)nTotRGB);
-        
+
         if (nTotRGB > 700)
-        {        
-            R = 255;                
-            G = 255;        
+        {
+            R = 255;
+            G = 255;
             B = 250;
         }
         if (nTotRGB > 600 && nTotRGB < 701)
-        {        
+        {
             R = 240;
-            G = 240;    
+            G = 240;
             B = 235;
         }
         if (nTotRGB > 550 && nTotRGB < 601)
-        {        
+        {
             R = 235;
-            G = 235;    
+            G = 235;
             B = 230;
         }
         if (nTotRGB > 500 && nTotRGB < 551)
-        {        
+        {
             R = 230;
-            G = 230; 
+            G = 230;
             B = 225;
         }
         if (nTotRGB > 450 && nTotRGB < 501)
-        {        
+        {
             R = 220;
-            G = 220;    
+            G = 220;
             B = 215;
         }
         if (nTotRGB > 400 && nTotRGB < 451)
-        {        
+        {
             R = 210;
             G = 210;
             B = 205;
         }
         if (nTotRGB > 350 && nTotRGB < 401)
-        {        
+        {
             R = 200;
             G = 200;
             B = 195;
         }
         if (nTotRGB > 300 && nTotRGB < 351)
-        {        
+        {
             R = 190;
             G = 190;
             B = 185;
         }
         if (nTotRGB > 250 && nTotRGB < 301)
-        {        
+        {
             R = 175;
             G = 175;
             B = 165;
         }
         if (nTotRGB < 251)
-        {        
+        {
             R = 165;
             G = 165;
             B = 160;
@@ -119,9 +119,9 @@ vector CalcFreeAreaColor (vector vColorInput)
         vColorRGB = <R,G,B>;
         //llOwnerSay("Color in Usual RGB AFTER conversion:  "+(string)vColorRGB);
         vColorRGB = vColorRGB / 255; //Convert back to SL's color type
-    }        
+    }
     return vColorRGB;
-}   
+}
 default
 {
     state_entry()
@@ -130,12 +130,12 @@ default
         integer nFChannel = 0x80000000 | ((integer)("0x"+(string)llGetOwner()) ^ gFChannelID);
         llListen(nFChannel, "", "", "");
     }
-    
+
     on_rez(integer param)
     {
         llResetScript();
     }
-        
+
     listen(integer Channel, string Name, key ID, string Msg)
     {
         //Msg has the color and whether is a natural or colored nail
@@ -146,43 +146,43 @@ default
         list MsgList = llParseString2List(Msg, [ "[","]" ], []);
         vector vColor = (vector)llList2String(MsgList,0); //extract color from the list
         string glNatural = llList2String(MsgList,1);   //extract whether it is a natural or colored nail
-        integer nShinyValue = (integer)llList2String(MsgList,2); 
+        integer nShinyValue = (integer)llList2String(MsgList,2);
         //Unfortunately, we have to get all this information in order to use llSetLinkPrimitiveParamsFast function
         list ParamList = llGetLinkPrimitiveParams(0,[PRIM_TEXTURE,-1]);
-        //ParamList is a list consisting of texture name, repeats, off-sets, etc.             
-        string TextName = llList2String(ParamList,0);   
+        //ParamList is a list consisting of texture name, repeats, off-sets, etc.
+        string TextName = llList2String(ParamList,0);
         string OldParams= llList2String(ParamList,1); //repeats
         vector Repeats = (vector)OldParams;
         string OldParams2 = llList2String(ParamList,2); //offsets
         vector OffSets = (vector)OldParams2;
-        
+
         //llOwnerSay("vColor: "+(string)vColor);
         if (glNatural == "1")  //If it's a natural finger/toenail - we have two colors
         {
             //First set the color of the main part of the nail
-            llSetLinkPrimitiveParamsFast(-2, [PRIM_COLOR, 1, vColor, 1.0]);            
+            llSetLinkPrimitiveParamsFast(-2, [PRIM_COLOR, 1, vColor, 1.0]);
             //llOwnerSay("Color before free area conversion:  "+(string)ColorRGB);
             vector vFree = CalcFreeAreaColor (vColor); //calculates the white-ish free area of the nail
-            //Set the color of the free area of the nail            
-            llSetLinkPrimitiveParamsFast(-2, [PRIM_COLOR, 0, vFree, 1.0]);            
+            //Set the color of the free area of the nail
+            llSetLinkPrimitiveParamsFast(-2, [PRIM_COLOR, 0, vFree, 1.0]);
             //[texture, vector repeats, vector offsets, float rot, vector specular_color, integer glossiness, integer environment ]
-            //llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);     
+            //llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);
             if (! glSkipSpecFunction)
             {
                 llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);
-            }            
-        }    
+            }
+        }
         else
         {
             llSetLinkPrimitiveParamsFast(-2, [PRIM_COLOR, 0, vColor, 1.0]);
             llSetLinkPrimitiveParamsFast(-2, [PRIM_COLOR, 1, vColor, 1.0]);
             //[texture, vector repeats, vector offsets, float rot, vector specular_color, integer glossiness, integer environment ]
-            //llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);     
+            //llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);
             if (! glSkipSpecFunction)
-            {            
+            {
                 //[texture, vector repeats, vector offsets, float rot, vector specular_color, integer glossiness, integer environment ]
-                llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);  
+                llSetLinkPrimitiveParamsFast(-2,[ PRIM_SPECULAR, ALL_SIDES, TextName, Repeats, OffSets, 0.0, <1,1,1>, nShinyValue, 0]);
             }
-        } 
+        }
     }
 }
