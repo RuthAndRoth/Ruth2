@@ -65,7 +65,7 @@ default
 						}
 
 					}
-				} else if (command = "ALPHA")
+				} else if (command == "ALPHA")
 				{
 					string prim2change = llStringTrim(llToUpper(llList2String(msglist, 1)), STRING_TRIM);
 					integer face2change = llList2Integer(msglist, 2);
