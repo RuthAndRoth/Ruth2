@@ -1,19 +1,7 @@
-//*********************************************************************************
-//**   Copyright (C) 2017  Shin Ingen
-//**
-//**   This program is free software: you can redistribute it and/or modify
-//**   it under the terms of the GNU Affero General Public License as
-//**   published by the Free Software Foundation, either version 3 of the
-//**   License, or (at your option) any later version.
-//**
-//**   This program is distributed in the hope that it will be useful,
-//**   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//**   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//**   GNU Affero General Public License for more details.
-//**
-//**   You should have received a copy of the GNU Affero General Public License
-//**   along with this program.  If not, see <https://www.gnu.org/licenses/>
-//*********************************************************************************
+// Ruth 2.0 HUD Controller
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright 2017 Shin Ingen
+// Copyright 2019 Serie Sumei
 
 // ss-a 29Dec2018 <seriesumei@avimail.org> - Make alpha hud link-order independent
 // ss-b 30Dec2018 <seriesumei@avimail.org> - Auto-adjust position on attach
@@ -21,114 +9,126 @@
 // ss-d 03Jan2019 <seriesumei@avimail.org> - Add skin panel
 // ss-d.2 06Jan2019 <seriesumei@avimail.org> - Fix OpenSim compatibility
 // ss-e 04Jan2019 <seriesumei@avimail.org> - New skin panel
+// ss-f 26Jan2019 <seriesumei@avimail.org> - New Options panel
 
-integer r2chan;
-integer appID = 20181024;
-integer keyapp2chan()
-{
-    return 0x80000000 | ((integer)("0x"+(string)llGetOwner()) ^ appID);
-}
-vector            alphaOnColor =     <0.000, 0.000, 0.000>;
-vector            buttonOnColor =     <0.000, 1.000, 0.000>;
-vector            offColor =         <1.000, 1.000, 1.000>;
+// This is a heavily modified version of Shin's RC3 HUD scripts for alpha
+// and skin selections.
+
+// The app ID is used on calculating the actual channel number used for communication
+// and must match in both the HUD and receivers.
+integer APP_ID = 20181024;
+
+vector alphaOnColor = <0.000, 0.000, 0.000>;
+vector buttonOnColor = <0.000, 1.000, 0.000>;
+vector offColor = <1.000, 1.000, 1.000>;
 
 vector tglOnColor = <0.000, 1.000, 0.000>;
 vector tglOffColor = <1.000, 1.000, 1.000>;
 
+// Which API version do we implement?
+integer API_VERSION = 2;
+
 // The command button list is:
-//  <button-name> :: <prim-name> :: <link-number> :: <face-number>
-// <link-number> is no longer used, replaced with the index in
+// <button-name> :: <prim-name> :: <link-number> :: <face-number>
+// Note that <link-number> is no longer used, replaced with the index in
 // prim_map that is built at script startup, thus relieving us
 // of the perils of not liking the HUD in the right order
 
-list              commandButtonList =    [
-"reset",
+list commandButtonList = [
+    "reset",
 
-"backupper::backupper::30::-1",
-"backlower::backlower::31::-1",
+    "backupper::backupper::30::-1",
+    "backlower::backlower::31::-1",
 
-"chest::chest::32::-1",
-"breasts::breastright::33::-1",
-"breasts::breastleft::34::-1",
-"nipples::breastright::33::0",
-"nipples::breastleft::34::0",
-"belly::belly::35::-1",
+    "chest::chest::32::-1",
+    "breasts::breastright::33::-1",
+    "breasts::breastleft::34::-1",
+    "nipples::breastright::33::0",
+    "nipples::breastleft::34::0",
+    "belly::belly::35::-1",
 
-"armsupper::armright::36::0",
-"armsupper::armright::36::1",
-"armsupper::armright::36::2",
-"armsupper::armright::36::3",
-"armsupper::armleft::37::0",
-"armsupper::armleft::37::1",
-"armsupper::armleft::37::2",
-"armsupper::armleft::37::3",
+    "armsupper::armright::36::0",
+    "armsupper::armright::36::1",
+    "armsupper::armright::36::2",
+    "armsupper::armright::36::3",
+    "armsupper::armleft::37::0",
+    "armsupper::armleft::37::1",
+    "armsupper::armleft::37::2",
+    "armsupper::armleft::37::3",
 
-"armslower::armright::36::4",
-"armslower::armright::36::5",
-"armslower::armright::36::6",
-"armslower::armright::36::7",
-"armslower::armleft::37::4",
-"armslower::armleft::37::5",
-"armslower::armleft::37::6",
-"armslower::armleft::37::7",
+    "armslower::armright::36::4",
+    "armslower::armright::36::5",
+    "armslower::armright::36::6",
+    "armslower::armright::36::7",
+    "armslower::armleft::37::4",
+    "armslower::armleft::37::5",
+    "armslower::armleft::37::6",
+    "armslower::armleft::37::7",
 
-"armsfull::armright::36::-1",
-"armsfull::armleft::37::-1",
+    "armsfull::armright::36::-1",
+    "armsfull::armleft::37::-1",
 
-"hands::hands::38::-1",
+    "hands::hands::38::-1",
 
-"buttcrotch::pelvisback::11::7",
-"buttcrotch::pelvisfront::12::5",
-"buttcrotch::pelvisfront::12::6",
-"buttcrotch::pelvisfront::12::7",
-"pelvis::pelvisback::11::-1",
-"pelvis::pelvisfront::12::-1",
+    "buttcrotch::pelvisback::11::7",
+    "buttcrotch::pelvisfront::12::5",
+    "buttcrotch::pelvisfront::12::6",
+    "buttcrotch::pelvisfront::12::7",
+    "pelvis::pelvisback::11::-1",
+    "pelvis::pelvisfront::12::-1",
 
-"legsupper::legright1::13::-1",
-"legsupper::legright2::14::-1",
-"legsupper::legright3::15::-1",
-"legsupper::legleft1::21::-1",
-"legsupper::legleft2::22::-1",
-"legsupper::legleft3::23::-1",
+    "legsupper::legright1::13::-1",
+    "legsupper::legright2::14::-1",
+    "legsupper::legright3::15::-1",
+    "legsupper::legleft1::21::-1",
+    "legsupper::legleft2::22::-1",
+    "legsupper::legleft3::23::-1",
 
-"knees::legright4::16::-1",
-"knees::legright5::17::-1",
-"knees::legleft4::24::-1",
-"knees::legleft5::25::-1",
+    "knees::legright4::16::-1",
+    "knees::legright5::17::-1",
+    "knees::legleft4::24::-1",
+    "knees::legleft5::25::-1",
 
-"legslower::legright6::18::-1",
-"legslower::legright7::19::-1",
-"legslower::legright8::20::-1",
-"legslower::legleft6::26::-1",
-"legslower::legleft7::27::-1",
-"legslower::legleft8::28::-1",
+    "legslower::legright6::18::-1",
+    "legslower::legright7::19::-1",
+    "legslower::legright8::20::-1",
+    "legslower::legleft6::26::-1",
+    "legslower::legleft7::27::-1",
+    "legslower::legleft8::28::-1",
 
-"legsfull::legright1::13::-1",
-"legsfull::legright2::14::-1",
-"legsfull::legright3::15::-1",
-"legsfull::legright4::16::-1",
-"legsfull::legright5::17::-1",
-"legsfull::legright6::18::-1",
-"legsfull::legright7::19::-1",
-"legsfull::legright8::20::-1",
-"legsfull::legleft1::21::-1",
-"legsfull::legleft2::22::-1",
-"legsfull::legleft3::23::-1",
-"legsfull::legleft4::24::-1",
-"legsfull::legleft5::25::-1",
-"legsfull::legleft6::26::-1",
-"legsfull::legleft7::27::-1",
-"legsfull::legleft8::28::-1",
+    "legsfull::legright1::13::-1",
+    "legsfull::legright2::14::-1",
+    "legsfull::legright3::15::-1",
+    "legsfull::legright4::16::-1",
+    "legsfull::legright5::17::-1",
+    "legsfull::legright6::18::-1",
+    "legsfull::legright7::19::-1",
+    "legsfull::legright8::20::-1",
+    "legsfull::legleft1::21::-1",
+    "legsfull::legleft2::22::-1",
+    "legsfull::legleft3::23::-1",
+    "legsfull::legleft4::24::-1",
+    "legsfull::legleft5::25::-1",
+    "legsfull::legleft6::26::-1",
+    "legsfull::legleft7::27::-1",
+    "legsfull::legleft8::28::-1",
 
-"feet::feet::29::-1",
-"ankles::feet::29::0",
-"bridges::feet::29::1",
-"bridges::feet::29::2",
-"toecleavages::feet::29::3",
-"toes::feet::29::4",
-"soles::feet::29::5",
-"heels::feet::29::6"
-    ];
+    "feet::feet::29::-1",
+    "ankles::feet::29::0",
+    "bridges::feet::29::1",
+    "bridges::feet::29::2",
+    "toecleavages::feet::29::3",
+    "toes::feet::29::4",
+    "soles::feet::29::5",
+    "heels::feet::29::6"
+];
+
+list fingernails = [
+    "fingernailsshort::fingernails",
+    "fingernailsmedium::fingernails",
+    "fingernailslong::fingernails",
+    "fingernailspointed::fingernails"
+];
 
 // The list stride is 3
 integer num_tex = 3;
@@ -272,6 +272,19 @@ list tex_8 = [
     "4f0aa9d0-1591-fd43-bae3-7e11a6c9c45d"
 ];
 
+list fingernail_colors = [
+    <0.80, 0.78, 0.74>,
+    <0.76, 0.69, 0.57>,
+    <0.97, 0.57, 0.97>,
+    <0.86, 0.14, 0.63>,
+    <0.78, 0.19, 0.41>,
+    <1.00, 0.00, 0.00>,
+    <0.75, 0.00, 0.00>,
+    <0.50, 0.00, 0.00>,
+    <0.25, 0.00, 0.00>,
+    <0.12, 0.12, 0.11>
+];
+
 // Keep a mapping of link number to prim name
 list prim_map = [];
 
@@ -286,16 +299,39 @@ integer last_attach = 0;
 
 vector MIN_BAR = <0.0, 0.0, 0.0>;
 vector ALPHA_HUD = <PI, 0.0, 0.0>;
+vector OPTION_HUD = <TWO_PI, 0.0, 0.0>;
 vector SKIN_HUD = <PI_BY_TWO, 0.0, 0.0>;
 vector alpha_rot;
 vector last_rot;
 
-integer VERBOSE = TRUE;
+integer VERBOSE = FALSE;
+
+// Memory limit
+integer MEM_LIMIT = 32000;
+
+integer r2channel;
+integer visible_fingernails = 0;
 
 log(string msg) {
     if (VERBOSE == 1) {
         llOwnerSay(msg);
     }
+}
+
+send(string msg) {
+    llSay(r2channel, msg);
+    if (VERBOSE == 1) {
+        llOwnerSay("S: " + msg);
+    }
+}
+
+send_csv(list msg) {
+    send(llList2CSV(msg));
+}
+
+// Calculate a channel number based on APP_ID and owner UUID
+integer keyapp2chan(integer id) {
+    return 0x80000000 | ((integer)("0x" + (string)llGetOwner()) ^ id);
 }
 
 vector get_size() {
@@ -337,10 +373,6 @@ adjust_pos() {
     }
 }
 
-send(string msg) {
-    llSay(r2chan, msg);
-}
-
 resetallalpha()
 {
     integer i;
@@ -358,36 +390,27 @@ resetallalpha()
     }
 }
 
-colorDoll(string commandFilter, integer alphaVal)
-{
+colorDoll(string commandFilter, integer alphaVal) {
     integer i;
     integer x = llGetListLength(commandButtonList)+1;
-    for (; i < x; ++i)
-    {
+    for (; i < x; ++i) {
         string dataString = llList2String(commandButtonList,i);
         list stringList = llParseString2List(dataString, ["::"], []);
         string command = llList2String(stringList,0);
 
-        if (command == commandFilter)
-        {
-            string primName = llList2String(stringList,1);
+        if (command == commandFilter) {
+            string name = llList2String(stringList, 1);
             integer j;
             for (; j < num_links; ++j) {
                 // Set color for all matching link nmaes
-                if (llList2String(prim_map, j) == primName) {
-                    integer primLink = j;
-                    integer primFace = llList2Integer(stringList,3);
-                    string message = "ALPHA," + (string)primName + "," + (string)primFace + "," + (string)alphaVal;
-
-                    if (alphaVal == 0)
-                    {
-                        llSetLinkPrimitiveParamsFast(primLink, [PRIM_COLOR, primFace, alphaOnColor, 1.0]);
-                        send(message);
-                    }
-                    else
-                    {
-                        llSetLinkPrimitiveParamsFast(primLink, [PRIM_COLOR, primFace, offColor, 1.0]);
-                        send(message);
+                if (llList2String(prim_map, j) == name) {
+                    integer link = j;
+                    integer face = llList2Integer(stringList,3);
+                    send_csv(["ALPHA", name, face, alphaVal]);
+                    if (alphaVal == 0) {
+                        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
+                    } else {
+                        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
                     }
                 }
             }
@@ -404,7 +427,7 @@ doButtonPress(list buttons, integer link, integer face) {
 
     integer alphaVal;
     integer i;
-    log("doButtonPress(): "+primName+" "+(string)link+" "+(string)face);
+    log("doButtonPress(): " + primName + " " + (string)link + " " + (string)face);
     for (; i < num_links; ++i) {
         // Set color for all matching link nmaes
         if (llList2String(prim_map, i) == name) {
@@ -426,14 +449,22 @@ apply_texture(list tex) {
     send("TEXTURE,lower," + llList2String(tex, 2));
 }
 
-default
-{
-    state_entry()
-    {
-        r2chan = keyapp2chan();
-        llListen(r2chan+1,"","","");
-        llSleep(2.0);
-        llRegionSay(r2chan, "STATUS,x,x,x");
+// Literal API for TEXTURE v2 command
+texture_v2(string name, string tex, integer face, vector color) {
+    string cmd = llList2CSV(["TEXTURE", name, tex, face, color]);
+    log(cmd);
+    send(cmd);
+}
+
+default {
+    state_entry() {
+        // Initialize attach state
+        last_attach = llGetAttached();
+        log("state_entry() attached=" + (string)last_attach);
+
+        r2channel = keyapp2chan(APP_ID);
+        llListen(r2channel+1, "", "", "");
+        send_csv(["STATUS", API_VERSION]);
 
         // Create map of all links to prim names
         integer i;
@@ -443,27 +474,32 @@ default
             prim_map += [llList2String(p, 0)];
         }
 
-        // Initialize attach state
-        last_attach = llGetAttached();
-        log("state_entry() attached="+(string)last_attach);
-
         alpha_rot = ALPHA_HUD;
         last_rot = MIN_BAR;
+
+        log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     }
 
-    listen(integer channel,string name,key id,string message)
-    {
-//        log("raw message: channel="+(string)channel+" name:"+name+" id="+(string)id+" msg="+message);
-                list msglist = llParseString2List(message, ["|"], []);
-                integer listLenght = llGetListLength(msglist);
-                    string command = llToUpper(llList2String(msglist, 0));
-                    if (command == "STATUS") {
-                        llOwnerSay("STATUS: " + llList2String(msglist, 1));
-                    }
+    listen(integer channel, string name, key id, string message) {
+        if (llGetOwnerKey(id) == llGetOwner()) {
+            if (channel == r2channel+1) {
+                log("R: " + message);
+                list cmdargs = llCSV2List(message);
+                string command = llToUpper(llList2String(cmdargs, 0));
+
+                if (command == "STATUS") {
+                    llOwnerSay(
+                        "STATUS: " +
+                        "API v" + llList2String(cmdargs, 1) + ", " +
+                        "Type " + llList2String(cmdargs, 2) + ", " +
+                        "Attached " + llList2String(cmdargs, 3)
+                    );
+                }
+            }
+        }
     }
 
-    touch_start(integer total_number)
-    {
+    touch_start(integer total_number) {
         integer link = llDetectedLinkNumber(0);
         integer face = llDetectedTouchFace(0);
         vector pos = llDetectedTouchST(0);
@@ -472,25 +508,26 @@ default
 
         log("link=" + (string)link + " face=" + (string)face + " name=" + name);
         if (name == "rotatebar") {
-            if(face == 1||face == 3||face == 5||face == 7)
-            {
-                rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_ROT_LOCAL]),0);
-                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(<0.0,0.0,-PI/2>)*localRot]);
-            }
-            else
-            {
-                rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_ROT_LOCAL]),0);
-                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(<0.0,0.0,PI/2>)*localRot]);
+            if(face == 1||face == 3||face == 5||face == 7) {
+                rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0);
+                llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0,0.0,-PI/2>)*localRot]);
+            } else {
+                rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0);
+                llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0,0.0,PI/2>)*localRot]);
             }
             // Save current alpha rotation
-            alpha_rot = llRot2Euler(llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_ROT_LOCAL]),0));
+            alpha_rot = llRot2Euler(llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0));
         }
-        else if (name == "minbar" || name == "alphabar" || name == "skinbar") {
+        else if (name == "minbar" || name == "alphabar" || name == "optionbar" || name == "skinbar") {
             integer bx = (integer)(pos.x * 10);
             integer by = (integer)(pos.y * 10);
             log("x,y="+(string)bx+","+(string)by);
 
-            if (bx == 4 || bx == 5) {
+            if (bx == 2 || bx == 3) {
+                // options
+                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(OPTION_HUD)]);
+            }
+            else if (bx == 4 || bx == 5) {
                 // skin
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(SKIN_HUD)]);
             }
@@ -528,12 +565,9 @@ default
                     "backlower",
                     "armsupper"
                     ];
-            if(face == 0)
-            {
+            if(face == 0) {
                 resetallalpha();
-            }
-            else
-            {
+            } else {
                 doButtonPress(buttonList, link, face);
             }
         }
@@ -577,11 +611,11 @@ default
             string commandButton = llList2String(buttonList,face);
             llOwnerSay("Saving and loading alpha is not yet implemented!");
         }
-        else if(name == "backboard")
-        {
-            //ignore click on backboard
+        else if (name == "backboard") {
+            // ignore click on backboard
         }
         else if (llGetSubString(name, 0, 3) == "skin") {
+            // Skin appliers
             integer b = (integer)llGetSubString(name, 4, -1);
             if (b == 1 && face == 0) {
                 integer i = ((1 - 1) * num_tex);
@@ -676,23 +710,56 @@ default
                 apply_texture(llList2List(tex_8, i, i+num_tex-1));
             }
         }
+        else if (llGetSubString(name, 0, 2) == "fnc") {
+            // Fingernail color
+            integer b = (integer)llGetSubString(name, 3, -1);
+            if (b >= 0 && b <= 9) {
+                texture_v2(
+                    "fingernails",
+                    "",
+                    ALL_SIDES,
+                    llList2Vector(fingernail_colors, b)
+                );
+            }
+        }
+        else if (llGetSubString(name, 0, 1) == "fn") {
+            // Fingernail shape
+            list nail_types = [
+                "fingernailsshort",
+                "fingernailsmedium",
+                "fingernailslong",
+                "fingernailspointed",
+                "fingernailsnone"
+            ];
+            integer b = (integer)llGetSubString(name, 2, -1);
+            if (b >= 0 && b <= 4) {
+                integer num = llGetListLength(nail_types);
+                integer i;
+                visible_fingernails = b;
+                for (; i < num; ++i) {
+                    if (i == b) {
+                        send_csv(["ALPHA", llList2String(nail_types, i), ALL_SIDES, 1.0]);
+                    } else {
+                        send_csv(["ALPHA", llList2String(nail_types, i), ALL_SIDES, 0.0]);
+                    }
+                }
+            }
+        }
         else {
-            list paramList = llGetLinkPrimitiveParams(link,[PRIM_NAME,PRIM_COLOR,face]);
-            string primName = llList2String(paramList,0);
-            vector primColor = llList2Vector(paramList,1);
+            // Handle alphas for touching the doll (that sounds baaaaaad...)
+            list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
+            string primName = llList2String(paramList, 0);
+            vector primColor = llList2Vector(paramList, 1);
             integer alphaVal;
 
             if (primColor == offColor) {
                 alphaVal=0;
                 llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
-            }
-            else
-            {
+            } else {
                 alphaVal=1;
                 llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
             }
-            message = "ALPHA," + (string)primName + "," + (string)face + "," + (string)alphaVal;
-            send(message);
+            send_csv(["ALPHA", primName, face, alphaVal]);
         }
     }
 
