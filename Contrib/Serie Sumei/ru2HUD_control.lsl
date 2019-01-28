@@ -297,7 +297,7 @@ float right_offset = 0.22;
 float top_offset = 0.46;
 integer last_attach = 0;
 
-vector MIN_BAR = <0.0, 0.0, 0.0>;
+vector MIN_BAR = <-PI_BY_TWO, 0.0, 0.0>;
 vector ALPHA_HUD = <PI, 0.0, 0.0>;
 vector OPTION_HUD = <TWO_PI, 0.0, 0.0>;
 vector SKIN_HUD = <PI_BY_TWO, 0.0, 0.0>;
@@ -524,16 +524,16 @@ default {
             log("x,y="+(string)bx+","+(string)by);
 
             if (bx == 2 || bx == 3) {
-                // options
-                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(OPTION_HUD)]);
+                // alpha
+                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(alpha_rot)]);
             }
             else if (bx == 4 || bx == 5) {
                 // skin
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(SKIN_HUD)]);
             }
             else if (bx == 6 || bx == 7) {
-                // alpha
-                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(alpha_rot)]);
+                // options
+                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(OPTION_HUD)]);
             }
             else if (bx == 8) {
                 // min
