@@ -10,6 +10,7 @@
 // ss-d.2 06Jan2019 <seriesumei@avimail.org> - Fix OpenSim compatibility
 // ss-e 04Jan2019 <seriesumei@avimail.org> - New skin panel
 // ss-f 26Jan2019 <seriesumei@avimail.org> - New Options panel
+// ss-g 29Jan2019 <seriesumei@avimail.org> - Add toenail color to Options panel
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -743,6 +744,18 @@ default {
                         send_csv(["ALPHA", llList2String(nail_types, i), ALL_SIDES, 0.0]);
                     }
                 }
+            }
+        }
+        else if (llGetSubString(name, 0, 2) == "tnc") {
+            // Toenail color
+            integer b = (integer)llGetSubString(name, 3, -1);
+            if (b >= 0 && b <= 9) {
+                texture_v2(
+                    "toenails",
+                    "",
+                    ALL_SIDES,
+                    llList2Vector(fingernail_colors, b)
+                );
             }
         }
         else {
