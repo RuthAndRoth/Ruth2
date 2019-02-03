@@ -105,40 +105,40 @@ default
 }
 
 /*
-	// INACTIVE TEXT, USED FOR REFERENCE. CAN BE SAFELY DELETED.
-	### HEAD ###
-		[15:27:34] head: Link #1: head
+// INACTIVE TEXT, USED FOR REFERENCE. CAN BE SAFELY DELETED.
+### HEAD ###
+[15:27:34] head: Link #1: head
 
-			### UPPER ###
-				[15:27:34] head: Link #07: chest
-					[15:27:34] head: Link #02: breast_r
-						[15:27:34] head: Link #09: breast_l
-							[15:27:34] head: Link #03: midriff
-								[15:27:34] head: Link #04: upper_back
-									[15:27:34] head: Link #10: lower_back
-										[15:27:34] head: Link #08: arm_l
-											[15:27:34] head: Link #30: arm_r
-												[15:27:34] head: Link #28: hand_r
-													[15:27:34] head: Link #29: hand_l
+### UPPER ###
+[15:27:34] head: Link #07: chest
+[15:27:34] head: Link #02: breast_r
+[15:27:34] head: Link #09: breast_l
+[15:27:34] head: Link #03: midriff
+[15:27:34] head: Link #04: upper_back
+[15:27:34] head: Link #10: lower_back
+[15:27:34] head: Link #08: arm_l
+[15:27:34] head: Link #30: arm_r
+[15:27:34] head: Link #28: hand_r
+[15:27:34] head: Link #29: hand_l
 
-														### LOWER ###
-															[15:27:34] head: Link #05: pelvis
-																[15:27:34] head: Link #12: butt
-																	[15:27:34] head: Link #06: upper_leg_top_r
-																		[15:27:34] head: Link #23: upper_leg_top_l
-																			[15:27:34] head: Link #14: upper_leg_mid_l
-																				[15:27:34] head: Link #16: upper_leg_mid_r
-																					[15:27:34] head: Link #19: upper_leg_bot_r
-																						[15:27:34] head: Link #18: upper_leg_bot_l
-																							[15:27:34] head: Link #17: upper_knee_r
-																								[15:27:34] head: Link #13: upper_knee_l
-																									[15:27:34] head: Link #20: lower_knee_r
-																										[15:27:34] head: Link #15: lower_knee_l
-																											[15:27:34] head: Link #11: lower_leg_top_r
-																												[15:27:34] head: Link #24: lower_leg_top_l
-																													[15:27:34] head: Link #22: lower_leg_mid_r
-																														[15:27:34] head: Link #25: lower_leg_mid_l
-																															[15:27:34] head: Link #21: lower_leg_bot_r
-																																[15:27:34] head: Link #26: lower_leg_bot_l
-																																	[15:27:34] head: Link #27: feet
-																																		*/
+### LOWER ###
+[15:27:34] head: Link #05: pelvis
+[15:27:34] head: Link #12: butt
+[15:27:34] head: Link #06: upper_leg_top_r
+[15:27:34] head: Link #23: upper_leg_top_l
+[15:27:34] head: Link #14: upper_leg_mid_l
+[15:27:34] head: Link #16: upper_leg_mid_r
+[15:27:34] head: Link #19: upper_leg_bot_r
+[15:27:34] head: Link #18: upper_leg_bot_l
+[15:27:34] head: Link #17: upper_knee_r
+[15:27:34] head: Link #13: upper_knee_l
+[15:27:34] head: Link #20: lower_knee_r
+[15:27:34] head: Link #15: lower_knee_l
+[15:27:34] head: Link #11: lower_leg_top_r
+[15:27:34] head: Link #24: lower_leg_top_l
+[15:27:34] head: Link #22: lower_leg_mid_r
+[15:27:34] head: Link #25: lower_leg_mid_l
+[15:27:34] head: Link #21: lower_leg_bot_r
+[15:27:34] head: Link #26: lower_leg_bot_l
+[15:27:34] head: Link #27: feet
+*/
