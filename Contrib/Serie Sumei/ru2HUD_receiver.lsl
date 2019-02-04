@@ -20,11 +20,17 @@
 // the parts.  It is still totally compatible with the RC2 and RC3 commands
 // provided the APP_ID is correct (we will handle that soon too).
 
-// v1 - Initial combination of body, feet and hands scripts, includes fingernails
+// v1 26Jan2019 <seriesumei@avimail.org> - Initial combination of body, feet
+//      and hands scripts, includes fingernails
+// v2 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change,
+//      listen on multiple APP_IDs
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.
 integer APP_ID = 20181024;
+integer APP_ID_ALT1 = 20171105;
+
+integer MULTI_LISTEN = TRUE;
 
 // Which API version do we implement?
 integer API_VERSION = 2;
@@ -48,7 +54,11 @@ integer VERBOSE = FALSE;
 // Memory limit
 integer MEM_LIMIT = 32000;
 
+// save the listen handles
+integer listen_main;
+integer listen_alt1;
 integer r2channel;
+integer r2channel_alt1;
 integer last_attach = 0;
 
 log(string msg) {
@@ -190,7 +200,11 @@ default {
 
         // Set up listener
         r2channel = keyapp2chan(APP_ID);
-        llListen(r2channel, "", "", "");
+        listen_main = llListen(r2channel, "", "", "");
+        if (MULTI_LISTEN) {
+            r2channel_alt1 = keyapp2chan(APP_ID_ALT1);
+            listen_alt1 = llListen(r2channel_alt1, "", "", "");
+        }
 
         if (part_type == PART_TYPE_HANDS) {
             llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
@@ -216,7 +230,7 @@ default {
 
     listen(integer channel, string name, key id, string message) {
         if (llGetOwnerKey(id) == llGetOwner()) {
-            if (channel == r2channel) {
+            if (channel == r2channel || channel == r2channel_alt1) {
                 log("R: " + message);
                 list cmdargs = llCSV2List(message);
                 string command = llToUpper(llList2String(cmdargs, 0));
@@ -231,6 +245,12 @@ default {
                     do_texture(cmdargs);
                 }
             }
+        }
+    }
+
+    changed(integer change) {
+        if (change & CHANGED_OWNER) {
+            llResetScript();
         }
     }
 }

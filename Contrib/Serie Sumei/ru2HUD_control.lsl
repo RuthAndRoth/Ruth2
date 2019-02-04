@@ -11,6 +11,7 @@
 // ss-e 04Jan2019 <seriesumei@avimail.org> - New skin panel
 // ss-f 26Jan2019 <seriesumei@avimail.org> - New Options panel
 // ss-g 29Jan2019 <seriesumei@avimail.org> - Add toenail color to Options panel
+// ss-h 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -788,6 +789,12 @@ default {
         } else {
             // Fix up our location
             adjust_pos();
+        }
+    }
+
+    changed(integer change) {
+        if (change & CHANGED_OWNER) {
+            llResetScript();
         }
     }
 }
