@@ -1,4 +1,4 @@
-**Fritigern's contribs**
+# Fritigern's contribs
 
 The scripts in the ***Applier*** folder are deprecated. Yet, feel free to use them in case they are useful to you, or use parts of it, I don't care.
 
