@@ -12,6 +12,7 @@
 // ss-f 26Jan2019 <seriesumei@avimail.org> - New Options panel
 // ss-g 29Jan2019 <seriesumei@avimail.org> - Add toenail color to Options panel
 // ss-h 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change
+// ss-i 08Feb2019 <seriesumei@avimail.org> - Fix alpha reset to not fiddle with HUD links
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -375,20 +376,43 @@ adjust_pos() {
     }
 }
 
-resetallalpha()
-{
+// Set the alpha val of all links matching name
+set_alpha(string name, integer face, float alpha) {
+    integer link;
+    for (; link < num_links; ++link) {
+        // Set color for all matching link names
+        if (llList2String(prim_map, link) == name) {
+            // Reset links that appear in the list of body parts
+            send_csv(["ALPHA", name, face, alpha]);
+            if (alpha == 0) {
+                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
+            } else {
+                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
+            }
+        }
+    }
+}
+
+resetallalpha() {
     integer i;
 
-    for (; i < num_links; ++i)
-    {
-        llSetLinkPrimitiveParamsFast(i, [PRIM_COLOR, -1, offColor, 1.0]);
-        if(i>=9)
-        {
-            list paramList = llGetLinkPrimitiveParams(i,[PRIM_NAME]);
-            string primName = llList2String(paramList,0);
-            string message = "ALPHA," + (string)primName + "," + "-1" + "," + "1";
-            send(message);
+    // Reset body and HUD doll
+    list seen = [];
+    integer x = llGetListLength(commandButtonList) + 1;
+    for (; i < x; ++i) {
+        string dataString = llList2String(commandButtonList, i);
+        list stringList = llParseString2List(dataString, ["::"], []);
+        string name = llList2String(stringList, 1);
+        if (llListFindList(seen, [name]) < 0) {
+            seen += [name];
+            set_alpha(name, -1, 1.0);
         }
+    }
+
+    // Reset HUD buttons
+    for(i=1; i <= 8; ++i) {
+        string name = "buttonbar" + (string)i;
+        set_alpha(name, -1, 1.0);
     }
 }
 
@@ -402,20 +426,9 @@ colorDoll(string commandFilter, integer alphaVal) {
 
         if (command == commandFilter) {
             string name = llList2String(stringList, 1);
-            integer j;
-            for (; j < num_links; ++j) {
-                // Set color for all matching link nmaes
-                if (llList2String(prim_map, j) == name) {
-                    integer link = j;
-                    integer face = llList2Integer(stringList,3);
-                    send_csv(["ALPHA", name, face, alphaVal]);
-                    if (alphaVal == 0) {
-                        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
-                    } else {
-                        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
-                    }
-                }
-            }
+            // Set color for all matching link names
+            integer face = llList2Integer(stringList, 3);
+            set_alpha(name, face, alphaVal);
         }
     }
 }
@@ -431,7 +444,7 @@ doButtonPress(list buttons, integer link, integer face) {
     integer i;
     log("doButtonPress(): " + primName + " " + (string)link + " " + (string)face);
     for (; i < num_links; ++i) {
-        // Set color for all matching link nmaes
+        // Set color for all matching link names
         if (llList2String(prim_map, i) == name) {
             if (primColor == offColor) {
                 alphaVal = 0;
@@ -528,14 +541,17 @@ default {
             if (bx == 2 || bx == 3) {
                 // alpha
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(alpha_rot)]);
+                last_rot = MIN_BAR;
             }
             else if (bx == 4 || bx == 5) {
                 // skin
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(SKIN_HUD)]);
+                last_rot = MIN_BAR;
             }
             else if (bx == 6 || bx == 7) {
                 // options
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(OPTION_HUD)]);
+                last_rot = MIN_BAR;
             }
             else if (bx == 8) {
                 // min
