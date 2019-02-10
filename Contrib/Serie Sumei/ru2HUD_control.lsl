@@ -14,6 +14,7 @@
 // ss-h 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change
 // ss-i 08Feb2019 <seriesumei@avimail.org> - Fix alpha reset to not fiddle with HUD links
 // ss-j 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
+// ss-k 10Feb2019 <seriesumei@avimail.org> - Adjust rotations for build script
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -301,10 +302,10 @@ float right_offset = 0.22;
 float top_offset = 0.46;
 integer last_attach = 0;
 
-vector MIN_BAR = <-PI_BY_TWO, 0.0, 0.0>;
-vector ALPHA_HUD = <PI, 0.0, 0.0>;
-vector OPTION_HUD = <TWO_PI, 0.0, 0.0>;
-vector SKIN_HUD = <PI_BY_TWO, 0.0, 0.0>;
+vector MIN_BAR = <0.0, 0.0, 0.0>;
+vector OPTION_HUD = <PI_BY_TWO, 0.0, 0.0>;
+vector SKIN_HUD = <PI, 0.0, 0.0>;
+vector ALPHA_HUD = <-PI_BY_TWO, 0.0, 0.0>;
 vector alpha_rot;
 vector last_rot;
 
@@ -561,10 +562,10 @@ default {
         if (name == "rotatebar") {
             if(face == 1||face == 3||face == 5||face == 7) {
                 rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0);
-                llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0,0.0,-PI/2>)*localRot]);
+                llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0, -PI_BY_TWO, 0.0>)*localRot]);
             } else {
                 rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0);
-                llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0,0.0,PI/2>)*localRot]);
+                llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0, PI_BY_TWO, 0.0>)*localRot]);
             }
             // Save current alpha rotation
             alpha_rot = llRot2Euler(llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0));
@@ -845,7 +846,7 @@ default {
     }
 
     changed(integer change) {
-        if (change & (CHANGED_OWNER | CHANGED_INVENTORY) {
+        if (change & (CHANGED_OWNER | CHANGED_INVENTORY)) {
             llResetScript();
         }
     }
