@@ -24,6 +24,7 @@
 //      and hands scripts, includes fingernails
 // v2 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change,
 //      listen on multiple APP_IDs
+// v3 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.
@@ -54,6 +55,23 @@ integer VERBOSE = FALSE;
 // Memory limit
 integer MEM_LIMIT = 32000;
 
+// The name of the XTEA script
+string XTEA_NAME = "r2_xtea";
+
+// Set to encrypt 'message' and re-send on channel 'id'
+integer XTEAENCRYPT = 13475896;
+
+// Set in the reply to a received XTEAENCRYPT if the passed channel is 0 or ""
+integer XTEAENCRYPTED = 8303877;
+
+// Set to decrypt 'message' and reply vi llMessageLinked()
+integer XTEADECRYPT = 4690862;
+
+// Set in the reply to a received XTEADECRYPT
+integer XTEADECRYPTED = 3450924;
+
+integer haz_xtea = FALSE;
+
 // save the listen handles
 integer listen_main;
 integer listen_alt1;
@@ -65,6 +83,18 @@ log(string msg) {
     if (VERBOSE == 1) {
         llOwnerSay(msg);
     }
+}
+
+integer can_haz_xtea() {
+    // See if the XTEA script is present in object inventory
+    integer count = llGetInventoryNumber(INVENTORY_SCRIPT);
+    while (count--) {
+        if (llGetInventoryName(INVENTORY_SCRIPT, count) == XTEA_NAME) {
+            llOwnerSay("Found XTEA script");
+            return TRUE;
+        }
+    }
+    return FALSE;
 }
 
 send(string msg) {
@@ -181,6 +211,8 @@ do_texture(list args) {
 
 default {
     state_entry() {
+        haz_xtea = can_haz_xtea();
+
         // Initialize attach state
         last_attach = llGetAttached();
         log("state_entry() attached="+(string)last_attach);
@@ -244,12 +276,27 @@ default {
                 else if (command == "TEXTURE") {
                     do_texture(cmdargs);
                 }
+                else {
+                    if (haz_xtea) {
+                        llMessageLinked(LINK_THIS, XTEADECRYPT, message, "");
+                    }
+                }
             }
         }
     }
 
+    link_message(integer sender_number, integer number, string message, key id) {
+        if (number == XTEADECRYPTED) {
+            list cmdargs = llCSV2List(message);
+            string command = llToUpper(llList2String(cmdargs, 0));
+
+            // handle decrypted message
+            // ...
+        }
+    }
+
     changed(integer change) {
-        if (change & CHANGED_OWNER) {
+        if (change & (CHANGED_OWNER | CHANGED_INVENTORY)) {
             llResetScript();
         }
     }

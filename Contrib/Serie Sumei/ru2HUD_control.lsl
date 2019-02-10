@@ -13,6 +13,7 @@
 // ss-g 29Jan2019 <seriesumei@avimail.org> - Add toenail color to Options panel
 // ss-h 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change
 // ss-i 08Feb2019 <seriesumei@avimail.org> - Fix alpha reset to not fiddle with HUD links
+// ss-j 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -312,6 +313,23 @@ integer VERBOSE = FALSE;
 // Memory limit
 integer MEM_LIMIT = 32000;
 
+// The name of the XTEA script
+string XTEA_NAME = "r2_xtea";
+
+// Set to encrypt 'message' and re-send on channel 'id'
+integer XTEAENCRYPT = 13475896;
+
+// Set in the reply to a received XTEAENCRYPT if the passed channel is 0 or ""
+integer XTEAENCRYPTED = 8303877;
+
+// Set to decrypt 'message' and reply vi llMessageLinked()
+integer XTEADECRYPT = 4690862;
+
+// Set in the reply to a received XTEADECRYPT
+integer XTEADECRYPTED = 3450924;
+
+integer haz_xtea = FALSE;
+
 integer r2channel;
 integer visible_fingernails = 0;
 
@@ -321,8 +339,24 @@ log(string msg) {
     }
 }
 
+integer can_haz_xtea() {
+    // See if the XTEA script is present in object inventory
+    integer count = llGetInventoryNumber(INVENTORY_SCRIPT);
+    while (count--) {
+        if (llGetInventoryName(INVENTORY_SCRIPT, count) == XTEA_NAME) {
+            llOwnerSay("Found XTEA script");
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 send(string msg) {
-    llSay(r2channel, msg);
+    if (haz_xtea) {
+        llMessageLinked(LINK_THIS, XTEAENCRYPT, msg, (string)r2channel);
+    } else {
+        llSay(r2channel, msg);
+    }
     if (VERBOSE == 1) {
         llOwnerSay("S: " + msg);
     }
@@ -473,6 +507,8 @@ texture_v2(string name, string tex, integer face, vector color) {
 
 default {
     state_entry() {
+        haz_xtea = can_haz_xtea();
+
         // Initialize attach state
         last_attach = llGetAttached();
         log("state_entry() attached=" + (string)last_attach);
@@ -809,7 +845,7 @@ default {
     }
 
     changed(integer change) {
-        if (change & CHANGED_OWNER) {
+        if (change & (CHANGED_OWNER | CHANGED_INVENTORY) {
             llResetScript();
         }
     }

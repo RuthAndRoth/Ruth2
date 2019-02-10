@@ -206,7 +206,7 @@ default {
         // CHANGE THIS at the top of this file if you require any actual security.
         xtea_key = xtea_key_from_string(SECRET);
 
-        llOwnerSay("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+        llOwnerSay("r2_xtea: Free memory: " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     }
 
     link_message(integer sender_number, integer number, string message, key id) {
@@ -228,6 +228,12 @@ default {
 
             // Return the cleartext via llMessageLinked
             llMessageLinked(LINK_THIS, XTEADECRYPTED, xtea_decrypt_string(message), "");
+        }
+    }
+
+    changed(integer change) {
+        if (change & (CHANGED_OWNER | CHANGED_INVENTORY)) {
+            llResetScript();
         }
     }
 }
