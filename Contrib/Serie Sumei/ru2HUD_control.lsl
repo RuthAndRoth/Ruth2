@@ -15,6 +15,7 @@
 // ss-i 08Feb2019 <seriesumei@avimail.org> - Fix alpha reset to not fiddle with HUD links
 // ss-j 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
 // ss-k 10Feb2019 <seriesumei@avimail.org> - Adjust rotations for build script
+// ss-l 24Mar2019 <seriesumei@avimail.org> - Read skins from Omega-compatible notecard
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -135,148 +136,6 @@ list fingernails = [
     "fingernailspointed::fingernails"
 ];
 
-// The list stride is 3
-integer num_tex = 3;
-
-// These skin textures were uploaded to SL by seriesumei and are full-perm
-// from Linda Kellie's set
-// Set these to the full-perm texture UUIDs
-list tex_1 = [
-    // Female 1 shaved
-    "aebcf034-b7b5-c682-5877-9e6037db9799",
-    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
-    "0be30f69-6c17-358e-3419-38aeb92540ae",
-
-    // Female 1 bushy
-    "aebcf034-b7b5-c682-5877-9e6037db9799",
-    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
-    "24b7eae1-403f-7346-b899-d34dde0f3d01",
-
-    // Female 1 landing strip
-    "aebcf034-b7b5-c682-5877-9e6037db9799",
-    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
-    "acadebf3-c9d7-5f3a-320f-ed210d901699",
-
-    // Female 1 extra bushy
-    "aebcf034-b7b5-c682-5877-9e6037db9799",
-    "64b3d1a1-1efb-99c8-e287-cff42f48c6a5",
-    "3022144c-087a-1f0a-b6a3-36142cdf4b14"
-];
-
-list tex_2 = [
-    // Female 2 shaved
-    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
-    "83172ffd-2431-e629-7b19-f67e689288b5",
-    "63d9c443-e815-070b-18e7-5db998af28e5",
-
-    // Female 2 bushy
-    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
-    "83172ffd-2431-e629-7b19-f67e689288b5",
-    "ae90997b-5fd9-b047-acca-ac4e7adb3fa1",
-
-    // Female 2 landing strip
-    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
-    "83172ffd-2431-e629-7b19-f67e689288b5",
-    "b0d6e00c-f14e-46aa-5ad8-7989e7b8ac53",
-
-    // Female 2 extra bushy
-    "c923f154-c1bf-ae41-d3f8-c1de78f44ca0",
-    "83172ffd-2431-e629-7b19-f67e689288b5",
-    "a5c97deb-dafd-385e-2883-e698e2ebac3c"
-];
-
-list tex_3 = [
-    // Female 3 shaved
-    "44d47200-8f4e-1220-2b74-2be1ee8e9ac5",
-    "a276d547-8de0-8326-c603-49cbcc509cb8",
-    "7ea4efe7-c0f9-3c56-3326-c87e5a2f19c3",
-
-    // Female 3 bushy
-    "44d47200-8f4e-1220-2b74-2be1ee8e9ac5",
-    "a276d547-8de0-8326-c603-49cbcc509cb8",
-    "b9690079-5734-c01b-5bc2-95c2e41c375f",
-
-    // Female 3 landing strip
-    "44d47200-8f4e-1220-2b74-2be1ee8e9ac5",
-    "a276d547-8de0-8326-c603-49cbcc509cb8",
-    "8421cf09-bb4a-9ba5-8087-911746b00ced"
-];
-
-list tex_4 = [
-    // Female 4 shaved
-    "096ee6f2-717b-fec3-4ed8-39f636fec964",
-    "a3243796-87eb-78a7-cbe1-15a29c78ca5a",
-    "7ea4efe7-c0f9-3c56-3326-c87e5a2f19c3",
-
-    // Female 4 bushy
-    "096ee6f2-717b-fec3-4ed8-39f636fec964",
-    "a3243796-87eb-78a7-cbe1-15a29c78ca5a",
-    "a656222d-73e2-2663-5472-8ccd85d3adf5",
-
-    // Female 4 landing strip
-    "096ee6f2-717b-fec3-4ed8-39f636fec964",
-    "a3243796-87eb-78a7-cbe1-15a29c78ca5a",
-    "225c1668-b82d-aea1-40fb-1e421f37ab11"
-];
-
-list tex_5 = [
-    // Female 5 shaved
-    "5dd60e66-f8a3-6dcb-50c6-23e52939e86b",
-    "e9af3504-70e5-80c7-d332-7fc3272ab23a",
-    "68f829d1-d736-269b-1577-e8b768795638",
-
-    // Female 5 bushy
-    "5dd60e66-f8a3-6dcb-50c6-23e52939e86b",
-    "e9af3504-70e5-80c7-d332-7fc3272ab23a",
-    "b2b1a848-377b-031c-d5c4-fd30b49c4fb3",
-
-    // Female 5 landing strip
-    "5dd60e66-f8a3-6dcb-50c6-23e52939e86b",
-    "e9af3504-70e5-80c7-d332-7fc3272ab23a",
-    "d2062972-ee1b-4826-d35e-e00eb5b55320"
-];
-
-list tex_6 = [
-    // Female 6 shaved
-    "374ec125-5968-33a9-eca3-c9b9ee3cb262",
-    "cc92325a-aa11-d6c1-6c46-db2ea4a56885",
-    "9ef029ff-65fc-76f4-432d-f013c4a593c5",
-
-    // Female 6 bushy
-    "374ec125-5968-33a9-eca3-c9b9ee3cb262",
-    "cc92325a-aa11-d6c1-6c46-db2ea4a56885",
-    "8e83a25f-bef9-2724-943f-1aecbc79d3b4",
-
-    // Female 6 landing strip
-    "374ec125-5968-33a9-eca3-c9b9ee3cb262",
-    "cc92325a-aa11-d6c1-6c46-db2ea4a56885",
-    "365df245-4b69-8e18-a315-bc6420db5798"
-];
-
-list tex_7 = [
-    // Female 7 shaved
-    "31b85c7e-5294-76ec-b83b-854581240e74",
-    "c40b8624-8cd0-d877-4fab-ce96e31ae446",
-    "79f1c337-8549-5d4e-cba8-842512add3b8",
-
-    // Female 7 bushy
-    "31b85c7e-5294-76ec-b83b-854581240e74",
-    "c40b8624-8cd0-d877-4fab-ce96e31ae446",
-    "1a15673d-8d0a-1fa3-a17a-6b284023dcce",
-
-    // Female 7 shaved
-    "31b85c7e-5294-76ec-b83b-854581240e74",
-    "c40b8624-8cd0-d877-4fab-ce96e31ae446",
-    "d2094f99-48f0-0aab-8b50-eebd09da5fca"
-];
-
-list tex_8 = [
-    // CMFF Template
-    "0585d463-b6e4-2c6c-46a3-19aa9c512a3c",
-    "fb9bbbc9-dadf-026f-bf87-7937ec470f5d",
-    "4f0aa9d0-1591-fd43-bae3-7e11a6c9c45d"
-];
-
 list fingernail_colors = [
     <0.80, 0.78, 0.74>,
     <0.76, 0.69, 0.57>,
@@ -314,6 +173,10 @@ integer VERBOSE = FALSE;
 // Memory limit
 integer MEM_LIMIT = 32000;
 
+// Ruth link messages
+integer LINK_RUTH_HUD = 40;
+integer LINK_RUTH_APP = 42;
+
 // The name of the XTEA script
 string XTEA_NAME = "r2_xtea";
 
@@ -340,15 +203,29 @@ log(string msg) {
     }
 }
 
-integer can_haz_xtea() {
-    // See if the XTEA script is present in object inventory
-    integer count = llGetInventoryNumber(INVENTORY_SCRIPT);
+// See if the notecard is present in object inventory
+integer can_haz_notecard(string name) {
+    integer count = llGetInventoryNumber(INVENTORY_NOTECARD);
     while (count--) {
-        if (llGetInventoryName(INVENTORY_SCRIPT, count) == XTEA_NAME) {
-            llOwnerSay("Found XTEA script");
+        if (llGetInventoryName(INVENTORY_NOTECARD, count) == name) {
+            log("Found notecard: " + name);
             return TRUE;
         }
     }
+    llOwnerSay("Notecard " + name + " not found");
+    return FALSE;
+}
+
+// See if the XTEA script is present in object inventory
+integer can_haz_script(string name) {
+    integer count = llGetInventoryNumber(INVENTORY_SCRIPT);
+    while (count--) {
+        if (llGetInventoryName(INVENTORY_SCRIPT, count) == name) {
+            log("Found script: " + name);
+            return TRUE;
+        }
+    }
+    llOwnerSay("Script " + name + " not found");
     return FALSE;
 }
 
@@ -468,6 +345,22 @@ colorDoll(string commandFilter, integer alphaVal) {
     }
 }
 
+// Put thumbnails from the applier onto the HUD buttons
+// Assumes the 2x1 mesh button and the square face 4
+set_skin_thumbnails(list names) {
+    integer i;
+    for (; i < llGetListLength(names); ++i) {
+        string texture = llList2String(names, i);
+        string prim_name = "skin" + (string)i;
+        integer link = llListFindList(prim_map, [prim_name]);
+        log("h: link=" + (string)link);
+        if (link >= 0) {
+            // face == 4 is specific to these buttons
+            llSetLinkTexture(link, texture, 4);
+        }
+    }
+}
+
 doButtonPress(list buttons, integer link, integer face) {
     string commandButton = llList2String(buttons, face);
     list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
@@ -493,10 +386,9 @@ doButtonPress(list buttons, integer link, integer face) {
     colorDoll(commandButton, alphaVal);
 }
 
-apply_texture(list tex) {
-    send("TEXTURE,head," + llList2String(tex, 0));
-    send("TEXTURE,upper," + llList2String(tex, 1));
-    send("TEXTURE,lower," + llList2String(tex, 2));
+// Send to listening Omega-compatible relay scripts
+apply_texture(string button) {
+    llMessageLinked(LINK_THIS, 411, button + "|apply", "");
 }
 
 // Literal API for TEXTURE v2 command
@@ -506,30 +398,75 @@ texture_v2(string name, string tex, integer face, vector color) {
     send(cmd);
 }
 
+// Convert face + position to a button name for 3 choices
+string map_button_3(integer face, integer x) {
+    string ret;
+    if (face == 0 && x == 0) {
+        ret = "1";
+    }
+    else if (face == 0 && x == 1) {
+        ret = "2";
+    }
+    else if (face == 2) {
+        ret = "3";
+    }
+    else if (face == 4) {
+        ret = "1";
+    }
+    return ret;
+}
+
+// Convert face + position to a button name for 4 choices
+string map_button_4(integer face, integer x) {
+    string ret;
+    if (face == 0 && x == 0) {
+        ret = "1";
+    }
+    else if (face == 0 && x == 1) {
+        ret = "2";
+    }
+    else if (face == 2 && x == 0) {
+        ret = "3";
+    }
+    else if (face == 2 && x == 1) {
+        ret = "4";
+    }
+    else if (face == 4) {
+        ret = "1";
+    }
+    return ret;
+}
+
+init() {
+    // Initialize attach state
+    last_attach = llGetAttached();
+    log("state_entry() attached=" + (string)last_attach);
+
+    r2channel = keyapp2chan(APP_ID);
+    llListen(r2channel+1, "", "", "");
+    llMessageLinked(LINK_THIS, LINK_RUTH_APP,  llList2CSV(["appid", APP_ID]), "");
+    send_csv(["STATUS", API_VERSION]);
+
+    // Create map of all links to prim names
+    integer i;
+    num_links = llGetNumberOfPrims() + 1;
+    for (; i < num_links; ++i) {
+        list p = llGetLinkPrimitiveParams(i, [PRIM_NAME]);
+        prim_map += [llList2String(p, 0)];
+    }
+
+    alpha_rot = ALPHA_HUD;
+    last_rot = MIN_BAR;
+
+    // Read skin notecard
+    log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+
+    haz_xtea = can_haz_script(XTEA_NAME);
+}
+
 default {
     state_entry() {
-        haz_xtea = can_haz_xtea();
-
-        // Initialize attach state
-        last_attach = llGetAttached();
-        log("state_entry() attached=" + (string)last_attach);
-
-        r2channel = keyapp2chan(APP_ID);
-        llListen(r2channel+1, "", "", "");
-        send_csv(["STATUS", API_VERSION]);
-
-        // Create map of all links to prim names
-        integer i;
-        num_links = llGetNumberOfPrims() + 1;
-        for (; i < num_links; ++i) {
-            list p = llGetLinkPrimitiveParams(i, [PRIM_NAME]);
-            prim_map += [llList2String(p, 0)];
-        }
-
-        alpha_rot = ALPHA_HUD;
-        last_rot = MIN_BAR;
-
-        log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+        init();
     }
 
     listen(integer channel, string name, key id, string message) {
@@ -559,6 +496,7 @@ default {
         string message;
 
         log("link=" + (string)link + " face=" + (string)face + " name=" + name);
+
         if (name == "rotatebar") {
             if(face == 1||face == 3||face == 5||face == 7) {
                 rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0);
@@ -672,98 +610,8 @@ default {
         else if (llGetSubString(name, 0, 3) == "skin") {
             // Skin appliers
             integer b = (integer)llGetSubString(name, 4, -1);
-            if (b == 1 && face == 0) {
-                integer i = ((1 - 1) * num_tex);
-                apply_texture(llList2List(tex_1, i, i+num_tex-1));
-            }
-            else if (b == 1 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_1, i, i+num_tex-1));
-            }
-            else if (b == 1 && face == 4) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_1, i, i+num_tex-1));
-            }
-            else if (b == 2 && face == 0) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_2, i, i+num_tex-1));
-            }
-            else if (b == 2 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_2, i, i+num_tex-1));
-            }
-            else if (b == 2 && face == 4) {
-                integer i = ((1 - 1) * num_tex);
-                apply_texture(llList2List(tex_2, i, i+num_tex-1));
-            }
-            else if (b == 3 && face == 0) {
-                integer i = ((1 - 1) * num_tex);
-                apply_texture(llList2List(tex_3, i, i+num_tex-1));
-            }
-            else if (b == 3 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_3, i, i+num_tex-1));
-            }
-            else if (b == 3 && face == 4) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_3, i, i+num_tex-1));
-            }
-            else if (b == 4 && face == 0) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_4, i, i+num_tex-1));
-            }
-            else if (b == 4 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_4, i, i+num_tex-1));
-            }
-            else if (b == 4 && face == 4) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_4, i, i+num_tex-1));
-            }
-            else if (b == 5 && face == 0) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_5, i, i+num_tex-1));
-            }
-            else if (b == 5 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_5, i, i+num_tex-1));
-            }
-            else if (b == 5 && face == 4) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_5, i, i+num_tex-1));
-            }
-            else if (b == 6 && face == 0) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_6, i, i+num_tex-1));
-            }
-            else if (b == 6 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_6, i, i+num_tex-1));
-            }
-            else if (b == 6 && face == 4) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_6, i, i+num_tex-1));
-            }
-            else if (b == 7 && face == 0) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_7, i, i+num_tex-1));
-            }
-            else if (b == 7 && face == 2) {
-                integer i = ((2 - 1) * num_tex);
-                apply_texture(llList2List(tex_7, i, i+num_tex-1));
-            }
-            else if (b == 7 && face == 4) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_7, i, i+num_tex-1));
-            }
-            else if (b == 3 && face == 0) {
-                integer i = ((3 - 1) * num_tex);
-                apply_texture(llList2List(tex_3, i, i+num_tex-1));
-            }
-            else if (b == 8) {
-                integer i = ((1 - 1) * num_tex);
-                apply_texture(llList2List(tex_8, i, i+num_tex-1));
-            }
+            string sname = "sb_" + (string)b + map_button_3(face, 0);
+            apply_texture(sname);
         }
         else if (llGetSubString(name, 0, 2) == "fnc") {
             // Fingernail color
@@ -830,6 +678,22 @@ default {
         }
     }
 
+    link_message(integer sender_number, integer number, string message, key id) {
+        log("h: num: " + (string)number + "msg: " + message);
+        if (number == LINK_RUTH_HUD) {
+            // <command>,<arg1>,...
+            list cmdargs = llCSV2List(message);
+            string command = llToUpper(llList2String(cmdargs, 0));
+            if (command == "STATUS") {
+                log("Loaded notecard: " + llList2String(cmdargs, 1));
+            }
+            else if (command == "THUMBNAILS") {
+                log("Loaded notecard: " + llList2String(cmdargs, 1));
+                set_skin_thumbnails(llList2List(cmdargs, 1, -1));
+            }
+        }
+    }
+
     run_time_permissions(integer perm) {
         if (perm & PERMISSION_ATTACH) {
             llDetachFromAvatar();
@@ -847,7 +711,7 @@ default {
 
     changed(integer change) {
         if (change & (CHANGED_OWNER | CHANGED_INVENTORY)) {
-            llResetScript();
+            init();
         }
     }
 }
