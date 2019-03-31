@@ -1,6 +1,8 @@
+# Licenses
+
 License terms for this project vary by part type. Copyrights are by the original Authors. Please do not delete any credits or license files that are included in this project.   
 
-**Avatar Mesh**
+## Avatar Mesh
 
 Built with Blender 2.79 with Avastar 2 RC12.
 
@@ -33,27 +35,15 @@ The UV map is CC-BY Linden Lab.
 
 Ruth 2.0 Logo and photos are AGPL by Shin Ingen.
 
-**Skins**
+## Skins
 
-Skin templates by Chip Midnight:  http://forums-archive.secondlife.com/109/72/40762/1.html
+Licenses for the included skins are summarized in Skins/README.md
 
-CMFF Templates are Licensed as CC-BY 3.0 by Chip Midnight. 
-
-Splendor Skin by Sezmra Svarog, (Laurie Ellis) is free to use and Non Commercial.
-
-Splendor Skin Mods by Lelani Carver - LelaniCarverSplendorTan is free to use and Non Commercial.
-
-Pleaides Skin by Eloh Eliot is BSD License--this covers both source files and in-world skins.
-
-StarLight Skin, Strawberry Mods by Eloh Eliot is MIT License--this covers both source files and in-world skins.
-
-Ghana Skin is CC-BY Ina Centaur. 
-
-**Attachments**
+## Attachments
 
 Elf Ears are AGPL by Fred K. Beckhusen.
 
-**Clothing**
+## Clothing
 
 ...
 
