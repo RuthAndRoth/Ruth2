@@ -8,7 +8,7 @@ MeWe Community Page: https://mewe.com/group/5bbe0189a5f4e57c73569fb9
 
 Second Life Groups: "RuthAndRoth" and "Ruth and Roth Community"
 
-OpenSim Group: "RuthAndRoth"
+OpenSim Group: OSGrid RuthAndRoth
 
 OpenSim Region: OSGrid RuthAndRoth hop://login.osgrid.org/RuthAndRoth/128/128/26
 
