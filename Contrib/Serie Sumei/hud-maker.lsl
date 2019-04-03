@@ -17,33 +17,48 @@
 // ss-d 03Jan2019 <seriesumei@avimail.org> - Add skin panel
 // ss-e 10Feb2019 <seriesumei@avimail.org> - Add option panel
 // ss-f 31Mar2019 <seriesumei@avimail.org> - Fix textures for SL vs OpenSim
+// ss-g 02Apr2019 <seriesumei@avimail.org> - Add skin buttons and tweak textures
 
-// Build a single HUD for Ruth/Roth for alpha and skin appliers:
-// * Upload or obtain via whatever means the Alpha HUD mesh and the 'doll' mesh.  This
-//   script will throw an error if you start with a pre-linked Alpha HUD but it should
-//   work anyway.  Remove any scripts in these meshes.
-// * Create a new prim and take a copy of it into inventory
-// * Copy the folloing objects into the new prim on the ground:
-//   * the new prim from inventory created above and name it 'Object'
-//   * the alpha HUD mesh into the root prim and name it 'alpha-hud'
-//   * the skin HUD mesh into the root prim and name it 'skin-hud'
-//   * the doll mesh into the root prim and name it 'doll' if it is not already linked
-//     to the ahpha HUD mesh
+// This builds a multi-paned HUD for Ruth/Roth that includes the existing
+// alpha HUD mesh and adds panes for a different skin applier than Shin's
+// and an Options pane that currently has fingernail shape/color and toenail
+// color buttons.
+//
+// To build the 'uniHUD' from scratch you will need to:
+// * Upload or obtain via whatever means the Alpha HUD mesh and the 'doll'
+//   mesh.  This script will throw an error if you start with a pre-linked
+//   alpha HUD but it should work anyway.  To prepare the alpha hud and doll
+//   meshes:
+//   * Remove all scripts
+//   * Make sure that the 'rotatebar' link is the root of the HUD linkset and
+//     the 'chest' link is the root of the doll linkset.  Thse are used for
+//     positioning, even so SL gets the positioning wrong compares to OpenSim.
+// * Create a new empty box prim named 'Object' and take a copy of it into
+//   inventory
+// * Copy the folloing objects into the new box's inventory on the ground:
+//   * the new box from inventory created above and name it 'Object'
+//   * the alpha HUD mesh and name it 'alpha-hud'
+//   * if the doll mes is not already linked into the alpha HUD linkset copy
+//     it and name it 'doll'
+//   * the button meshes named '2x1 button' and 5x button'
 //   * this script
-// * Light fuse (touch the new prim) and get away, the new HUD will be assembled
-//   around the new prim which is now the root prim of the HUD.
-// * The alpha HUD and the doll will not be linked as they may need size and/or
-//   position adjustments depending on how your mesh is linked and what their original
-//   root prim was.
-// * Rename the former root prim of the alpha HUD mesh, if it was the rotation bar
-//   at the bottom name it 'rotatebar'.  Remove any script if it is still present.
-// * Rename the former root prim of the doll according to the usual doll link names.
-// * Make any position and size adjustments as necessary to the alpha HUD mesh and
-//   doll, then link them both to the new HUD root prim.  Make sure that the center
-//   square HUD prim is last so it remains the root of the linkset.
-// * Remove this script from the HUD root prim and copy in the ss-c version of the
-//   ru2HUD_ac_trigger HUD script.
-// * The other objects are also not needed any longer in the root prim and can be removed.
+// * Light fuse (touch the box prim) and get away, the new HUD will be
+//   assembled around the box prim which will become the root prim of the HUD.
+// * The alpha HUD and the doll will not be linked as they may need size
+//   and/or position adjustments depending on how your mesh is linked.  Since
+//   they are both linksets you do not want to link them to the main HUD until
+//   you are very satisfied with their position.  Then link them and rejoice.
+// * Rename the former root prim of the alpha HUD mesh, if it was the rotation
+//   bar at the bottom name it 'rotatebar'.  Remove any script if it is still
+//   present.
+// * Rename the former root prim of the doll according to the usual doll link
+//   names.
+// * Make any position and size adjustments as necessary to the alpha HUD mesh
+//   and doll, then link them both to the new HUD root prim.  Make sure that
+//   the center square HUD prim is last so it remains the root of the linkset.
+// * Remove this script from the HUD root prim and copy in the HUD script(s).
+// * The other objects are also not needed any longer in the root prim and
+//   can be removed.
 
 vector build_pos;
 integer link_me = FALSE;
@@ -74,20 +89,45 @@ integer is_SL() {
     return (la == SL);
 }
 
+// The four textures used in the HUD referenced below are included in the repo:
+// bar_texture: ruth 2.0 hud header.png
+// hud_texture: ruth 2.0 hud background gradient.png
+// options_texture: ruth 2.0 hud options gradient.png
+// fingernails_shape_texture: ruth 2.0 hud fingernails shape.png
+
 get_textures() {
     if (is_SL()) {
-        // Textures sin SL
+        // Textures in SL
+        // The textures listed are full-perm uploaded by seriesumei Resident
         bar_texture = "d5aeccd4-f3ff-bea6-1296-07e8e0453275";
-        hud_texture = "c09da8d2-7b3a-1434-9ae4-ae56e296ebc4";
-        options_texture = "9d71ccf1-025d-a529-aa08-a10a6ecae630";
+        hud_texture = "76dbff9c-c2fd-ffe9-a37f-cb9e42f722fe";
+        options_texture = "1186285b-cc82-7602-71f0-8ad0eb1762b2";
         fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
     } else {
-        // Textures in OSGrid
-        // TODO: Bad assumption that OpenSim == OSGrid, how do we detect which grid?
-        bar_texture = "dc2612bd-e230-47f3-8888-d9a14b652f7d";
-        hud_texture = "0f85ff3b-de15-4dbe-b899-63324de774e4";
-        options_texture = "00846504-9c2c-46bb-91d7-e392b0ee6a35";
-        fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
+        string grid_name = "";
+
+        // This will not compile in Second Life as it is an OpenSim-specific
+        // function.  Comment out the following line for SL:
+        grid_name = osGetGridName();
+
+        if (grid_name == "OSGrid") {
+            // Textures in OSGrid
+            // TODO: Bad assumption that OpenSim == OSGrid, how do we detect
+            //       which grid?  osGetGridName() is an option but does not
+            //       compile in SL so editing the script would stll be required.
+            //       Maybe we don't care too much about that?
+            // The textures listed are full-perm uploaded by serie sumei to OSGrid
+            bar_texture = "dc2612bd-e230-47f3-8888-d9a14b652f7d";
+            hud_texture = "c76f327a-a431-4219-8913-78c7adfe0d02";
+            options_texture = "86717f80-d201-4cf5-ab4c-1d77e5bd8e55";
+            fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
+        } else {
+            log("OpenSim detected but grid " + grid_name() + " unknown, using blank textures");
+            bar_texture = TEXTURE_BLANK;
+            hud_texture = TEXTURE_BLANK;
+            options_texture = TEXTURE_BLANK;
+            fingernails_shape_texture = TEXTURE_BLANK;
+        }
     }
 }
 
@@ -279,6 +319,110 @@ default {
         }
         else if (counter == 13) {
             configure_color_buttons("tnc1");
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, -0.1, 0.6333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 14) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin1",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, 0.1, 0.6333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 15) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin2",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, -0.1, 0.7333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 16) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin3",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, 0.1, 0.7333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 17) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin4",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, -0.1, 0.8333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 18) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin5",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, 0.1, 0.8333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 19) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin6",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, -0.1, 0.9333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 20) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin7",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+
+            log("Rezzing buttons");
+            link_me = TRUE;
+            // z=0.76953
+            rez_object("1x2 button", <-0.25, 0.1, 0.9333>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 21) {
+            log("Configuring skin button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "skin8",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
 
         }
     }
