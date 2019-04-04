@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+<!-- Please save as 'filename.dae' -->
+<asset>
+<contributor><author>tomjs Resident</author><authoring_tool>*NN* Mesh Generator</authoring_tool></contributor>
+<unit name="meter" meter="1"/><up_axis>Z_UP</up_axis></asset>
+<library_geometries>
+<geometry id="PRIM_0000" name="Mesh_Generator_Object"><mesh>
+<source id="PRIM_0000_UV"><float_array id="PRIM_0000_UV_ARRAY" count="48">
+0 0 1 0 0 1 1 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1 1 1 0 0 1 0 0 1 1 1 
+</float_array><technique_common><accessor source="#PRIM_0000_UV_ARRAY" count="24" stride="2">
+<param name="S" type="float"/><param name="T" type="float"/></accessor></technique_common></source>
+<source id="PRIM_0000_HOSEN"><float_array id="PRIM_0000_HOSEN_ARRAY" count="72">
+-1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 -1 0 0 -1 0 0 -1 0 0 -1 0 0 1 0 0 1 0 0 1 0 0 1 0 0 
+</float_array><technique_common><accessor source="#PRIM_0000_HOSEN_ARRAY" count="24" stride="3">
+<param name="X" type="float"/><param name="Y" type="float"/><param name="Z" type="float"/></accessor></technique_common></source>
+<source id="PRIM_0000_POINT"><float_array id="PRIM_0000_POINT_ARRAY" count="72">
+-0.005 0.0175 0.002 -0.005 -0.0825 0.002 -0.005 0.0175 0.03 -0.005 -0.0825 0.03 0.005 -0.0825 0.002 0.005 0.0175 0.002 0.005 -0.0825 0.03 0.005 0.0175 0.03 -0.005 0.0175 -0.03 -0.005 -0.0825 -0.03 -0.005 0.0175 -0.002 -0.005 -0.0825 -0.002 0.005 -0.0825 -0.03 0.005 0.0175 -0.03 0.005 -0.0825 -0.002 0.005 0.0175 -0.002 -0.005 0.0825 -0.03 -0.005 0.0225 -0.03 -0.005 0.0825 0.03 -0.005 0.0225 0.03 0.005 0.0225 -0.03 0.005 0.0825 -0.03 0.005 0.0225 0.03 0.005 0.0825 0.03 
+</float_array><technique_common><accessor source="#PRIM_0000_POINT_ARRAY" count="24" stride="3">
+<param name="X" type="float"/><param name="Y" type="float"/><param name="Z" type="float"/></accessor></technique_common></source>
+<vertices id="PRIM_0000_CHOTEN"><input semantic="POSITION" source="#PRIM_0000_POINT"/></vertices>
+<triangles material="SOZAI_PRIM_0000_0" count="2">
+<input semantic="VERTEX" source="#PRIM_0000_CHOTEN" offset="0"/>
+<input semantic="NORMAL" source="#PRIM_0000_HOSEN" offset="1"/>
+<input semantic="TEXCOORD" source="#PRIM_0000_UV" offset="2"/>
+<p>
+0 0 0 1 1 1 3 3 3 0 0 0 3 3 3 2 2 2 
+</p></triangles>
+<triangles material="SOZAI_PRIM_0000_1" count="2">
+<input semantic="VERTEX" source="#PRIM_0000_CHOTEN" offset="0"/>
+<input semantic="NORMAL" source="#PRIM_0000_HOSEN" offset="1"/>
+<input semantic="TEXCOORD" source="#PRIM_0000_UV" offset="2"/>
+<p>
+4 4 4 5 5 5 7 7 7 4 4 4 7 7 7 6 6 6 
+</p></triangles>
+<triangles material="SOZAI_PRIM_0000_2" count="2">
+<input semantic="VERTEX" source="#PRIM_0000_CHOTEN" offset="0"/>
+<input semantic="NORMAL" source="#PRIM_0000_HOSEN" offset="1"/>
+<input semantic="TEXCOORD" source="#PRIM_0000_UV" offset="2"/>
+<p>
+8 8 8 9 9 9 11 11 11 8 8 8 11 11 11 10 10 10 
+</p></triangles>
+<triangles material="SOZAI_PRIM_0000_3" count="2">
+<input semantic="VERTEX" source="#PRIM_0000_CHOTEN" offset="0"/>
+<input semantic="NORMAL" source="#PRIM_0000_HOSEN" offset="1"/>
+<input semantic="TEXCOORD" source="#PRIM_0000_UV" offset="2"/>
+<p>
+12 12 12 13 13 13 15 15 15 12 12 12 15 15 15 14 14 14 
+</p></triangles>
+<triangles material="SOZAI_PRIM_0000_4" count="2">
+<input semantic="VERTEX" source="#PRIM_0000_CHOTEN" offset="0"/>
+<input semantic="NORMAL" source="#PRIM_0000_HOSEN" offset="1"/>
+<input semantic="TEXCOORD" source="#PRIM_0000_UV" offset="2"/>
+<p>
+16 16 16 17 17 17 19 19 19 16 16 16 19 19 19 18 18 18 
+</p></triangles>
+<triangles material="SOZAI_PRIM_0000_5" count="2">
+<input semantic="VERTEX" source="#PRIM_0000_CHOTEN" offset="0"/>
+<input semantic="NORMAL" source="#PRIM_0000_HOSEN" offset="1"/>
+<input semantic="TEXCOORD" source="#PRIM_0000_UV" offset="2"/>
+<p>
+20 20 20 21 21 21 23 23 23 20 20 20 23 23 23 22 22 22 
+</p></triangles>
+</mesh></geometry>"
+</library_geometries>
+<library_visual_scenes><visual_scene id="SCENE">
+<node id="PRIM_0000_NODE" name="PRIM_0000_NODE" type="NODE">
+<matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+<instance_geometry url="#PRIM_0000"/></node>
+</visual_scene></library_visual_scenes><scene><instance_visual_scene url="#SCENE"/></scene></COLLADA>
