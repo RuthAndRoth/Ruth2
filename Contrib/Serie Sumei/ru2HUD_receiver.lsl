@@ -25,6 +25,7 @@
 // v2 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change,
 //      listen on multiple APP_IDs
 // v3 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
+// v4 06Apr2019 <seriesumei@avimail.org> - Fix initialization bug in OpenSim
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.
@@ -38,12 +39,13 @@ integer API_VERSION = 2;
 
 // The body part types are used to track which type the script is handling
 // and is inferred at start-up by looking for specific names in the linkset.
-// Override this by directly setting part_type below.
+// Override this by directly setting PART_TYPE_DEFAULT below.
 integer PART_TYPE_NULL = 0;
 integer PART_TYPE_BODY = 1;
 integer PART_TYPE_HANDS = 2;
 integer PART_TYPE_FEET = 3;
-integer part_type = PART_TYPE_NULL;
+integer PART_TYPE_DEFAULT = 0;
+integer part_type;
 
 // Map prim name and descriptions to link numbers
 list prim_map = [];
@@ -220,6 +222,7 @@ default {
         map_linkset();
 
         // Deduce part type from the linked names
+        part_type = PART_TYPE_DEFAULT;
         if (~llListFindList(prim_map, ["CHEST"])) {
             part_type = PART_TYPE_BODY;
         }
