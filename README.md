@@ -33,3 +33,8 @@ We have moved all personal directories under the new top-level directory
 'Contrib'.  These continue to be used as they always have, as a place for
 team members to put things that are still under development before (or until)
 they are merged into the master release directories.
+
+## Licenses
+
+Ruth 2.0 and Roth 2.0 are AGPL licensed, other contents of this repository are also
+AGPL licensed unless otherwise indecated.  See Licenses.txt for specific details.
