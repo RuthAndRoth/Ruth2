@@ -37,4 +37,4 @@ they are merged into the master release directories.
 ## Licenses
 
 Ruth 2.0 and Roth 2.0 are AGPL licensed, other contents of this repository are also
-AGPL licensed unless otherwise indecated.  See Licenses.txt for specific details.
+AGPL licensed unless otherwise indicated.  See Licenses.txt for specific details.
