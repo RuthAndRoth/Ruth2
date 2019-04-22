@@ -1,6 +1,8 @@
 # Skins
 
-A selection of freely-licensed skins is included here as a starting point
+A selection of freely-licensed skins is included here as a starting point.
+
+For more open dource skins see https://github.com/RuthAndRoth/Skins
 
 ## Licenses
 
