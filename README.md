@@ -6,7 +6,8 @@ source mesh bodies by Shin Ingen with other open source contributions from the
 OpenSimulator Community.
 
 * Github Repository: https://github.com/RuthAndRoth/Ruth
-* Discord Discussion Forum: https://discordapp.com/channels/619919380154810380/619919380691550240 Invite: https://discord.gg/UMyaZkc
+* Discord Discussion Forum: https://discordapp.com/channels/619919380154810380/619919380691550240
+Invite: https://discord.gg/UMyaZkc
 * MeWe Community Page: https://mewe.com/group/5bbe0189a5f4e57c73569fb9
 * Second Life Groups: "RuthAndRoth" and "Ruth and Roth Community"
 * OpenSim Group: OSGrid RuthAndRoth
