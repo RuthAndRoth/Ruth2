@@ -1,0 +1,156 @@
+Ruth2.0_RC#4b.blend notes Ada Radius 2019-04-06
+
+To a clean file with new Avastar rig and mesh:
+    
+Appended from R2HandPoseLibary.blend:
+Actions>Pose libraries: Ruth2_HandPose_Library
+
+Appended from Medhue Animations Poselib.blend
+Actions>Pose libraries: MDHU Weight Poses, Medhue Poses and more
+   
+Appended from OSRuth2_02Ada1.8_UV58.blend: 
+Ruth_6k_bodyAda1.8
+Ruth6k_hands_bento
+
+Appended from Release3_AdaShinEdit_SundanceEdit_16.blend:
+r2FEET_high_SundanceUV_RC3                   
+
+Appended from OSRuth2_CurrentRelease_DEVKIT_CURIOUS_TAARNA_r2FEET_RC#3.blend:
+r2FEET_medium_RC#3                    
+                    
+Appended OSRuth2_02Ada2.1Feet.blend
+Ruth6kfeet_flat                   
+    
+WORK IN THIS FILE:
+                    Save Pose library datablocks
+                    Delete unneeded Avastar stuff that came in with appended mesh
+                    unbind and reskin everything to new armature, keeping weights
+                    join upper body, lower body and hands, remove doubles
+                    assign materials and make simple node setups
+                    rename to Ruth2_RC4_BODY, Ruth2_RC4_FEET_high, Ruth2_RC4_FEET_med, Ruth2_RC4_FEET_flat
+                    set AutoSmooth to 90 for all pieces
+                    reset data transfer modifier assignmants
+                    minor remodel to center loop, snap center loop to x=0, snap the mesh to symmetry
+                    minor smoothing to torso and upper-lower body seam
+                    
+TESTING to mBones:
+    Hand weights tested against Sundance's Ruth2_HandPose_Library
+    Flat feet tested against against Ada's Foot poses and general animations inworld 
+    Overall to Medhue's free pose library sets (commercial and noncommercial use allowed)   
+                    
+        Neck:
+            Added mNeck vertex group and assigned top row loop 100%
+            Extend NECK influence down another loop, and blur
+            NOTE: the neck seam is still unsnapping in extreme mNeck positions, but it's better. 
+                    
+        Arms:  
+            Redo CLAVICLE weights  - better shoulder, chest, back and underarm deformation with mCollar bone moves
+            Redo UPPER_ARM weights - better shoulder and elbow deformation with mShoulder bone moves
+            Adjust LOWER_ARM weights - better elbow, wrist to hand deformation with mElbow bone moves
+                    
+        Hands:  
+            Adj weights near or in palm - weight limit per vert, deformation
+            Clean up hand weights (fix stray verts, ranges not following loops, weight limit per vert) 
+    
+        Chest
+           Reweighted CHEST, PECS and UPPER BACK to improve definition of rib cage when mChest bone moves. 
+            
+        Torso
+           Reweighted BELLY, HANDLEs, LOWER_BACK - improve definition of belly to rib cage when mTorso moves. 
+                                     
+        Pelvis
+            Reweighted PELVIS, BUTT for better sit and ground sit while moving mPelvis bone.
+                        
+        Legs
+            Better blending with PELVIS and BUTT. Added edge loops at the upper thigh to help with sits.          
+                                               
+        Feet_high:         
+            tweak UV map - uncross edges, adjust verts at the toes
+            assign a material to the nail faces so the map can be used with other skins more easily
+            minor fixes to weights (ranges not following loops)
+            fix symmetry, snap to lower leg       
+                                            
+        Feet_medium
+            remove nail faces
+            assign a material to the nail faces so the map can be used with other skins more easily
+            copy UV maps from high foot
+            adjust toenail verts similar to high foot
+            Adjust weights similar to high foot (not exact match as verts are different distances from bones)
+            Clean up ranges not following loops
+            fix symmetry, snap to lower leg 
+                    
+        Feet_flat                 
+            assign materials 
+            tweak UV and model - toenails
+            minor fixes to weights - ranges not following loops
+            fix symmetry, snap to lower leg  
+            NOTE: these weights are different than for high and medium foot, so that the flat feet can be posed to any heel height plus a few dance positions. 
+                    
+                    
+                      
+TESTING AGAINST THE APPEARANCE SLIDERS: see http://wiki.secondlife.com/wiki/Avatar_sliders
+    
+    Body fat:
+         affected by weights in BELLY, CHEST, HEAD, LEFT_HANDLE, LEFT_PEC, LOWER_BACK, L_CLAVICLE, L_LOWER_ARM, L_LOWER_LEG, L_UPPER_ARM, L_UPPER_LEG, NECK, PELVIS, RIGHT_HANDLE, RIGHT_PEC, R_CLAVICLE, R_LOWER_ARM, R_LOWER_LEG, R_UPPER_ARM, R_UPPER_LEG, UPPER_BACK.
+        I got it to smooth out by smoothing Shin's topography at the top of the belly. We lost some rib cage definition :( 
+    
+    Torso Muscles:
+        according to SLWiki, affected by BELLY, CHEST, L_CLAVICLE, L_LOWER_ARM, _UPPER_ARM, R_CLAVICLE, R_LOWER_ARM, R_UPPER_ARM, UPPER_BACK, but it looks as though BELLY and CHEST are not influencing much. 
+    
+    Neck Thickness
+        Affected by mNeck according to the SL Wiki, but it's clearly affected more by NECK. Working OK. 
+
+    Breast Size, gravity, female cleavage
+        affected by LEFT_PEC, RIGHT_PEC.
+        Breast volume weights are OK for big breasts, ugly for small breasts. I've tried a combination of changing weights and a little resculpting, but I think it would need a redesign of the topology to fix it, and that would ruin Shin's shaping. (a less natural grapefruit shape rather than banana, with even concentric circles and no center grid. I think.) 
+
+    Love Handles
+        affected by BELLY, LEFT_HANDLE, LOWER_BACK, RIGHT_HANDLE.
+        Minor fixes. These look good to me - I wanted corset shapes for historical costumes, and we have that now. 
+
+    Belly Size
+        according to SL WIki, affected by BELLY, PELVIS, but it's obvious that anything clamped to mTorso and mPelvis is affecting the slider to include BUTT, LEFT_HANDLE, RIGHT_HANDLE, LOWER_BACK. 
+        Fixing this ruins the weighting needed to make good sits - it would be better to make a preggers av, if that's wanted.  
+        
+    Saddlebags
+     	affected by PELVIS.
+        working OK     
+    
+    Butt Size
+        affected by BUTT, PELVIS
+        fixed the sideways pancake issue with 0%
+        working OK
+     
+    Leg Muscles: L_LOWER_LEG, L_UPPER_LEG, R_LOWER_LEG, _UPPER_LEG. Looks OK to me. 
+
+    Bowed Legs: L_LOWER_LEG, L_UPPER_LEG, R_LOWER_LEG, _UPPER_LEG. Fixed leg vert issue that hadn't shown up in other tests. 
+
+    Foot Size: L_FOOT, R_FOOT. Working well for FEET_High and FEET_medium, and OK for FEET_Flat 
+    
+       
+    TO DO Append Sundance's fingernails and toenails in another file
+    TO DO design alpha cuts in another file
+    TO DO a G-rated version of this file
+                    
+VERTEX COUNTS:
+    Body: 8768
+    Feet_flat: 2516
+    Feet_high: 2484
+    Feet_med: 2484
+    
+    Total vertex counts will increase quite a bit after the alpha cuts.      
+
+                                            
+CONTRIBUTORS TO THIS FILE: Please correct this if I got any of it wrong. 
+Shin Ingen - modeling, vertex weighting
+Ada Radius - vertex weighting, modeling, UV mapping, foot poses
+Sundance Haiku - UV mapping, modeling, high feet, hand poses, fingernails, toenails
+Curious Creator - UV mapping?
+Taarna Welles - UV mapping, medium feet
+Leona Morro - UV mapping
+Eloh Eliot - Starlight skin textures
+Chip Midnight - templates
+
+Software: ZBrush (original model by Shin Ingen), Blender V2.79b with Avastar Bento plugin v.2.5.18
+
+Ada Radius 2019-04-06

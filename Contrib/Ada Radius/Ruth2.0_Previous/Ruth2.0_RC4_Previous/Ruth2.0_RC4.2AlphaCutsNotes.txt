@@ -1,0 +1,40 @@
+Ruth2.0_RC#4.2AlphaCuts.blend notes Ada Radius 2019-04-15
+
+To Ruth2.0RC#4.blend:
+    
+Append from ShinRC3_SundanceNewAlphas.blend  - to use Sundance's layout wishlist as the starting point. I added to it, primarily to be able to expose torso, hips and legs a little at the sides for ancient classical costume - chitans and stolas, for example.  
+
+The HUD doll should be in T-pose instead of A-pose so clothing makers and their customers can reach the sides of the torso. 
+
+Each part has up to 8 materials, or faces inworld.
+    
+I'm using a color palette designed to be perceived by the approx. one out of twelve people who have some form of shift or blindness in their color perception. Starting with the basic RGB values, then brightening or shading each incrementally to allow distinct grayscale values.
+
+The order of the color bands matters to the color blind: green and any other color except for white is a problem for someone. OTOH, even the most severely affected can usually see at least a little yellow. No arrangement made me happy in all directions.   
+yellow: 255,255,0 AKA 1.0,1.0,0.0
+cyan: 26,255,255 AKA 0.1,1.0, 1.0
+magenta: 204,0,204 AKA 0.8,0.0.0.8
+black 50,50,50 AKA 0.2,0.2,.02 (so we can see wireframe under it)
+red 153,0,0 AKA 0.6,0.0,0.0
+blue 128,128,255 AKA 0.5.0.5.1.0
+white 255,255,255 AKA 1.0,1.0,1.0
+green 64,255,64 AKA 0.25,1.0,0.25 or similar. This one could be 0,255,0 if the yellow is shaded. 
+
+For the most part, I ordered the materials/faces either left to right in rows, or clockwise_R, counterclockwise_L, whenever possible. To maximize contrast and keep from getting lost.  
+
+Please see the numbered parts list in this file. If you make a change, be sure to reflect it in the outliner, both object and object data. And back to the parts list. It's easy to get off, I did several times.
+
+Data transfer modifiers (weld in Avastar) now point to the object directly above, or whatever looked the best to me. 
+
+Duplicated the Cuts group and merged upper and lower bits to make new UV maps, grayscale & color. 
+
+Naming is by clothing terminology, which helped me to make decisions on which cuts to consolidate. There is a lot of variance industry-wide so I used what seemed reasonable, just so we can communicate with each other when there are differences of opinion.
+
+some sources:
+    https://sewguide.com/fashion-vocabulary/ 
+    https://www.apparelsearch.com/definitions/clothing/clothing_terminology.htm
+    The Complete Costume Dictionary by Elizabeth J. Lewandowski
+
+I'm pretty sure that we can consolidate this into fewer segments, but I don't know which ones. 
+
+Ada Radius 2019-04-15

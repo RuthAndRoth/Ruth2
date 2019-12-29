@@ -1,0 +1,28 @@
+Ruth2.0_RC4.4Export.blend notes Ada Radius 2019-04-14
+
+Things to fix before exporting:
+    
+    Clean up the file - get the bits out of organizational empties and parented directly to the armature, delete source objects and anything else that won't be uploaded, check the materials list and get rid of lurking unused materials, etc.     
+
+    Number the materials, no spaces, starting with 0. Inworld, yellow will always be face 0, cyan=1, magenta=2, black=3, red=4, blue=5, white=6, green=7, which is the best order horizontally for visual perception for most. 
+
+    Credit to: Kayaker Magic on how to order the faces. He also advises not to rely on linkset ordering from Blender; to rename the links inworld.   
+
+
+Upload notes:
+    I'm using Firestorm viewer x64 5.011.53634.
+    
+    The model takes a while to load, because of all the links, but inworld only adds 7410 to the avatar complexity measure, which is exellent.  If there's an error message "Missing required level of detail" and the yellow Loading button in the lower left is visible, it's a false error message. Wait. 
+
+Upload settings
+    LOD: high = default, each lower level 1/2 of the one above seemed to work the best while not overloading. I've been to meetings or parties where Ruth is on a lot of people, and some were jellies. That's probably from hair and shoes, but we should try to make the mesh as efficient as possible. 
+
+    Physics - a cube from my file. 
+
+    Upload Options: check Include Skin Weight
+
+I am not able to get the colors from Material Settings to import - they import fine when there's one material per piece, but not more, apparently? So I baked textures - see Ruth2.0_RC#4.3BakeAlphaCuts.blend and the png files.
+
+Ada Radius 2019-04-14
+ 
+
