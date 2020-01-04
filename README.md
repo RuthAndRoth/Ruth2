@@ -1,6 +1,6 @@
-# Ruth and Roth 2.0 Mesh Avatar Project
+# Ruth2 and Roth2 Mesh Avatar Project
 
-Ruth and Roth 2.0 are low-poly mesh bodies, specifically designed for OpenSimulator.
+Ruth2 and Roth2 are low-poly mesh bodies, specifically designed for OpenSimulator.
 They are built to use standard Second Life(TM) UV maps using scratch-built open
 source mesh bodies by Shin Ingen with other open source contributions from the
 OpenSimulator Community.
@@ -15,14 +15,14 @@ OpenSimulator Community.
 
 ## Current Release
 
-The Ruth/Roth 2.0 current release files have been kept in a number of
+The Ruth2/Roth2 current release files have been kept in a number of
 'Current Release' directories before now.  We have renamed these
 directories to 'Release' as there is no longer a need to distinguish which
 release they belong to.
 
 ## Previous Release
 
-The Ruth 2.0 RC2 release files have been kept in a number of 'Previous Release'
+The Ruth2 RC#2 release files have been kept in a number of 'Previous Release'
 directories in the repo.  These have been archived into a git branch named
 'archive-ruth-rc2' and the directories renamed 'Release' in that branch.  These
 'Previous Release' directories will be removed from the master branch in the
@@ -37,5 +37,5 @@ they are merged into the master release directories.
 
 ## Licenses
 
-Ruth 2.0 and Roth 2.0 are AGPL licensed, other contents of this repository are also
+Ruth2 and Roth2 are AGPL licensed, other contents of this repository are also
 AGPL licensed unless otherwise indicated.  See Licenses.txt for specific details.
