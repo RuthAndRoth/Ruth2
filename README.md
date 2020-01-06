@@ -1,11 +1,11 @@
-# Ruth2 and Roth2 Mesh Avatar Project
+# Ruth2 Mesh Avatar Project
 
-Ruth2 and Roth2 are low-poly mesh bodies, specifically designed for OpenSimulator.
-They are built to use standard Second Life(TM) UV maps using scratch-built open
+Ruth2 is a low-poly mesh body specifically designed for OpenSimulator.
+It is built to use standard Second Life(TM) UV maps using scratch-built open
 source mesh bodies by Shin Ingen with other open source contributions from the
 OpenSimulator Community.
 
-* Github Repository: https://github.com/RuthAndRoth/Ruth
+* Github Repository: https://github.com/RuthAndRoth/Ruth2
 * Discord Discussion Forum: https://discordapp.com/channels/619919380154810380/619919380691550240
 * Discord Discussion Forum Invitation (open to all): https://discord.gg/UMyaZkc
 * MeWe Community Page: https://mewe.com/group/5bbe0189a5f4e57c73569fb9
@@ -15,18 +15,12 @@ OpenSimulator Community.
 
 ## Current Release
 
-The Ruth2/Roth2 current release files have been kept in a number of
-'Current Release' directories before now.  We have renamed these
-directories to 'Release' as there is no longer a need to distinguish which
-release they belong to.
+The Ruth2 current release files are in the Mesh directory.
 
 ## Previous Release
 
-The Ruth2 RC#2 release files have been kept in a number of 'Previous Release'
-directories in the repo.  These have been archived into a git branch named
-'archive-ruth-rc2' and the directories renamed 'Release' in that branch.  These
-'Previous Release' directories will be removed from the master branch in the
-near future.
+Previous releases of Ruth2 may be found in the old Ruth repo on Github and
+in a number of places both in Second Life and OSGrid as listed above.
 
 ## Personal Directories
 
@@ -35,7 +29,48 @@ We have moved all personal directories under the new top-level directory
 team members to put things that are still under development before (or until)
 they are merged into the master release directories.
 
+## Upload Artifacts
+
+Since not everyone is prepared to perform Blender exports to get the Collada
+files for uploading we maintain recent exported .dae files in the Artifacts
+directory.  These correspond to the .blend files in the Mesh directory.
+
+There is also an IAR file that can be uset to pre-load OpenSim grids.  These are
+usually updated at releases.  They will maintain consistent UUIDs for the
+assets to minimize duplication when uploading multiple releases for unchanged
+files.
+
 ## Licenses
 
-Ruth2 and Roth2 are AGPL licensed, other contents of this repository are also
-AGPL licensed unless otherwise indicated.  See Licenses.txt for specific details.
+Ruth2 is AGPL licensed, other contents of this repository are also
+AGPL licensed unless otherwise indicated.  See LICENSE.md for specific details.
+
+# Changes from Ruth 2.0
+
+The Ruth2 and Roth2 repositories have been extracted from the original Ruth 2.0
+repo, retaining all Git history of the files that have been moved.  Some common
+files will be moved later to a common repo.  Below is the list of changes for the
+files present in this repo:
+
+* Animations -> Accessories/Animations
+* Clothing -> Accessories/Clothing
+* Contrib/Shin Ingen/Ruth/Uploads -> Artifacts/Collada
+* Licenses.txt -> LICENSE.md
+* Mesh/Avatar Ruth -> Mesh
+  * Mesh/OSRuth2_CurrentRelease_DevKit_RC3.blend -> Mesh/ru2_DevKit_v3.blend
+  * Mesh/OSRuth2_CurrentRelease_Source_RC3.blend -> Mesh/ru2_Source_v3.blend
+* Mesh/Avatar Ruth/IARs -> Artifacts/IAR
+  * Artifacts/IAR/R2-Ruth-RC3.iar -> Artifacts/IAR/Ruth2-v3.iar
+* Mesh/Avatar Ruth/Scripts -> Scripts
+* Mesh/Avatar Ruth/Textures -> Textures
+* Mesh/Avatar Ruth/Uploads -> Artifacts/Collada
+* Shapes -> Accessories/Shapes
+* Skins -> Accessories/Skins
+
+## Reference Files
+
+The original Ruth repo contained a number of reference files archived from
+various places around the Internet.  Some of those have become hard to find
+due to link rot and sites vanishing.
+
+Those archived files are now in their own repo https://github.com/RuthAndRoth/Reference.
