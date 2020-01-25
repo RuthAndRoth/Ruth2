@@ -1,0 +1,13 @@
+If you look at the snapshot it will give a clear idea how the hud is supposed to look.
+
+The principle for how the hud works is exactly the same as the last hud, the difference is in the addition of BOM, apply all and material information. 
+
+Each collum and row has different naming protols.
+
+All the top row buttons are called "BtnApplyAll" + a number relating the collum number. 
+All the 2nd row buttons are called "BtnEyes" + a number reflecting the collum number.
+All the 3rd row buttons are called "BtnHead" + a number reflecting the collum number.
+All the 4th row buttons are called "BtnUpper" + a number reflecting the collum number.
+All the 5th row buttons are called "BtnLower" + a number reflecting the collum number.
+
+The collum number for all the Bakes on mesh buttons is "0". So the use Bakes on Mesh button for all items is called "BtnApplyAll0".
