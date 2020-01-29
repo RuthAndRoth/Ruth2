@@ -1,6 +1,6 @@
 # Licenses
 
-License terms for this project vary by part type. Copyrights are by the original Authors. Please do not delete any credits or license files that are included in this project.   
+License terms for this project vary by part type. Copyrights are by the original Authors. Please do not delete any credits or license files that are included in this project.
 
 ## Avatar Mesh
 
@@ -32,6 +32,7 @@ Sundance Haiku
 
 The mesh head is CC-BY Linden Lab.
 The UV map is CC-BY Linden Lab.
+The Avastar rig contains components licensed as CC-BY-3.0 by Machinimatrix.org.
 
 Ruth 2.0 Logo and photos are AGPL by Shin Ingen.
 
