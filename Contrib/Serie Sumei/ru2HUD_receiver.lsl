@@ -26,6 +26,8 @@
 //      listen on multiple APP_IDs
 // v3 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
 // v4 06Apr2019 <seriesumei@avimail.org> - Fix initialization bug in OpenSim
+// v5 15Mar2020 <seriesumei@avimail.org> - Remove part type for hands and feet
+//      to handle when hands and feet are linked to body
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.
@@ -138,15 +140,15 @@ do_alpha(list args) {
             // Found a matching part name, use it
             found = TRUE;
         }
-        // Override link on hands and feet
-        if (part_type == PART_TYPE_HANDS && target == "HANDS") {
-            link = LINK_ALL_CHILDREN;
-            found = TRUE;
-        }
-        else if (part_type == PART_TYPE_FEET && target == "FEET") {
-            link = LINK_ALL_CHILDREN;
-            found = TRUE;
-        }
+        // // Override link on hands and feet
+        // if (part_type == PART_TYPE_HANDS && target == "HANDS") {
+        //     link = LINK_ALL_CHILDREN;
+        //     found = TRUE;
+        // }
+        // else if (part_type == PART_TYPE_FEET && target == "FEET") {
+        //     link = LINK_ALL_CHILDREN;
+        //     found = TRUE;
+        // }
         if (found) {
             llSetLinkAlpha(link, alpha, face);
         }
@@ -226,12 +228,12 @@ default {
         if (~llListFindList(prim_map, ["CHEST"])) {
             part_type = PART_TYPE_BODY;
         }
-        else if (~llListFindList(prim_map, ["HANDS"])) {
-            part_type = PART_TYPE_HANDS;
-        }
-        else if (~llListFindList(prim_map, ["FEET"])) {
-            part_type = PART_TYPE_FEET;
-        }
+        // else if (~llListFindList(prim_map, ["HANDS"])) {
+        //     part_type = PART_TYPE_HANDS;
+        // }
+        // else if (~llListFindList(prim_map, ["FEET"])) {
+        //     part_type = PART_TYPE_FEET;
+        // }
 
         // Set up listener
         r2channel = keyapp2chan(APP_ID);
@@ -241,9 +243,9 @@ default {
             listen_alt1 = llListen(r2channel_alt1, "", "", "");
         }
 
-        if (part_type == PART_TYPE_HANDS) {
-            llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
-        }
+        // if (part_type == PART_TYPE_HANDS) {
+        //     llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
+        // }
 
         log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     }
@@ -258,9 +260,9 @@ default {
 
     timer() {
         llSetTimerEvent(0);
-        if (part_type == PART_TYPE_HANDS) {
-            llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
-        }
+        // if (part_type == PART_TYPE_HANDS) {
+        //     llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
+        // }
     }
 
     listen(integer channel, string name, key id, string message) {
@@ -293,8 +295,15 @@ default {
             list cmdargs = llCSV2List(message);
             string command = llToUpper(llList2String(cmdargs, 0));
 
-            // handle decrypted message
-            // ...
+                if (command == "ALPHA") {
+                    do_alpha(cmdargs);
+                }
+                else if (command == "STATUS") {
+                    do_status(cmdargs);
+                }
+                else if (command == "TEXTURE") {
+                    do_texture(cmdargs);
+                }
         }
     }
 
