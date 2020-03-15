@@ -16,6 +16,8 @@
 // ss-j 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
 // ss-k 10Feb2019 <seriesumei@avimail.org> - Adjust rotations for build script
 // ss-l 24Mar2019 <seriesumei@avimail.org> - Read skins from Omega-compatible notecard
+// ss-m 08Sep2019 <seriesumei@avimail.org> - change minimize behaviour
+// ss-n 24Jan2020 <seriesumei@avimail.org> - Add hand poses
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -171,7 +173,7 @@ vector last_rot;
 integer VERBOSE = FALSE;
 
 // Memory limit
-integer MEM_LIMIT = 32000;
+integer MEM_LIMIT = 64000;
 
 // Ruth link messages
 integer LINK_RUTH_HUD = 40;
@@ -196,6 +198,23 @@ integer haz_xtea = FALSE;
 
 integer r2channel;
 integer visible_fingernails = 0;
+
+// ***
+// Hand pose
+string gcAnimation = "";      //the currently selected animation from the HUD inventory
+string gcPrevRtAnim = "";     //the previously selected animation on the right side
+string gcPrevLfAnim = "";     //the previously selected animation on the left side
+string gcWhichSide = "";      //Whether the currently selected animation is a right or left hand
+integer gnButtonNo = 0;       //The number of the button pressed by the user
+integer gnPrimNo;             //The prim which contains the button pressed
+integer gnPrimFace;           //The face of the prim containing the button pressed
+integer gnButtonStart;        //The starting number of a group of buttons
+vector gvONColor =  <0.224, 0.800, 0.800>;  //Teal color to indicate the button has been pressed
+vector gvOFFColor = <1.0, 1.0, 1.0>;  //white color to indicate the button has not been pressed
+integer glStopAll =FALSE;
+
+integer hp_index = 0;
+// ***
 
 log(string msg) {
     if (VERBOSE == 1) {
@@ -345,22 +364,6 @@ colorDoll(string commandFilter, integer alphaVal) {
     }
 }
 
-// Put thumbnails from the applier onto the HUD buttons
-// Assumes the 2x1 mesh button and the square face 4
-set_skin_thumbnails(list names) {
-    integer i;
-    for (; i < llGetListLength(names); ++i) {
-        string texture = llList2String(names, i);
-        string prim_name = "skin" + (string)i;
-        integer link = llListFindList(prim_map, [prim_name]);
-        log("h: link=" + (string)link);
-        if (link >= 0) {
-            // face == 4 is specific to these buttons
-            llSetLinkTexture(link, texture, 4);
-        }
-    }
-}
-
 doButtonPress(list buttons, integer link, integer face) {
     string commandButton = llList2String(buttons, face);
     list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
@@ -398,45 +401,6 @@ texture_v2(string name, string tex, integer face, vector color) {
     send(cmd);
 }
 
-// Convert face + position to a button name for 3 choices
-string map_button_3(integer face, integer x) {
-    string ret;
-    if (face == 0 && x == 0) {
-        ret = "1";
-    }
-    else if (face == 0 && x == 1) {
-        ret = "2";
-    }
-    else if (face == 2) {
-        ret = "3";
-    }
-    else if (face == 4) {
-        ret = "1";
-    }
-    return ret;
-}
-
-// Convert face + position to a button name for 4 choices
-string map_button_4(integer face, integer x) {
-    string ret;
-    if (face == 0 && x == 0) {
-        ret = "1";
-    }
-    else if (face == 0 && x == 1) {
-        ret = "2";
-    }
-    else if (face == 2 && x == 0) {
-        ret = "3";
-    }
-    else if (face == 2 && x == 1) {
-        ret = "4";
-    }
-    else if (face == 4) {
-        ret = "1";
-    }
-    return ret;
-}
-
 init() {
     // Initialize attach state
     last_attach = llGetAttached();
@@ -458,7 +422,6 @@ init() {
     alpha_rot = ALPHA_HUD;
     last_rot = MIN_BAR;
 
-    // Read skin notecard
     log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
 
     haz_xtea = can_haz_script(XTEA_NAME);
@@ -513,7 +476,21 @@ default {
             integer by = (integer)(pos.y * 10);
             log("x,y="+(string)bx+","+(string)by);
 
-            if (bx == 2 || bx == 3) {
+            if (bx == 0 || bx == 1 || bx == 8 || name == "minbar") {
+                // min
+                vector next_rot = MIN_BAR;
+
+                if (last_rot == MIN_BAR) {
+                    // Save current rotation for later
+                    last_rot = llRot2Euler(llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_ROT_LOCAL]),0));
+                } else {
+                    // Restore last rotation
+                    next_rot = last_rot;
+                    last_rot = MIN_BAR;
+                }
+                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(next_rot)]);
+            }
+            else if (bx == 2 || bx == 3) {
                 // alpha
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(alpha_rot)]);
                 last_rot = MIN_BAR;
@@ -527,20 +504,6 @@ default {
                 // options
                 llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(OPTION_HUD)]);
                 last_rot = MIN_BAR;
-            }
-            else if (bx == 8) {
-                // min
-                vector next_rot = MIN_BAR;
-
-                if (last_rot == MIN_BAR) {
-                    // Save current rotation for later
-                    last_rot = llRot2Euler(llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT,[PRIM_ROT_LOCAL]),0));
-                } else {
-                    // Restore last rotation
-                    next_rot = last_rot;
-                    last_rot = MIN_BAR;
-                }
-                llSetLinkPrimitiveParamsFast(LINK_ROOT,[PRIM_ROT_LOCAL,llEuler2Rot(next_rot)]);
             }
             else if (bx == 9) {
                 log("DETACH!");
@@ -614,7 +577,8 @@ default {
         else if (llGetSubString(name, 0, 3) == "skin") {
             // Skin appliers
             integer b = (integer)llGetSubString(name, 4, -1);
-            string sname = "sb_" + (string)b + map_button_3(face, 0);
+            // incomplete...
+            string sname = "sb_" + (string)b;
             apply_texture(sname);
         }
         else if (llGetSubString(name, 0, 2) == "fnc") {
@@ -664,6 +628,18 @@ default {
                 );
             }
         }
+        else if (llGetSubString(name, 0, 1) == "hp") {
+            // Hand poses
+            integer b = ((integer)llGetSubString(name, 2, -1)) -1;
+            integer bx = (integer)(pos.x * 12);
+            // 2 prim, 12 buttons per
+            hp_index = (b * 12) + bx + 1;
+            log("index: " + (string)hp_index);
+            llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
+        }
+        else if (name == "optionbox") {
+            // Do nothing here
+        }
         else {
             // Handle alphas for touching the doll (that sounds baaaaaad...)
             list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
@@ -693,7 +669,6 @@ default {
             }
             else if (command == "THUMBNAILS") {
                 log("Loaded notecard: " + llList2String(cmdargs, 1));
-                set_skin_thumbnails(llList2List(cmdargs, 1, -1));
             }
         }
     }
@@ -701,6 +676,70 @@ default {
     run_time_permissions(integer perm) {
         if (perm & PERMISSION_ATTACH) {
             llDetachFromAvatar();
+        }
+        if (perm & PERMISSION_TRIGGER_ANIMATION) {
+            if (glStopAll) {
+                //User pressed the Stop All Animations button
+                glStopAll = FALSE;
+                list anims = llGetAnimationList(llGetPermissionsKey());
+                integer len = llGetListLength(anims);
+                integer i;
+                for (i = 0; i < len; ++i) llStopAnimation(llList2Key(anims, i));
+                llStartAnimation("stand");  //removing all anims can create problems - this sorts things out
+                llOwnerSay("All finished: " + (string)len + llGetSubString(" animations",0,-1 - (len == 1))+" stopped.\n");
+                //llOwnerSay("All animations have been stopped.");
+            } else {
+                //User pressed one of the buttons
+                list    InventoryList;
+                integer nCounter = -1;
+                integer lFlag = FALSE;
+                integer nTotCount = llGetInventoryNumber(INVENTORY_ANIMATION);
+                integer nItemNo;
+                gcAnimation="";
+                do {
+                    nCounter++;
+                    gcAnimation = llGetInventoryName(INVENTORY_ANIMATION, nCounter);
+                    nItemNo = (integer)gcAnimation;
+                    if (nItemNo == hp_index) {
+                        //When the Animation number matches the button number
+                        if (gcAnimation != "") {
+                            log("gcAnimation: " + gcAnimation);
+//                            ColorButton();
+                            //it also returns a value for gcWhichSide
+
+                            if (hp_index & 0x01) {
+                                log(" left");
+                                // Left side
+                                if (gcPrevLfAnim != "") {
+                                    llStopAnimation(gcPrevLfAnim);
+                                }
+                                gcPrevLfAnim = gcAnimation;
+                            } else {
+                                log(" right");
+                                // Right side
+                                if (gcPrevRtAnim != "") {
+                                    llStopAnimation(gcPrevRtAnim);
+                                }
+                                gcPrevRtAnim = gcAnimation;
+                            }
+                            llStartAnimation(gcAnimation);
+                            //llOwnerSay("We started: "+gcAnimation+"  gcPrevLfAnim is: "+gcPrevLfAnim+"  " + "gcPrevRtAnim is: "+gcPrevRtAnim);
+                            lFlag = TRUE; //We found the animation
+                        }
+                    }
+                }
+                while (nCounter < nTotCount && !lFlag);
+
+                if (!lFlag) {
+                    //Error messages - explanations of common problems a user might have if they assemble the HUD or add their own animations
+                    if (nItemNo == 0) {
+                        llOwnerSay("There's a problem.  First check to make sure you've loaded all of the hand animations in the HUD inventory.  There should be 24 of them.  If that's not the problem, you may have used an incorrect name for one of the prims making up the HUD. Finally, double check to make sure that the backboard of the HUD is the last prim you linked (the root prim).\n");
+                    }
+                    else {
+                        llOwnerSay("Animation # "+(string)nItemNo + " was not found.  Check the animations in the inventory of the HUD.  When numbering the animations, you may have left this number out.\n");
+                    }
+                }
+            } //End of if(glStopAll)
         }
     }
 
