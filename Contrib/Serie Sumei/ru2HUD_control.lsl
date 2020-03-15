@@ -18,6 +18,7 @@
 // ss-l 24Mar2019 <seriesumei@avimail.org> - Read skins from Omega-compatible notecard
 // ss-m 08Sep2019 <seriesumei@avimail.org> - change minimize behaviour
 // ss-n 24Jan2020 <seriesumei@avimail.org> - Add hand poses
+// ss-o 14Mar2020 <seriesumei@avimail.org> - Add foot poses & ankle lock
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -211,9 +212,19 @@ integer gnPrimFace;           //The face of the prim containing the button press
 integer gnButtonStart;        //The starting number of a group of buttons
 vector gvONColor =  <0.224, 0.800, 0.800>;  //Teal color to indicate the button has been pressed
 vector gvOFFColor = <1.0, 1.0, 1.0>;  //white color to indicate the button has not been pressed
-integer glStopAll =FALSE;
 
 integer hp_index = 0;
+integer do_hp = FALSE;
+// ***
+
+// ***
+// Foot pose
+string AnkleLockAnim = "anklelock";
+integer AnkleLockEnabled = FALSE;
+integer AnkleLockLink = 0;
+integer AnkleLockFace = 5;
+integer fp_index = 0;
+integer do_fp = FALSE;
 // ***
 
 log(string msg) {
@@ -401,6 +412,23 @@ texture_v2(string name, string tex, integer face, vector color) {
     send(cmd);
 }
 
+integer is_ankle_lock_running() {
+    return (
+        llListFindList(
+            llGetAnimationList(llGetOwner()),
+            [llGetInventoryKey(AnkleLockAnim)]
+        ) >= 0
+    );
+}
+
+set_ankle_color(integer link) {
+    if (AnkleLockEnabled) {
+        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, AnkleLockFace, <0.0, 1.0, 0.0>, 1.0]);
+    } else {
+        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, AnkleLockFace, <1.0, 1.0, 1.0>, 1.0]);
+    }
+}
+
 init() {
     // Initialize attach state
     last_attach = llGetAttached();
@@ -416,15 +444,22 @@ init() {
     num_links = llGetNumberOfPrims() + 1;
     for (; i < num_links; ++i) {
         list p = llGetLinkPrimitiveParams(i, [PRIM_NAME]);
-        prim_map += [llList2String(p, 0)];
+        string name = llList2String(p, 0);
+        prim_map += [name];
+        if (name == "fp0") {
+            AnkleLockLink = i;
+        }
     }
 
     alpha_rot = ALPHA_HUD;
-    last_rot = MIN_BAR;
+    last_rot = OPTION_HUD;
 
     log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
 
     haz_xtea = can_haz_script(XTEA_NAME);
+
+    AnkleLockEnabled = is_ankle_lock_running();
+    set_ankle_color(AnkleLockLink);
 }
 
 default {
@@ -577,23 +612,33 @@ default {
         else if (llGetSubString(name, 0, 3) == "skin") {
             // Skin appliers
             integer b = (integer)llGetSubString(name, 4, -1);
-            // incomplete...
-            string sname = "sb_" + (string)b;
-            apply_texture(sname);
+            if (b == 1 && face == 0) {
+//                integer i = ((1 - 1) * num_tex);
+//                apply_texture(llList2List(tex_1, i, i+num_tex-1));
+            }
+            else if (b == 1 && face == 2) {
+//                integer i = ((2 - 1) * num_tex);
+//                apply_texture(llList2List(tex_1, i, i+num_tex-1));
+            }
+            else if (b == 1 && face == 4) {
+//                integer i = ((3 - 1) * num_tex);
+//                apply_texture(llList2List(tex_1, i, i+num_tex-1));
+            }
         }
         else if (llGetSubString(name, 0, 2) == "fnc") {
             // Fingernail color
             integer b = (integer)llGetSubString(name, 3, -1);
-            if (b >= 0 && b <= 9) {
+            integer index = (b * 5) + face;
+            if (index >= 0 && index <= 9) {
                 texture_v2(
                     "fingernails",
                     "",
                     ALL_SIDES,
-                    llList2Vector(fingernail_colors, b)
+                    llList2Vector(fingernail_colors, index)
                 );
             }
         }
-        else if (llGetSubString(name, 0, 1) == "fn") {
+        else if (llGetSubString(name, 0, 2) == "fns") {
             // Fingernail shape
             list nail_types = [
                 "fingernailsshort",
@@ -603,12 +648,12 @@ default {
                 "fingernailsnone"
             ];
             integer b = (integer)llGetSubString(name, 2, -1);
-            if (b >= 0 && b <= 4) {
+            if (face >= 0 && face <= 4) {
                 integer num = llGetListLength(nail_types);
-                integer i;
-                visible_fingernails = b;
+                integer i = 0;
+                visible_fingernails = face;
                 for (; i < num; ++i) {
-                    if (i == b) {
+                    if (i == face) {
                         send_csv(["ALPHA", llList2String(nail_types, i), ALL_SIDES, 1.0]);
                     } else {
                         send_csv(["ALPHA", llList2String(nail_types, i), ALL_SIDES, 0.0]);
@@ -630,12 +675,33 @@ default {
         }
         else if (llGetSubString(name, 0, 1) == "hp") {
             // Hand poses
-            integer b = ((integer)llGetSubString(name, 2, -1)) -1;
-            integer bx = (integer)(pos.x * 12);
-            // 2 prim, 12 buttons per
-            hp_index = (b * 12) + bx + 1;
+            integer b = ((integer)llGetSubString(name, 2, -1));
+            // 4 buttons per link
+            if (b == 0) {
+                // Stop
+                hp_index = 0;
+            } else {
+                list facemap = [2, 4, 6, 8, 1, 3, 5, 7];
+                // Calculate which column
+                hp_index = ((b - 1) * 8) + llList2Integer(facemap, face);
+            }
             log("index: " + (string)hp_index);
+            do_hp = TRUE;
             llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
+        }
+        else if (llGetSubString(name, 0, 1) == "fp") {
+            // Foot poses
+            if (face == AnkleLockFace) {
+                // Ankle Lock
+                AnkleLockEnabled = !AnkleLockEnabled;
+                log("ankle lock: " + (string)AnkleLockEnabled);
+                fp_index = face;
+                set_ankle_color(link);
+                do_fp = TRUE;
+                llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
+            } else {
+                log("index: " + (string)face);
+            }
         }
         else if (name == "optionbox") {
             // Do nothing here
@@ -678,19 +744,21 @@ default {
             llDetachFromAvatar();
         }
         if (perm & PERMISSION_TRIGGER_ANIMATION) {
-            if (glStopAll) {
-                //User pressed the Stop All Animations button
-                glStopAll = FALSE;
+            if (do_hp && hp_index == 0) {
+                // Stop all animations
                 list anims = llGetAnimationList(llGetPermissionsKey());
                 integer len = llGetListLength(anims);
                 integer i;
-                for (i = 0; i < len; ++i) llStopAnimation(llList2Key(anims, i));
-                llStartAnimation("stand");  //removing all anims can create problems - this sorts things out
+                for (i = 0; i < len; ++i) {
+                    llStopAnimation(llList2Key(anims, i));
+                }
+                // removing all anims can create problems - this sorts things out
+                llStartAnimation("stand");
                 llOwnerSay("All finished: " + (string)len + llGetSubString(" animations",0,-1 - (len == 1))+" stopped.\n");
-                //llOwnerSay("All animations have been stopped.");
-            } else {
-                //User pressed one of the buttons
-                list    InventoryList;
+                do_hp = FALSE;
+            }
+            else if (do_hp && hp_index > 0) {
+                // Locate and play a pose animation
                 integer nCounter = -1;
                 integer lFlag = FALSE;
                 integer nTotCount = llGetInventoryNumber(INVENTORY_ANIMATION);
@@ -707,9 +775,9 @@ default {
 //                            ColorButton();
                             //it also returns a value for gcWhichSide
 
-                            if (hp_index & 0x01) {
+                            if ((hp_index % 2) == 1) {
                                 log(" left");
-                                // Left side
+                                // Left side is odd
                                 if (gcPrevLfAnim != "") {
                                     llStopAnimation(gcPrevLfAnim);
                                 }
@@ -739,7 +807,20 @@ default {
                         llOwnerSay("Animation # "+(string)nItemNo + " was not found.  Check the animations in the inventory of the HUD.  When numbering the animations, you may have left this number out.\n");
                     }
                 }
-            } //End of if(glStopAll)
+                do_hp = FALSE;
+            }
+            if (do_fp) {
+                if (fp_index == 5) {
+                    if (AnkleLockEnabled) {
+                        log(" start " + AnkleLockAnim);
+                        llStartAnimation(AnkleLockAnim);
+                    } else {
+                        log(" stop " + AnkleLockAnim);
+                        llStopAnimation(AnkleLockAnim);
+                    }
+                }
+                do_fp = FALSE;
+            }
         }
     }
 
