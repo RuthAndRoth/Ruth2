@@ -607,6 +607,10 @@ default {
         else if (name == "backboard") {
             // ignore click on backboard
         }
+        else if (name == "bom") {
+            // Bakes on Mesh
+            apply_texture("sb_81");
+        }
         else if (llGetSubString(name, 0, 3) == "skin") {
             // Skin appliers
             integer b = (integer)llGetSubString(name, 4, -1);
