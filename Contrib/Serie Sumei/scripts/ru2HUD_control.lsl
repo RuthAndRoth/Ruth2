@@ -18,7 +18,7 @@
 // ss-l 24Mar2019 <seriesumei@avimail.org> - Read skins from Omega-compatible notecard
 // ss-m 08Sep2019 <seriesumei@avimail.org> - change minimize behaviour
 // ss-n 24Jan2020 <seriesumei@avimail.org> - Add hand poses
-// ss-o 14Mar2020 <seriesumei@avimail.org> - Add foot poses & ankle lock
+// ss-o 15Mar2020 <seriesumei@avimail.org> - Add foot poses & ankle lock
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -122,6 +122,7 @@ list commandButtonList = [
     "legsfull::legleft7::27::-1",
     "legsfull::legleft8::28::-1",
 
+    "feet::toenails::0::-1",
     "feet::feet::29::-1",
     "ankles::feet::29::0",
     "bridges::feet::29::1",
@@ -136,6 +137,7 @@ list fingernails = [
     "fingernailsshort::fingernails",
     "fingernailsmedium::fingernails",
     "fingernailslong::fingernails",
+    "fingernailsoval::fingernails",
     "fingernailspointed::fingernails"
 ];
 
@@ -645,7 +647,8 @@ default {
                 "fingernailsmedium",
                 "fingernailslong",
                 "fingernailspointed",
-                "fingernailsnone"
+                "fingernailsnone",
+                "fingernailsoval"
             ];
             integer b = (integer)llGetSubString(name, 2, -1);
             if (face >= 0 && face <= 4) {
@@ -664,12 +667,13 @@ default {
         else if (llGetSubString(name, 0, 2) == "tnc") {
             // Toenail color
             integer b = (integer)llGetSubString(name, 3, -1);
-            if (b >= 0 && b <= 9) {
+            integer index = (b * 5) + face;
+            if (index >= 0 && index <= 9) {
                 texture_v2(
                     "toenails",
                     "",
                     ALL_SIDES,
-                    llList2Vector(fingernail_colors, b)
+                    llList2Vector(fingernail_colors, index)
                 );
             }
         }
