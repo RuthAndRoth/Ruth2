@@ -1,5 +1,5 @@
-// SS Combo skin applier
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// r2_applier.lsl - SS Combo skin applier
+// SPDX-License-Identifier: CC-BY-3.0
 // Copyright 2019 Serie Sumei
 
 // ss-a - 24Mar2019 <seriesumei@avimail.org> - Initial release - apply skins only

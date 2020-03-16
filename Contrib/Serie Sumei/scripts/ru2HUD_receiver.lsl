@@ -1,7 +1,16 @@
-// Ruth 2.0 HUD Receiver
+// ru2HUD_receiver.lsl - Ruth2 v3 HUD Receiver
 // SPDX-License-Identifier: AGPL-3.0-or-later
-//**   Copyright 2017 Shin Ingen
-//**   Copyright 2019 Serie Sumei
+// Copyright 2017 Shin Ingen
+// Copyright 2019 Serie Sumei
+
+// v1 26Jan2019 <seriesumei@avimail.org> - Initial combination of body, feet
+//      and hands scripts, includes fingernails
+// v2 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change,
+//      listen on multiple APP_IDs
+// v3 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
+// v4 06Apr2019 <seriesumei@avimail.org> - Fix initialization bug in OpenSim
+// v5 15Mar2020 <seriesumei@avimail.org> - Remove part type for hands and feet
+//      to handle when hands and feet are linked to body
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -19,15 +28,6 @@
 // The commands have been expanded a bit to allow more flexibility in texturing
 // the parts.  It is still totally compatible with the RC2 and RC3 commands
 // provided the APP_ID is correct (we will handle that soon too).
-
-// v1 26Jan2019 <seriesumei@avimail.org> - Initial combination of body, feet
-//      and hands scripts, includes fingernails
-// v2 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change,
-//      listen on multiple APP_IDs
-// v3 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
-// v4 06Apr2019 <seriesumei@avimail.org> - Fix initialization bug in OpenSim
-// v5 15Mar2020 <seriesumei@avimail.org> - Remove part type for hands and feet
-//      to handle when hands and feet are linked to body
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.

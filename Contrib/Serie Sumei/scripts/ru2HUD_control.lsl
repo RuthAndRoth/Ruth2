@@ -1,4 +1,4 @@
-// Ruth 2.0 HUD Controller
+// ru2HUD_control.lsl - Ruth2 v3 HUD Controller
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright 2017 Shin Ingen
 // Copyright 2019 Serie Sumei

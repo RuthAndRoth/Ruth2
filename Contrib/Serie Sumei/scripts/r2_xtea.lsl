@@ -1,4 +1,6 @@
 // r2_xtea.lsl - xtea MessageLinked wrapper
+// SPDX-License-Identifier: CC-BY-3.0
+// Modifications Copyright 2019 Serie Sumei
 
 // v1 - Initial release
 
@@ -31,17 +33,17 @@
 // as the second argument.
 
 // Fred Beckhusen proposed using this for Ruth 2.0 and his version is at
-// https://github.com/RuthAndRoth/Ruth/blob/master/Contrib/Fred%20Beckhusen/XTEA.lsl
+// https://github.com/RuthAndRoth/Ruth2/blob/master/Contrib/Fred%20Beckhusen/XTEA.lsl
 // I created this version because I could not find exactly the source Fred
-// used. These are similar but not identical.  I have not pref tested them
+// used. These are similar but not identical.  I have not perf tested them
 // against each other but the size of messages we are dealing with here put
 // any differences close to meaningless.
 //
 // Fred's script reads the key from a notecard, I have chosen to simply make
 // it a constant below.  This requires the script to be distributed in
-// products no-modify.  Both scripts licensing allow this, the XTEA in
-// Fred's version is BSD, this one is public domain.
-
+// products no-modify.  The licensing of both versions allow this, the XTEA in
+// Fred's version is BSD, the original version of this one is public domain
+// per the code headers and all modifications are CC-BY-3.0.
 
 // This is the shared secret that is required at both ends to communicate
 // CHANGE THIS if you need any security at all
@@ -188,7 +190,7 @@ string xtea_decrypt_string( string str ) {
 // ---------- End XTEA Lib ----------
 
 // The following code is based on Fred's wrapper and is licensed
-// as CC-0.
+// as CC-BY-3.0.
 
 integer hexdec(string hex) {
     if(llGetSubString(hex,0,1) == "0x")
