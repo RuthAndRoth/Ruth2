@@ -89,6 +89,18 @@ integer is_SL() {
     return (la == SL);
 }
 
+// Wrapper for osGetGridName to simplify transition between environments
+string GetGridName() {
+    string grid_name;
+    // Comment out this line to run in SecondLife, un-comment it to run in OpenSim
+    grid_name = osGetGridName();
+    if (is_SL()) {
+        grid_name = llGetEnv("sim_channel");
+    }
+    llOwnerSay("grid: " + grid_name);
+    return grid_name;
+}
+
 // The four textures used in the HUD referenced below are included in the repo:
 // bar_texture: ruth2 v3 hud header.png
 // hud_texture: ruth2 v3 hud gradient.png
@@ -104,7 +116,7 @@ get_textures() {
         options_texture = "9dfaebd8-5676-fb92-6018-5f52dd903d01";
         fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
     } else {
-        if (osGetGridName() == "OSGrid") {
+        if (GetGridName() == "OSGrid") {
             // Textures in OSGrid
             // TODO: Bad assumption that OpenSim == OSGrid, how do we detect
             //       which grid?  osGetGridName() is an option but does not
@@ -116,7 +128,7 @@ get_textures() {
             options_texture = "9234be05-9ff4-4cb3-bcdb-4115f7e32ff6";
             fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
         } else {
-            log("OpenSim detected but grid " + osGetGridName() + " unknown, using blank textures");
+            log("OpenSim detected but grid " + GetGridName() + " unknown, using blank textures");
             bar_texture = TEXTURE_BLANK;
             hud_texture = TEXTURE_BLANK;
             options_texture = TEXTURE_BLANK;
