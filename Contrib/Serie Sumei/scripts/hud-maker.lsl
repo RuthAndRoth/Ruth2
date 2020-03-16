@@ -18,13 +18,14 @@
 // ss-e 10Feb2019 <seriesumei@avimail.org> - Add option panel
 // ss-f 31Mar2019 <seriesumei@avimail.org> - Fix textures for SL vs OpenSim
 // ss-g 02Apr2019 <seriesumei@avimail.org> - Add skin buttons and tweak textures
+// ss-o 15Mar2020 <seriesumei@avimail.org> - Catch up to current state
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's
-// and an Options pane that currently has fingernail shape/color and toenail
-// color buttons.
+// and an Options pane that has fingernail shape/color and toenail
+// color buttons as well as hand and foot pose buttons.
 //
-// To build the 'uniHUD' from scratch you will need to:
+// To build the HUD from scratch you will need to:
 // * Upload or obtain via whatever means the Alpha HUD mesh and the 'doll'
 //   mesh.  This script will throw an error if you start with a pre-linked
 //   alpha HUD but it should work anyway.  To prepare the alpha hud and doll
@@ -40,7 +41,7 @@
 //   * the alpha HUD mesh and name it 'alpha-hud'
 //   * if the doll mes is not already linked into the alpha HUD linkset copy
 //     it and name it 'doll'
-//   * the button meshes named '2x1 button' and 5x button'
+//   * the button meshes named '5x1-s_button', '6x1_button' and '4x2_button'
 //   * this script
 // * Light fuse (touch the box prim) and get away, the new HUD will be
 //   assembled around the box prim which will become the root prim of the HUD.
@@ -70,13 +71,12 @@ key hud_texture;
 key options_texture;
 key fingernails_shape_texture;
 
-vector bar_size = <0.5, 0.5, 0.04>;
-vector hud_size = <0.5, 0.5, 0.5>;
+vector bar_size = <0.4, 0.4, 0.03>;
 vector color_button_size = <0.01, 0.145, 0.025>;
 vector shape_button_size = <0.01, 0.295, 0.051>;
 
 // Spew debug info
-integer VERBOSE = TRUE;
+integer VERBOSE = FALSE;
 
 // Hack to detect Second Life vs OpenSim
 // Relies on a bug in llParseString2List() in SL
@@ -90,39 +90,33 @@ integer is_SL() {
 }
 
 // The four textures used in the HUD referenced below are included in the repo:
-// bar_texture: ruth 2.0 hud header.png
-// hud_texture: ruth 2.0 hud background gradient.png
-// options_texture: ruth 2.0 hud options gradient.png
+// bar_texture: ruth2 v3 hud header.png
+// hud_texture: ruth2 v3 hud gradient.png
+// options_texture: ruth2 v3 hud options.png
 // fingernails_shape_texture: ruth 2.0 hud fingernails shape.png
 
 get_textures() {
     if (is_SL()) {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
-        bar_texture = "d5aeccd4-f3ff-bea6-1296-07e8e0453275";
+        bar_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
         hud_texture = "76dbff9c-c2fd-ffe9-a37f-cb9e42f722fe";
-        options_texture = "1186285b-cc82-7602-71f0-8ad0eb1762b2";
+        options_texture = "9dfaebd8-5676-fb92-6018-5f52dd903d01";
         fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
     } else {
-        string grid_name = "";
-
-        // This will not compile in Second Life as it is an OpenSim-specific
-        // function.  Comment out the following line for SL:
-        grid_name = osGetGridName();
-
-        if (grid_name == "OSGrid") {
+        if (osGetGridName() == "OSGrid") {
             // Textures in OSGrid
             // TODO: Bad assumption that OpenSim == OSGrid, how do we detect
             //       which grid?  osGetGridName() is an option but does not
             //       compile in SL so editing the script would stll be required.
             //       Maybe we don't care too much about that?
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
-            bar_texture = "dc2612bd-e230-47f3-8888-d9a14b652f7d";
-            hud_texture = "c76f327a-a431-4219-8913-78c7adfe0d02";
-            options_texture = "86717f80-d201-4cf5-ab4c-1d77e5bd8e55";
+            bar_texture = "165ecebe-b9f2-4633-b547-2f55af868f82";
+            hud_texture = "f38beb3f-6f3c-4072-b37e-1ee57f6e9ee4";
+            options_texture = "9234be05-9ff4-4cb3-bcdb-4115f7e32ff6";
             fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
         } else {
-            log("OpenSim detected but grid " + grid_name() + " unknown, using blank textures");
+            log("OpenSim detected but grid " + osGetGridName() + " unknown, using blank textures");
             bar_texture = TEXTURE_BLANK;
             hud_texture = TEXTURE_BLANK;
             options_texture = TEXTURE_BLANK;
@@ -151,11 +145,11 @@ rez_object(string name, vector delta, vector rot) {
     );
 }
 
-configre_bar(string name, float offset_y) {
+configure_bar(string name, float offset_y) {
     log("Configuring " + name);
     llSetLinkPrimitiveParamsFast(2, [
         PRIM_NAME, name,
-        PRIM_TEXTURE, ALL_SIDES, bar_texture, <1.0, 0.1, 0.0>, <0.0, offset_y, 0.0>, 0.0,
+        PRIM_TEXTURE, ALL_SIDES, bar_texture, <1.0, 0.08, 0.0>, <0.0, offset_y, 0.0>, 0.0,
         PRIM_TEXTURE, 0, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
         PRIM_TEXTURE, 5, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
         PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
@@ -196,7 +190,7 @@ default {
         if (perm & PERMISSION_CHANGE_LINKS) {
             // log("Rezzing south");
             link_me = TRUE;
-            rez_object("Object", <0.0, 0.0, -0.5>, <0.0, 0.0, 0.0>);
+            rez_object("Object", <0.0, 0.16, -0.5>, <0.0, 0.0, 0.0>);
         } else {
             llOwnerSay("unable to link objects, aborting build");
         }
@@ -213,45 +207,51 @@ default {
         }
 
         if (counter == 1) {
-            configre_bar("minbar", 0.440);
+            configure_bar("minbar", 0.440);
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_TEXTURE, 2, bar_texture, <0.2, 0.08, 0.0>, <-0.4, 0.437, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, bar_texture, <0.2, 0.08, 0.0>, <-0.4, 0.437, 0.0>, 0.0,
+                PRIM_SIZE, <0.40, 0.08, 0.03>
+            ]);
 
             // log("Rezzing east");
             link_me = TRUE;
             rez_object("Object", <0.0, -0.5, 0.0>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 2) {
-            configre_bar("optionbar", 0.065);
+            configure_bar("optionbar", 0.062);
 
             // log("Rezzing north");
             link_me = TRUE;
             rez_object("Object", <0.0, 0.0, 0.5>, <PI, 0.0, 0.0>);
         }
         else if (counter == 3) {
-            configre_bar("skinbar", 0.190);
+            configure_bar("skinbar", 0.187);
 
             // log("Rezzing west");
             link_me = TRUE;
             rez_object("Object", <0.0, 0.5, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 4) {
-            configre_bar("alphabar", 0.314);
+            configure_bar("alphabar", 0.312);
 
             log("Rezzing option HUD");
             link_me = TRUE;
-            rez_object("Object", <0.0, -0.76953, 0.0>, <-PI_BY_TWO, 0.0, 0.0>);
+            rez_object("Object", <0.0, -0.6894, 0.0>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 5) {
             log("Configuring option HUD");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "optionbox",
-                PRIM_TEXTURE, ALL_SIDES, options_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 0.7, 0.0>, <0.0, 0.15, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, options_texture, <1.0, 0.7, 0.0>, <0.0, 0.15, 0.0>, 0.0,
                 PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
-                PRIM_SIZE, hud_size
+                PRIM_SIZE, <0.4, 0.4, 0.34985>
             ]);
 
             log("Rezzing skin HUD");
             link_me = TRUE;
-            rez_object("Object", <0.0, 0.0, 0.76953>, <PI, 0.0, 0.0>);
+            rez_object("Object", <0.0, 0.0, 0.7147>, <PI, 0.0, 0.0>);
         }
         else if (counter == 6) {
             log("Configuring skin HUD");
@@ -259,14 +259,19 @@ default {
                 PRIM_NAME, "skinbox",
                 PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
                 PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
-                PRIM_SIZE, hud_size
+                PRIM_SIZE, <0.4, 0.4, 0.4>
             ]);
 
             log("Rezzing alpha HUD");
-            link_me = FALSE;
+            link_me = TRUE;
             rez_object("alpha-hud", <0.0, 0.811, 0.0>, <PI_BY_TWO, 0.0, -PI_BY_TWO>);
         }
         else if (counter == 7) {
+            log("Configuring rotatebar");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "rotatebar"
+            ]);
+
             log("Rezzing alpha doll");
             link_me = FALSE;
             rez_object("doll", <0.0, 0.78, 0.0>, <PI_BY_TWO, 0.0, -PI_BY_TWO>);
@@ -274,48 +279,48 @@ default {
         else if (counter == 8) {
             log("Rezzing buttons");
             link_me = TRUE;
-            rez_object("5x button", <-0.2488, -0.6, -0.03027>, <-PI_BY_TWO, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, -0.6037, -0.03027>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 9) {
             configure_color_buttons("fnc0");
 
             log("Rezzing buttons");
             link_me = TRUE;
-            rez_object("5x button", <-0.2488, -0.6, 0.11965>, <-PI_BY_TWO, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, -0.6037, 0.11965>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 10) {
             configure_color_buttons("fnc1");
 
             log("Rezzing buttons");
             link_me = TRUE;
-            rez_object("5x button", <-0.2488, -0.64849, 0.04468>, <-PI_BY_TWO, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, -0.5693, 0.04468>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 11) {
             log("Configuring buttons");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "fns0",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 5, fingernails_shape_texture, <0.25, 1.0, 0.0>, <-0.375, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 6, fingernails_shape_texture, <0.25, 1.0, 0.0>, <-0.125, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 1, fingernails_shape_texture, <0.25, 1.0, 0.0>, <0.125, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 2, fingernails_shape_texture, <0.25, 1.0, 0.0>, <0.375, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 0, fingernails_shape_texture, <0.2, 0.9, 0.0>, <-0.375, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 1, fingernails_shape_texture, <0.2, 0.9, 0.0>, <-0.125, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 2, fingernails_shape_texture, <0.2, 0.9, 0.0>, <0.125, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 3, fingernails_shape_texture, <0.2, 0.9, 0.0>, <0.375, 0.0, 0.0>, 0.0,
                 PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
                 PRIM_COLOR, 3, <0.3, 0.3, 0.3>, 1.00,
                 PRIM_COLOR, 4, <0.6, 0.6, 0.6>, 1.00,
                 PRIM_COLOR, 0, <0.0, 0.0, 0.0>, 1.00,
-                PRIM_SIZE, shape_button_size
+                PRIM_SIZE, <0.01, 0.295, 0.035>
             ]);
 
             log("Rezzing buttons");
             link_me = TRUE;
-            rez_object("5x button", <-0.2488, -0.73976, -0.03027>, <-PI_BY_TWO, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, -0.6589, -0.03027>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 12) {
             configure_color_buttons("tnc0");
 
             log("Rezzing buttons");
             link_me = TRUE;
-            rez_object("5x button", <-0.2488, -0.73976, 0.11965>, <-PI_BY_TWO, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, -0.6589, 0.11965>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 13) {
             configure_color_buttons("tnc1");
@@ -323,105 +328,67 @@ default {
             log("Rezzing buttons");
             link_me = TRUE;
             // z=0.76953
-            rez_object("1x2 button", <-0.25, -0.1, 0.6333>, <PI, 0.0, 0.0>);
+            rez_object("4x2_button", <-0.2025, -0.7327, -0.0708>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 14) {
-            log("Configuring skin button");
+            log("Configuring hand pose button");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin1",
+                PRIM_NAME, "hp1",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                PRIM_SIZE, <1.0, 0.1, 0.05>
             ]);
 
             log("Rezzing buttons");
             link_me = TRUE;
             // z=0.76953
-            rez_object("1x2 button", <-0.25, 0.1, 0.6333>, <PI, 0.0, 0.0>);
+            rez_object("4x2_button", <-0.2025, -0.7327, 0.0305>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 15) {
-            log("Configuring skin button");
+            log("Configuring hand pose button");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin2",
+                PRIM_NAME, "hp2",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                PRIM_SIZE, <1.0, 0.1, 0.05>
             ]);
 
             log("Rezzing buttons");
             link_me = TRUE;
             // z=0.76953
-            rez_object("1x2 button", <-0.25, -0.1, 0.7333>, <PI, 0.0, 0.0>);
+            rez_object("4x2_button", <-0.2025, -0.7327, 0.1316>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 16) {
-            log("Configuring skin button");
+            log("Configuring hand pose button");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin3",
+                PRIM_NAME, "hp3",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                PRIM_SIZE, <1.0, 0.1, 0.05>
             ]);
 
             log("Rezzing buttons");
             link_me = TRUE;
             // z=0.76953
-            rez_object("1x2 button", <-0.25, 0.1, 0.7333>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.6958, 0.1555>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 17) {
-            log("Configuring skin button");
+            log("Configuring hand pose button");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin4",
+                PRIM_NAME, "hp0",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                PRIM_SIZE, <0.01, 0.05, 0.02>
             ]);
 
             log("Rezzing buttons");
             link_me = TRUE;
             // z=0.76953
-            rez_object("1x2 button", <-0.25, -0.1, 0.8333>, <PI, 0.0, 0.0>);
+            rez_object("6x1_button", <-0.2025, -0.813, 0.0315>, <-PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 18) {
-            log("Configuring skin button");
+            log("Configuring foot pose button");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin5",
+                PRIM_NAME, "fp0",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
-            ]);
-
-            log("Rezzing buttons");
-            link_me = TRUE;
-            // z=0.76953
-            rez_object("1x2 button", <-0.25, 0.1, 0.8333>, <PI, 0.0, 0.0>);
-        }
-        else if (counter == 19) {
-            log("Configuring skin button");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin6",
-                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
-            ]);
-
-            log("Rezzing buttons");
-            link_me = TRUE;
-            // z=0.76953
-            rez_object("1x2 button", <-0.25, -0.1, 0.9333>, <PI, 0.0, 0.0>);
-        }
-        else if (counter == 20) {
-            log("Configuring skin button");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin7",
-                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
-            ]);
-
-            log("Rezzing buttons");
-            link_me = TRUE;
-            // z=0.76953
-            rez_object("1x2 button", <-0.25, 0.1, 0.9333>, <PI, 0.0, 0.0>);
-        }
-        else if (counter == 21) {
-            log("Configuring skin button");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "skin8",
-                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                PRIM_TEXTURE, 5, options_texture, <0.12, 0.12, 0.0>, <0.44, -0.44, 0.0>, 0.0,
+                PRIM_SIZE, <1.0, 0.3, 0.05>
             ]);
 
         }
