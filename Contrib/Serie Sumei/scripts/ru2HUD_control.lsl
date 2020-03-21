@@ -18,7 +18,8 @@
 // ss-l 24Mar2019 <seriesumei@avimail.org> - Read skins from Omega-compatible notecard
 // ss-m 08Sep2019 <seriesumei@avimail.org> - change minimize behaviour
 // ss-n 24Jan2020 <seriesumei@avimail.org> - Add hand poses
-// ss-o 15Mar2020 <seriesumei@avimail.org> - Add foot poses & ankle lock
+// ss-o 15Mar2020 <seriesumei@avimail.org> - Add ankle lock
+// ss-p 20Mar2020 <seriesumei@avimail.org> - Add foot poses
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -204,7 +205,6 @@ integer visible_fingernails = 0;
 
 // ***
 // Hand pose
-string gcAnimation = "";      //the currently selected animation from the HUD inventory
 string gcPrevRtAnim = "";     //the previously selected animation on the right side
 string gcPrevLfAnim = "";     //the previously selected animation on the left side
 string gcWhichSide = "";      //Whether the currently selected animation is a right or left hand
@@ -221,10 +221,12 @@ integer do_hp = FALSE;
 
 // ***
 // Foot pose
-string AnkleLockAnim = "anklelock";
+integer fp_offset = 30;     // Add to the fp1 index (face) to get the actual anim in inventory
+string PrevFootAnim = "";
+string AnkleLockAnim = "30_anklelock";      // The index value must match the fp_offset above
 integer AnkleLockEnabled = FALSE;
 integer AnkleLockLink = 0;
-integer AnkleLockFace = 5;
+integer AnkleLockFace = 4;
 integer fp_index = 0;
 integer do_fp = FALSE;
 // ***
@@ -695,7 +697,7 @@ default {
         }
         else if (llGetSubString(name, 0, 1) == "fp") {
             // Foot poses
-            if (face == AnkleLockFace) {
+            if (name == "fp0") {
                 // Ankle Lock
                 AnkleLockEnabled = !AnkleLockEnabled;
                 log("ankle lock: " + (string)AnkleLockEnabled);
@@ -704,7 +706,10 @@ default {
                 do_fp = TRUE;
                 llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
             } else {
+                fp_index = face + 1;
                 log("index: " + (string)face);
+                do_fp = TRUE;
+                llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
             }
         }
         else if (name == "optionbox") {
@@ -767,15 +772,15 @@ default {
                 integer lFlag = FALSE;
                 integer nTotCount = llGetInventoryNumber(INVENTORY_ANIMATION);
                 integer nItemNo;
-                gcAnimation="";
+                string anim = "";
                 do {
                     nCounter++;
-                    gcAnimation = llGetInventoryName(INVENTORY_ANIMATION, nCounter);
-                    nItemNo = (integer)gcAnimation;
+                    anim = llGetInventoryName(INVENTORY_ANIMATION, nCounter);
+                    nItemNo = (integer)anim;
                     if (nItemNo == hp_index) {
                         //When the Animation number matches the button number
-                        if (gcAnimation != "") {
-                            log("gcAnimation: " + gcAnimation);
+                        if (anim != "") {
+                            log("hp anim: " + anim);
 //                            ColorButton();
                             //it also returns a value for gcWhichSide
 
@@ -785,17 +790,17 @@ default {
                                 if (gcPrevLfAnim != "") {
                                     llStopAnimation(gcPrevLfAnim);
                                 }
-                                gcPrevLfAnim = gcAnimation;
+                                gcPrevLfAnim = anim;
                             } else {
                                 log(" right");
                                 // Right side
                                 if (gcPrevRtAnim != "") {
                                     llStopAnimation(gcPrevRtAnim);
                                 }
-                                gcPrevRtAnim = gcAnimation;
+                                gcPrevRtAnim = anim;
                             }
-                            llStartAnimation(gcAnimation);
-                            //llOwnerSay("We started: "+gcAnimation+"  gcPrevLfAnim is: "+gcPrevLfAnim+"  " + "gcPrevRtAnim is: "+gcPrevRtAnim);
+                            llStartAnimation(anim);
+                            //llOwnerSay("We started: "+anim+"  gcPrevLfAnim is: "+gcPrevLfAnim+"  " + "gcPrevRtAnim is: "+gcPrevRtAnim);
                             lFlag = TRUE; //We found the animation
                         }
                     }
@@ -814,7 +819,9 @@ default {
                 do_hp = FALSE;
             }
             if (do_fp) {
-                if (fp_index == 5) {
+                fp_index += fp_offset;
+                if (fp_index == fp_offset) {
+                    // Handle ankle lock
                     if (AnkleLockEnabled) {
                         log(" start " + AnkleLockAnim);
                         llStartAnimation(AnkleLockAnim);
@@ -822,6 +829,28 @@ default {
                         log(" stop " + AnkleLockAnim);
                         llStopAnimation(AnkleLockAnim);
                     }
+                } else {
+                    // Handle foot poses
+                    integer nCounter = -1;
+                    integer nTotCount = llGetInventoryNumber(INVENTORY_ANIMATION);
+                    string anim = "";
+                    // Adjust for the foot pose animation index
+                    do {
+                        nCounter++;
+                        anim = llGetInventoryName(INVENTORY_ANIMATION, nCounter);
+                        if ((integer)anim == fp_index) {
+                            log("fp anim: " + anim);
+                            if (PrevFootAnim != "") {
+                                log(" stopping: " + PrevFootAnim);
+                                llStopAnimation(PrevFootAnim);
+                            }
+                            PrevFootAnim = anim;
+                            llStartAnimation(anim);
+//                            llOwnerSay("We started: " + anim + "  PrevFootAnim is: " + PrevFootAnim);
+                            nCounter = nTotCount;   // Implicit break
+                        }
+                    }
+                    while (nCounter < nTotCount);
                 }
                 do_fp = FALSE;
             }
