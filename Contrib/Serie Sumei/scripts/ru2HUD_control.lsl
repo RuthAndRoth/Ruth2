@@ -20,6 +20,7 @@
 // ss-n 24Jan2020 <seriesumei@avimail.org> - Add hand poses
 // ss-o 15Mar2020 <seriesumei@avimail.org> - Add ankle lock
 // ss-p 20Mar2020 <seriesumei@avimail.org> - Add foot poses
+// ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -231,6 +232,16 @@ integer fp_index = 0;
 integer do_fp = FALSE;
 // ***
 
+// ***
+// Skin / Bakes on Mesh
+integer SkinLink = 0;
+integer BoMEnabled = FALSE;
+integer BoMLink = 0;
+integer BoMTexLink = 0;
+integer BoMFace = 4;
+integer ShowBoMPreview = FALSE;
+// ***
+
 log(string msg) {
     if (VERBOSE == 1) {
         llOwnerSay(msg);
@@ -433,6 +444,34 @@ set_ankle_color(integer link) {
     }
 }
 
+set_bom_color(integer link) {
+    if (BoMEnabled) {
+        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, BoMFace, <0.0, 1.0, 0.0>, 1.0]);
+        if (ShowBoMPreview) {
+            llSetLinkPrimitiveParamsFast(BoMTexLink, [
+                PRIM_COLOR, 0, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 0, IMG_USE_BAKED_HEAD, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 1, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 1, IMG_USE_BAKED_UPPER, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 2, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 2, IMG_USE_BAKED_LOWER, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 3, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 3, IMG_USE_BAKED_LEFTARM, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 4, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 4, IMG_USE_BAKED_LEFTLEG, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 5, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 5, IMG_USE_BAKED_EYES, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+            ]);
+        }
+    } else {
+        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, BoMFace, <1.0, 1.0, 1.0>, 1.0]);
+        llSetLinkPrimitiveParamsFast(BoMTexLink, [
+            PRIM_COLOR, 0, <1.0, 1.0, 1.0>, 0.0,
+            PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+        ]);
+    }
+}
+
 init() {
     // Initialize attach state
     last_attach = llGetAttached();
@@ -452,6 +491,15 @@ init() {
         prim_map += [name];
         if (name == "fp0") {
             AnkleLockLink = i;
+        }
+        if (name == "bom0") {
+            BoMLink = i;
+        }
+        if (name == "bom1") {
+            BoMTexLink = i;
+        }
+        if (name == "sk0") {
+            SkinLink = i;
         }
     }
 
@@ -609,25 +657,17 @@ default {
         else if (name == "backboard") {
             // ignore click on backboard
         }
-        else if (name == "bom") {
+        else if (name == "bom0") {
             // Bakes on Mesh
-            apply_texture("sb_81");
+            BoMEnabled = TRUE;
+            set_bom_color(BoMLink);
+            apply_texture("bom");
         }
-        else if (llGetSubString(name, 0, 3) == "skin") {
+        else if (llGetSubString(name, 0, 1) == "sk") {
             // Skin appliers
-            integer b = (integer)llGetSubString(name, 4, -1);
-            if (b == 1 && face == 0) {
-//                integer i = ((1 - 1) * num_tex);
-//                apply_texture(llList2List(tex_1, i, i+num_tex-1));
-            }
-            else if (b == 1 && face == 2) {
-//                integer i = ((2 - 1) * num_tex);
-//                apply_texture(llList2List(tex_1, i, i+num_tex-1));
-            }
-            else if (b == 1 && face == 4) {
-//                integer i = ((3 - 1) * num_tex);
-//                apply_texture(llList2List(tex_1, i, i+num_tex-1));
-            }
+            BoMEnabled = FALSE;
+            set_bom_color(BoMLink);
+            apply_texture((string)face);
         }
         else if (llGetSubString(name, 0, 2) == "fnc") {
             // Fingernail color
@@ -734,7 +774,7 @@ default {
     }
 
     link_message(integer sender_number, integer number, string message, key id) {
-        log("h: num: " + (string)number + "msg: " + message);
+        log("l_m: num: " + (string)number + " msg: " + message + " id: " + (string)id);
         if (number == LINK_RUTH_HUD) {
             // <command>,<arg1>,...
             list cmdargs = llCSV2List(message);
@@ -744,6 +784,14 @@ default {
             }
             else if (command == "THUMBNAILS") {
                 log("Loaded notecard: " + llList2String(cmdargs, 1));
+                integer x = llGetListLength(commandButtonList) + 1;
+                integer i;
+                for (i=2; i < x; ++i) {
+                    llSetLinkPrimitiveParamsFast(SkinLink, [
+                        PRIM_COLOR, i-2, <1.0, 1.0, 1.0>, 1.0,
+                        PRIM_TEXTURE, i-2, llList2String(cmdargs, i), <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                    ]);
+                }
             }
         }
     }

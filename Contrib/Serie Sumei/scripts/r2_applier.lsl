@@ -3,6 +3,7 @@
 // Copyright 2019 Serie Sumei
 
 // ss-a - 24Mar2019 <seriesumei@avimail.org> - Initial release - apply skins only
+// ss-b - 21Mar2020 <seriesumei@avimail.org> - Add Bakes on Mesh
 
 // This script loads a notecard with button-to-skin
 // mappings and listens for link messages with button names to
@@ -86,6 +87,13 @@ send_thumbnails() {
 
 apply_texture(string button) {
     log("ap: button=" + button);
+
+    if (button == "bom") {
+        send("TEXTURE,upper," + (string)IMG_USE_BAKED_UPPER);
+        send("TEXTURE,lower," + (string)IMG_USE_BAKED_LOWER);
+        send("TEXTURE,head," + (string)IMG_USE_BAKED_HEAD);
+        return;
+    }
 
     integer i;
     for (; i < llGetListLength(skin_config); ++i) {
@@ -245,6 +253,12 @@ default {
             else if (command == "DEBUG") {
                 VERBOSE = llList2Integer(cmdargs, 1);
             }
+        }
+    }
+
+    changed(integer change) {
+        if (change & (CHANGED_OWNER | CHANGED_INVENTORY)) {
+            init();
         }
     }
 }
