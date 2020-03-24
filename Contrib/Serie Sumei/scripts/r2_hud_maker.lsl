@@ -21,6 +21,7 @@
 // ss-o 15Mar2020 <seriesumei@avimail.org> - Catch up to current state
 // ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
 // ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
+// ss-s 26Mar2020 <seriesumei@avimail.org> - Simplify alpha HUD
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's
@@ -58,6 +59,9 @@
 // * The other objects are also not needed any longer in the root prim and
 //   can be removed.
 
+// Which HUD to build?
+integer ROTH = FALSE;
+
 vector build_pos;
 integer link_me = FALSE;
 integer FINI = FALSE;
@@ -68,14 +72,18 @@ key header_texture;
 key skin_texture;
 key options_texture;
 key fingernails_shape_texture;
+key alpha_button_texture;
+key alpha_doll_texture;
 
 vector bar_size = <0.4, 0.4, 0.03>;
 vector hud_size = <0.4, 0.4, 0.34985>;
 vector color_button_size = <0.01, 0.145, 0.025>;
 vector shape_button_size = <0.01, 0.295, 0.051>;
+vector alpha_button_scale = <0.25, 0.125, 0.0>;
 
-vector alpha_hud_pos;
 vector alpha_doll_pos;
+float alpha_button_left_offset;
+float alpha_button_right_offset;
 
 // Spew debug info
 integer VERBOSE = FALSE;
@@ -108,18 +116,32 @@ string GetGridName() {
 // header_texture: ruth2 v3 hud header.png
 // skin_texture: ruth2 v3 hud.skin.png
 // options_texture: ruth2 v3 hud options.png
+// alpha_button_texture: r2_hud_alpha_buttons.png
+// alpha_doll_texture: r2_hud_alpha_doll.png
 // fingernails_shape_texture: ruth 2.0 hud fingernails shape.png
 
 get_textures() {
+    if (ROTH) {
+        alpha_button_left_offset = 0.125;
+        alpha_button_right_offset = 0.375;
+    } else {
+        alpha_button_left_offset = -0.375;
+        alpha_button_right_offset = -0.125;
+    }
     if (is_SL()) {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
         hud_texture = "76dbff9c-c2fd-ffe9-a37f-cb9e42f722fe";
-        header_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
         skin_texture = "1cf48b3f-768d-652e-b789-4d0fa5e7085c";
-        options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
-        fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
-        alpha_hud_pos = <0.0, 1.03528, 0.24976>;
+        alpha_button_texture = "";
+        if (ROTH) {
+            header_texture = "a231a9af-145e-417e-8e63-29b2437f7a1f";
+            options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
+        } else {
+            header_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
+            options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
+            fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
+        }
         alpha_doll_pos = <0.0, 0.57, 0.18457>;
     } else {
         if (GetGridName() == "OSGrid") {
@@ -130,12 +152,18 @@ get_textures() {
             //       Maybe we don't care too much about that?
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
             hud_texture = "f38beb3f-6f3c-4072-b37e-1ee57f6e9ee4";
-            header_texture = "2d80dac8-670a-4f46-8201-e7796a77afdd";
             skin_texture = "2f45a3e9-d4a9-4ea0-bbc8-bc3ead7a0a0f";
-            options_texture = "a97c448b-10a7-4a2c-a705-f9b73368c852";
-            fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
-            alpha_hud_pos = <0.0, 0.811, 0.0>;
-            alpha_doll_pos = <0.0, 0.78, 0.0>;
+            alpha_button_texture = "3dc803d9-0057-4cb7-b951-9b8d5b3af84d";
+            alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
+            if (ROTH) {
+                header_texture = "0bd02931-21e8-4b81-90d1-aca4349c0679";
+                options_texture = "bb329314-535c-4fcf-8da4-d6582f1c7d0c";
+            } else {
+                header_texture = "2d80dac8-670a-4f46-8201-e7796a77afdd";
+                options_texture = "a97c448b-10a7-4a2c-a705-f9b73368c852";
+                fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
+            }
+            alpha_doll_pos = <-0.22416, 0.7, 0.0>;
         } else {
             log("OpenSim detected but grid " + GetGridName() + " unknown, using blank textures");
             hud_texture = TEXTURE_BLANK;
@@ -143,6 +171,8 @@ get_textures() {
             skin_texture = TEXTURE_BLANK;
             options_texture = TEXTURE_BLANK;
             fingernails_shape_texture = TEXTURE_BLANK;
+            alpha_button_texture = TEXTURE_BLANK;
+            alpha_doll_texture = TEXTURE_BLANK;
         }
     }
 }
@@ -245,22 +275,69 @@ default {
 
             log("Rezzing alpha HUD");
             link_me = TRUE;
-            rez_object("alpha-hud", alpha_hud_pos, <PI_BY_TWO, 0.0, -PI_BY_TWO>);
+            rez_object("Object", <0.0, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 3) {
             log("Configuring alpha HUD");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "rotatebar"
+                PRIM_NAME, "alphabox",
+                PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+                PRIM_SIZE, hud_size
             ]);
 
             log("Rezzing alpha doll");
             link_me = TRUE;
-            rez_object("ruthdollv3", alpha_doll_pos, <PI_BY_TWO, 0.0, -PI_BY_TWO>);
+            rez_object("Object", <-0.1975, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 4) {
             log("Configuring alpha doll");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "chest"
+                PRIM_NAME, "alphadoll",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, alpha_doll_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+                PRIM_SIZE, <0.01, 0.3, 0.3>
+            ]);
+
+            log("Rezzing alpha buttons");
+            link_me = TRUE;
+            rez_object("8x1_button", <-0.205, 0.685, 0.12>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 5) {
+            log("Configuring alpha buttons");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "alpha0",
+                PRIM_TEXTURE, 0, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, 0.4375, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 1, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, 0.3125, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 2, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, 0.1875, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 3, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, 0.0625, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 4, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, -0.0625, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 5, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, -0.1875, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 6, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, -0.3125, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 7, alpha_button_texture, alpha_button_scale, <alpha_button_left_offset, -0.4375, 0.0>, PI_BY_TWO,
+                PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+                PRIM_SIZE, <0.01, 0.25, 0.08>
+            ]);
+
+            log("Rezzing alpha buttons");
+            link_me = TRUE;
+            rez_object("8x1_button", <-0.205, 0.685, -0.12>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 6) {
+            log("Configuring alpha buttons");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "alpha1",
+                PRIM_TEXTURE, 0, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, 0.4375, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 1, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, 0.3125, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 2, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, 0.1875, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 3, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, 0.0625, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 4, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, -0.0625, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 5, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, -0.1875, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 6, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, -0.3125, 0.0>, PI_BY_TWO,
+                PRIM_TEXTURE, 7, alpha_button_texture, alpha_button_scale, <alpha_button_right_offset, -0.4375, 0.0>, PI_BY_TWO,
+                PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+                PRIM_SIZE, <0.01, 0.25, 0.08>
             ]);
 
         // ***** Skin HUD *****
@@ -399,12 +476,43 @@ default {
                 PRIM_SIZE, <1.0, 0.1, 0.05>
             ]);
 
+            log("Rezzing fingernail color buttons");
+            link_me = TRUE;
+            rez_object("5x1-s_button", <-0.2025, -0.6037, -0.04297>, <-PI_BY_TWO, 0.0, 0.0>);
+        }
+        else if (counter == 27) {
+            configure_color_buttons("fnc0");
+
+            log("Rezzing fingernail color buttons");
+            link_me = TRUE;
+            rez_object("5x1-s_button", <-0.2025, -0.6037, 0.10695>, <-PI_BY_TWO, 0.0, 0.0>);
+        }
+        else if (counter == 28) {
+            configure_color_buttons("fnc1");
+
+            log("Rezzing toenail color buttons");
+            link_me = TRUE;
+            rez_object("5x1-s_button", <-0.2025, -0.6589, -0.04297>, <-PI_BY_TWO, 0.0, 0.0>);
+        }
+        else if (counter == 29) {
+            configure_color_buttons("tnc0");
+
+            log("Rezzing toenail color buttons");
+            link_me = TRUE;
+            rez_object("5x1-s_button", <-0.2025, -0.6589, 0.10695>, <-PI_BY_TWO, 0.0, 0.0>);
+        }
+        else if (counter == 30) {
+            configure_color_buttons("tnc1");
+
+            if (ROTH)
+                return;
+
         // Ruth only from here down
             log("Rezzing ankle lock button");
             link_me = TRUE;
             rez_object("Object", <-0.2025, -0.8130, -0.15891>, <-PI_BY_TWO, 0.0, 0.0>);
         }
-        else if (counter == 27) {
+        else if (counter == 31) {
             log("Configuring ankle lock button");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "fp0",
@@ -417,7 +525,7 @@ default {
             link_me = TRUE;
             rez_object("6x1_button", <-0.2025, -0.813, 0.0315>, <-PI_BY_TWO, 0.0, 0.0>);
         }
-        else if (counter == 28) {
+        else if (counter == 32) {
             log("Configuring foot pose button");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "fp1",
@@ -429,7 +537,7 @@ default {
             link_me = TRUE;
             rez_object("5x1-s_button", <-0.2025, -0.5693, 0.03198>, <-PI_BY_TWO, 0.0, 0.0>);
         }
-        else if (counter == 29) {
+        else if (counter == 33) {
             log("Configuring fingernail shape buttons");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "fns0",
@@ -444,34 +552,6 @@ default {
                 PRIM_COLOR, 4, <0.0, 0.0, 0.0>, 1.00,
                 PRIM_SIZE, <0.01, 0.295, 0.035>
             ]);
-
-            log("Rezzing fingernail color buttons");
-            link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, -0.6037, -0.04297>, <-PI_BY_TWO, 0.0, 0.0>);
-        }
-        else if (counter == 30) {
-            configure_color_buttons("fnc0");
-
-            log("Rezzing fingernail color buttons");
-            link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, -0.6037, 0.10695>, <-PI_BY_TWO, 0.0, 0.0>);
-        }
-        else if (counter == 31) {
-            configure_color_buttons("fnc1");
-
-            log("Rezzing toenail color buttons");
-            link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, -0.6589, -0.04297>, <-PI_BY_TWO, 0.0, 0.0>);
-        }
-        else if (counter == 32) {
-            configure_color_buttons("tnc0");
-
-            log("Rezzing toenail color buttons");
-            link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, -0.6589, 0.10695>, <-PI_BY_TWO, 0.0, 0.0>);
-        }
-        else if (counter == 33) {
-            configure_color_buttons("tnc1");
         }
     }
 }
