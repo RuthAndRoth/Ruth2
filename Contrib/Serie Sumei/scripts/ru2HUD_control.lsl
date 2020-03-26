@@ -21,6 +21,7 @@
 // ss-o 15Mar2020 <seriesumei@avimail.org> - Add ankle lock
 // ss-p 20Mar2020 <seriesumei@avimail.org> - Add foot poses
 // ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
+// ss-r 24Mar2020 <seriesumei@avimail.org> - Rework doll datastructures
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -38,102 +39,6 @@ vector tglOffColor = <1.000, 1.000, 1.000>;
 
 // Which API version do we implement?
 integer API_VERSION = 2;
-
-// The command button list is:
-// <button-name> :: <prim-name> :: <link-number> :: <face-number>
-// Note that <link-number> is no longer used, replaced with the index in
-// prim_map that is built at script startup, thus relieving us
-// of the perils of not liking the HUD in the right order
-
-list commandButtonList = [
-    "reset",
-
-    "backupper::backupper::30::-1",
-    "backlower::backlower::31::-1",
-
-    "chest::chest::32::-1",
-    "breasts::breastright::33::-1",
-    "breasts::breastleft::34::-1",
-    "nipples::breastright::33::0",
-    "nipples::breastleft::34::0",
-    "belly::belly::35::-1",
-
-    "armsupper::armright::36::0",
-    "armsupper::armright::36::1",
-    "armsupper::armright::36::2",
-    "armsupper::armright::36::3",
-    "armsupper::armleft::37::0",
-    "armsupper::armleft::37::1",
-    "armsupper::armleft::37::2",
-    "armsupper::armleft::37::3",
-
-    "armslower::armright::36::4",
-    "armslower::armright::36::5",
-    "armslower::armright::36::6",
-    "armslower::armright::36::7",
-    "armslower::armleft::37::4",
-    "armslower::armleft::37::5",
-    "armslower::armleft::37::6",
-    "armslower::armleft::37::7",
-
-    "armsfull::armright::36::-1",
-    "armsfull::armleft::37::-1",
-
-    "hands::hands::38::-1",
-
-    "buttcrotch::pelvisback::11::7",
-    "buttcrotch::pelvisfront::12::5",
-    "buttcrotch::pelvisfront::12::6",
-    "buttcrotch::pelvisfront::12::7",
-    "pelvis::pelvisback::11::-1",
-    "pelvis::pelvisfront::12::-1",
-
-    "legsupper::legright1::13::-1",
-    "legsupper::legright2::14::-1",
-    "legsupper::legright3::15::-1",
-    "legsupper::legleft1::21::-1",
-    "legsupper::legleft2::22::-1",
-    "legsupper::legleft3::23::-1",
-
-    "knees::legright4::16::-1",
-    "knees::legright5::17::-1",
-    "knees::legleft4::24::-1",
-    "knees::legleft5::25::-1",
-
-    "legslower::legright6::18::-1",
-    "legslower::legright7::19::-1",
-    "legslower::legright8::20::-1",
-    "legslower::legleft6::26::-1",
-    "legslower::legleft7::27::-1",
-    "legslower::legleft8::28::-1",
-
-    "legsfull::legright1::13::-1",
-    "legsfull::legright2::14::-1",
-    "legsfull::legright3::15::-1",
-    "legsfull::legright4::16::-1",
-    "legsfull::legright5::17::-1",
-    "legsfull::legright6::18::-1",
-    "legsfull::legright7::19::-1",
-    "legsfull::legright8::20::-1",
-    "legsfull::legleft1::21::-1",
-    "legsfull::legleft2::22::-1",
-    "legsfull::legleft3::23::-1",
-    "legsfull::legleft4::24::-1",
-    "legsfull::legleft5::25::-1",
-    "legsfull::legleft6::26::-1",
-    "legsfull::legleft7::27::-1",
-    "legsfull::legleft8::28::-1",
-
-    "feet::toenails::0::-1",
-    "feet::feet::29::-1",
-    "ankles::feet::29::0",
-    "bridges::feet::29::1",
-    "bridges::feet::29::2",
-    "toecleavages::feet::29::3",
-    "toes::feet::29::4",
-    "soles::feet::29::5",
-    "heels::feet::29::6"
-];
 
 list fingernails = [
     "fingernailsshort::fingernails",
@@ -203,6 +108,97 @@ integer haz_xtea = FALSE;
 
 integer r2channel;
 integer visible_fingernails = 0;
+
+// *****
+// New alpha part management
+
+// Enumerate the body region types as of Bakes on Mesh
+// We added our fingernail and toenail types at the end
+// The index of this list is the value of <body-region> in the element_map
+
+list regions = [
+    "head",
+    "upper",
+    "lower",
+    "eyes",
+    "skirt",
+    "hair",
+    "leftarm",
+    "leftleg",
+    "aux1",
+    "aux2",
+    "aux3",
+    "fingernails",
+    "toenails"
+];
+
+// <prim-name>, <face>, <button-group>, <body-region>
+
+integer element_stride = 4;
+list element_map = [
+    "head", -1, "head", 0,
+    "chest", -1, "chest", 1,
+    "breastright", -1, "breasts", 1,
+    "breastleft", -1, "breasts", 1,
+    "breastright", 0, "nipples", 1,
+    "breastleft", 0, "nipples", 1,
+    "belly", -1, "belly", 1,
+
+    "backupper", -1, "backupper", 1,
+    "backlower", -1, "backlower", 1,
+
+    "armright", 0, "armsupper", 1,
+    "armright", 1, "armsupper", 1,
+    "armright", 2, "armsupper", 1,
+    "armright", 3, "armsupper", 1,
+    "armleft", 0, "armsupper", 1,
+    "armleft", 1, "armsupper", 1,
+    "armleft", 2, "armsupper", 1,
+    "armleft", 3, "armsupper", 1,
+    "armright", 4, "armslower", 1,
+    "armright", 5, "armslower", 1,
+    "armright", 6, "armslower", 1,
+    "armright", 7, "armslower", 1,
+    "armleft", 4, "armslower", 1,
+    "armleft", 5, "armslower", 1,
+    "armleft", 6, "armslower", 1,
+    "armleft", 7, "armslower", 1,
+
+    "armright", -1, "arms", 1,
+    "armleft", -1, "arms", 1,
+    "hands", -1, "hands", 1,
+    "fingernails", -1, "hands", 11,
+
+    "pelvisback", 7, "crotch", 2,
+    "pelvisfront", 5, "crotch", 2,
+    "pelvisfront", 6, "crotch", 2,
+    "pelvisfront", 7, "crotch", 2,
+    "pelvisback", -1, "pelvis", 2,
+    "pelvisfront", -1, "pelvis", 2,
+
+    "legright1", -1, "legsupper", 2,
+    "legright2", -1, "legsupper", 2,
+    "legright3", -1, "legsupper", 2,
+    "legleft1", -1, "legsupper", 2,
+    "legleft2", -1, "legsupper", 2,
+    "legleft3", -1, "legsupper", 2,
+
+    "legright4", -1, "knees", 2,
+    "legright5", -1, "knees", 2,
+    "legleft4", -1, "knees", 2,
+    "legleft5", -1, "knees", 2,
+
+    "legright6", -1, "legslower", 2,
+    "legright7", -1, "legslower", 2,
+    "legright8", -1, "legslower", 2,
+    "legleft6", -1, "legslower", 2,
+    "legleft7", -1, "legslower", 2,
+    "legleft8", -1, "legslower", 2,
+
+    "feet", -1, "feet", 2,
+    "toenails", -1, "feet", 12
+];
+// *****
 
 // ***
 // Hand pose
@@ -350,69 +346,54 @@ set_alpha(string name, integer face, float alpha) {
     }
 }
 
-resetallalpha() {
-    integer i;
+set_alpha_group(list buttons, integer button_link, integer button_face) {
+    string button_name = llList2String(buttons, button_face);
+    list paramList = llGetLinkPrimitiveParams(button_link, [PRIM_NAME, PRIM_COLOR, button_face]);
+    vector face_color = llList2Vector(paramList, 1);
 
+    // Toggle the group button state
+    integer alphaVal;
+    log("set_alpha_group(): button: " + button_name + " link=" + (string)button_link + " face=" + (string)button_face);
+    if (face_color == offColor) {
+        alphaVal = 0;
+        llSetLinkPrimitiveParamsFast(button_link, [PRIM_COLOR, button_face, buttonOnColor, 1.0]);
+    } else {
+        alphaVal = 1;
+        llSetLinkPrimitiveParamsFast(button_link, [PRIM_COLOR, button_face, offColor, 1.0]);
+    }
+
+    // Set doll face state
+    integer i;
+    list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
+    integer len = llGetListLength(groups);
+    for (i = 0; i <= len; ++i) {
+        if (llList2String(groups, i) == button_name) {
+            // process matching group entry
+            string prim_name = llList2String(element_map, i * element_stride);
+            integer doll_face = llList2Integer(element_map, (i * element_stride) + 1);
+            set_alpha(prim_name, doll_face, alphaVal);
+        }
+    }
+}
+
+reset_alpha() {
     // Reset body and HUD doll
     list seen = [];
-    integer x = llGetListLength(commandButtonList) + 1;
-    for (; i < x; ++i) {
-        string dataString = llList2String(commandButtonList, i);
-        list stringList = llParseString2List(dataString, ["::"], []);
-        string name = llList2String(stringList, 1);
-        if (llListFindList(seen, [name]) < 0) {
-            seen += [name];
-            set_alpha(name, -1, 1.0);
+    list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
+    integer len = llGetListLength(groups);
+    integer i;
+    for (i = 0; i <= len; ++i) {
+        string prim_name = llList2String(element_map, i * element_stride);
+        if (llListFindList(seen, [prim_name]) < 0) {
+            seen += [prim_name];
+            set_alpha(prim_name, -1, 1.0);
         }
     }
 
     // Reset HUD buttons
-    for(i=1; i <= 8; ++i) {
-        string name = "buttonbar" + (string)i;
-        set_alpha(name, -1, 1.0);
+    for(i = 0; i <= 1; ++i) {
+        set_alpha("alpha" + (string)i, -1, 1.0);
     }
-}
-
-colorDoll(string commandFilter, integer alphaVal) {
-    integer i;
-    integer x = llGetListLength(commandButtonList)+1;
-    for (; i < x; ++i) {
-        string dataString = llList2String(commandButtonList,i);
-        list stringList = llParseString2List(dataString, ["::"], []);
-        string command = llList2String(stringList,0);
-
-        if (command == commandFilter) {
-            string name = llList2String(stringList, 1);
-            // Set color for all matching link names
-            integer face = llList2Integer(stringList, 3);
-            set_alpha(name, face, alphaVal);
-        }
-    }
-}
-
-doButtonPress(list buttons, integer link, integer face) {
-    string commandButton = llList2String(buttons, face);
-    list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
-    string primName = llList2String(paramList, 0);
-    vector primColor = llList2Vector(paramList, 1);
-    string name = llGetLinkName(link);
-
-    integer alphaVal;
-    integer i;
-    log("doButtonPress(): " + primName + " " + (string)link + " " + (string)face);
-    for (; i < num_links; ++i) {
-        // Set color for all matching link names
-        if (llList2String(prim_map, i) == name) {
-            if (primColor == offColor) {
-                alphaVal = 0;
-                llSetLinkPrimitiveParamsFast(i, [PRIM_COLOR, face, buttonOnColor, 1.0]);
-            } else {
-                alphaVal = 1;
-                llSetLinkPrimitiveParamsFast(i, [PRIM_COLOR, face, offColor, 1.0]);
-            }
-        }
-    }
-    colorDoll(commandButton, alphaVal);
 }
 
 // Send to listening Omega-compatible relay scripts
@@ -609,9 +590,9 @@ default {
                     "armsupper"
                     ];
             if(face == 0) {
-                resetallalpha();
+                reset_alpha();
             } else {
-                doButtonPress(buttonList, link, face);
+                set_alpha_group(buttonList, link, face);
             }
         }
         else if (name == "buttonbar2" || name == "buttonbar6") {
@@ -619,13 +600,13 @@ default {
                     "armslower",
                     "armsfull",
                     "hands",
-                    "buttcrotch",
+                    "crotch",
                     "pelvis",
                     "legsupper",
                     "knees",
                     "legslower"
                     ];
-            doButtonPress(buttonList, link, face);
+            set_alpha_group(buttonList, link, face);
         }
         else if (name == "buttonbar3" || name == "buttonbar7") {
             list buttonList = [
@@ -638,7 +619,7 @@ default {
                     "toes",
                     "soles"
                     ];
-            doButtonPress(buttonList, link, face);
+            set_alpha_group(buttonList, link, face);
         }
         else if (name == "buttonbar4" || name == "buttonbar8") {
             list buttonList = [
@@ -784,9 +765,9 @@ default {
             }
             else if (command == "THUMBNAILS") {
                 log("Loaded notecard: " + llList2String(cmdargs, 1));
-                integer x = llGetListLength(commandButtonList) + 1;
+                integer len = llGetListLength(cmdargs);
                 integer i;
-                for (i=2; i < x; ++i) {
+                for (i = 2; i <= len; ++i) {
                     llSetLinkPrimitiveParamsFast(SkinLink, [
                         PRIM_COLOR, i-2, <1.0, 1.0, 1.0>, 1.0,
                         PRIM_TEXTURE, i-2, llList2String(cmdargs, i), <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
