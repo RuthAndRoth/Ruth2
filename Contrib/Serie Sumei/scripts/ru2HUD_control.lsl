@@ -22,6 +22,7 @@
 // ss-p 20Mar2020 <seriesumei@avimail.org> - Add foot poses
 // ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
 // ss-r 24Mar2020 <seriesumei@avimail.org> - Rework doll datastructures
+// ss-s 26Mar2020 <seriesumei@avimail.org> - New simpler alpha HUD
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -136,68 +137,50 @@ list regions = [
 
 integer element_stride = 4;
 list element_map = [
-    "head", -1, "head", 0,
-    "chest", -1, "chest", 1,
-    "breastright", -1, "breasts", 1,
-    "breastleft", -1, "breasts", 1,
-    "breastright", 0, "nipples", 1,
-    "breastleft", 0, "nipples", 1,
-    "belly", -1, "belly", 1,
-
-    "backupper", -1, "backupper", 1,
-    "backlower", -1, "backlower", 1,
-
-    "armright", 0, "armsupper", 1,
-    "armright", 1, "armsupper", 1,
-    "armright", 2, "armsupper", 1,
-    "armright", 3, "armsupper", 1,
-    "armleft", 0, "armsupper", 1,
-    "armleft", 1, "armsupper", 1,
-    "armleft", 2, "armsupper", 1,
-    "armleft", 3, "armsupper", 1,
-    "armright", 4, "armslower", 1,
-    "armright", 5, "armslower", 1,
-    "armright", 6, "armslower", 1,
-    "armright", 7, "armslower", 1,
-    "armleft", 4, "armslower", 1,
-    "armleft", 5, "armslower", 1,
-    "armleft", 6, "armslower", 1,
-    "armleft", 7, "armslower", 1,
-
-    "armright", -1, "arms", 1,
-    "armleft", -1, "arms", 1,
-    "hands", -1, "hands", 1,
+    "body", 3, "head", 0,
+    "body", 4, "neck", 1,
+    "body", 6, "arms", 1,
+    "body", 1, "hands", 1,
     "fingernails", -1, "hands", 11,
-
-    "pelvisback", 7, "crotch", 2,
-    "pelvisfront", 5, "crotch", 2,
-    "pelvisfront", 6, "crotch", 2,
-    "pelvisfront", 7, "crotch", 2,
-    "pelvisback", -1, "pelvis", 2,
-    "pelvisfront", -1, "pelvis", 2,
-
-    "legright1", -1, "legsupper", 2,
-    "legright2", -1, "legsupper", 2,
-    "legright3", -1, "legsupper", 2,
-    "legleft1", -1, "legsupper", 2,
-    "legleft2", -1, "legsupper", 2,
-    "legleft3", -1, "legsupper", 2,
-
-    "legright4", -1, "knees", 2,
-    "legright5", -1, "knees", 2,
-    "legleft4", -1, "knees", 2,
-    "legleft5", -1, "knees", 2,
-
-    "legright6", -1, "legslower", 2,
-    "legright7", -1, "legslower", 2,
-    "legright8", -1, "legslower", 2,
-    "legleft6", -1, "legslower", 2,
-    "legleft7", -1, "legslower", 2,
-    "legleft8", -1, "legslower", 2,
-
-    "feet", -1, "feet", 2,
-    "toenails", -1, "feet", 12
+    "body", 7, "torso", 2,
+    "body", 5, "legs", 2,
+    "body", 0, "feet", 2,
+    "body", 2, "hair", 5,
+    "toenails", -1, "feet", 12,
+    "lefteye", -1, "eyes", 3,
+    "righteye", -1, "eyes", 3
 ];
+
+// A JSON buffer to save the alpha values of elements:
+// key - element name
+// value - 16-bit alpha values, 1 bit per face: 0 == visible, 1 == invisible
+// Note this representation is opposite of the usage in the rest of this script where
+// alpha values are integer representations of the actual face alpha float
+string current_alpha = "{}";
+
+// Alpha HUD button map
+list alpha_buttons = [
+    // alpha0
+    "",
+    "head",
+    "neck",
+    "arms",
+    "hands",
+    "fingernails",
+    "",
+    "hide",
+    // alpha1
+    "",
+    "",
+    "torso",
+    "legs",
+    "feet",
+    "toenails",
+    "",
+    "show"
+];
+
+
 // *****
 
 // ***
@@ -329,14 +312,61 @@ adjust_pos() {
     }
 }
 
+
+// *****
+// get/set alpha values in JSON buffer
+
+// j - JSON value storage
+// name - prim_name
+// face - integer face, -1 returns the unmasked 16 bit value
+// Internal JSON values are ones complement, ie a 1 bit means the face is not visible
+integer json_get_alpha(string j, string name, integer face) {
+    integer cur_val = llList2Integer(llJsonGetValue(j, [name]), 0);
+    if (face < 0) {
+        // All faces, return aggregate value masked to 16 bits
+        cur_val = ~cur_val & 0xffff;
+    } else {
+        cur_val = (cur_val & (1 << face)) == 0;
+    }
+    return cur_val;
+}
+
+// j - JSON value storage
+// name - prim_name
+// face - integer face, -1 sets all 16 bits in the value
+// value - alpha boolean, 0 = invisible, 1 = visible
+// Internal JSON values are ones complement, ie a 1 bit means the face is not visible
+string json_set_alpha(string j, string name, integer face, integer value) {
+    value = !value;  // logical NOT for internal storage
+    integer cur_val = llList2Integer(llJsonGetValue(j, [name]), 0);
+    integer mask;
+    integer cmd;
+    if (face < 0) {
+        // All faces
+        mask = 0x0000;
+        // One's complement
+        cmd = -value;
+    } else {
+        mask = ~(1 << face);
+        cmd = (value << face);
+    }
+    // Mask final value to 16 bits
+    cur_val = ((cur_val & mask) | cmd) & 0xffff;
+    return llJsonSetValue(j, [name], (string)(cur_val));
+}
+// *****
+
+
 // Set the alpha val of all links matching name
 set_alpha(string name, integer face, float alpha) {
+    log("set_alpha(): name="+name+" face="+(string)face+" alpha="+(string)alpha);
+    send_csv(["ALPHA", name, face, alpha]);
+    current_alpha = json_set_alpha(current_alpha, name, face, (integer)alpha);
     integer link;
     for (; link < num_links; ++link) {
         // Set color for all matching link names
         if (llList2String(prim_map, link) == name) {
             // Reset links that appear in the list of body parts
-            send_csv(["ALPHA", name, face, alpha]);
             if (alpha == 0) {
                 llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
             } else {
@@ -346,53 +376,44 @@ set_alpha(string name, integer face, float alpha) {
     }
 }
 
-set_alpha_group(list buttons, integer button_link, integer button_face) {
-    string button_name = llList2String(buttons, button_face);
-    list paramList = llGetLinkPrimitiveParams(button_link, [PRIM_NAME, PRIM_COLOR, button_face]);
-    vector face_color = llList2Vector(paramList, 1);
-
-    // Toggle the group button state
-    integer alphaVal;
-    log("set_alpha_group(): button: " + button_name + " link=" + (string)button_link + " face=" + (string)button_face);
-    if (face_color == offColor) {
-        alphaVal = 0;
-        llSetLinkPrimitiveParamsFast(button_link, [PRIM_COLOR, button_face, buttonOnColor, 1.0]);
-    } else {
-        alphaVal = 1;
-        llSetLinkPrimitiveParamsFast(button_link, [PRIM_COLOR, button_face, offColor, 1.0]);
-    }
-
-    // Set doll face state
+// alpha = -1 toggles the current saved value
+set_alpha_group(string group_name, integer alpha) {
     integer i;
     list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
     integer len = llGetListLength(groups);
     for (i = 0; i <= len; ++i) {
-        if (llList2String(groups, i) == button_name) {
+        if (llList2String(groups, i) == group_name) {
             // process matching group entry
             string prim_name = llList2String(element_map, i * element_stride);
             integer doll_face = llList2Integer(element_map, (i * element_stride) + 1);
-            set_alpha(prim_name, doll_face, alphaVal);
+            if (alpha < 0) {
+                // Toggle the current value
+                log("json: " + current_alpha);
+                alpha = !json_get_alpha(current_alpha, prim_name, doll_face);
+                log("val: " + (string)alpha);
+            }
+            set_alpha(prim_name, doll_face, alpha);
         }
     }
 }
 
-reset_alpha() {
+reset_alpha(float alpha) {
     // Reset body and HUD doll
     list seen = [];
     list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
     integer len = llGetListLength(groups);
     integer i;
-    for (i = 0; i <= len; ++i) {
+    for (i = 0; i < len; ++i) {
         string prim_name = llList2String(element_map, i * element_stride);
         if (llListFindList(seen, [prim_name]) < 0) {
             seen += [prim_name];
-            set_alpha(prim_name, -1, 1.0);
+            set_alpha(prim_name, -1, alpha);
         }
     }
 
     // Reset HUD buttons
     for(i = 0; i <= 1; ++i) {
-        set_alpha("alpha" + (string)i, -1, 1.0);
+        set_alpha("alpha" + (string)i, -1, alpha);
     }
 }
 
@@ -578,65 +599,62 @@ default {
                 llRequestPermissions(llDetectedKey(0), PERMISSION_ATTACH);
             }
         }
-        else if (name == "buttonbar1" || name == "buttonbar5") {
-            list buttonList = [
-                    "reset",
-                    "chest",
-                    "breasts",
-                    "nipples",
-                    "belly",
-                    "backupper",
-                    "backlower",
-                    "armsupper"
-                    ];
-            if(face == 0) {
-                reset_alpha();
-            } else {
-                set_alpha_group(buttonList, link, face);
+        else if (name == "alphadoll") {
+            // Handle the doll before the buttons
+            integer bx = (integer)(pos.x * 10);
+            integer by = (integer)(pos.y * 10);
+            if ((pos.x > 0.475 && pos.x < 0.525) && (pos.y > 0.775 && pos.y < 0.8)) {
+                // neck
+                set_alpha_group("neck", -1);
+            }
+            else if (bx == 4 || bx == 5) {
+                if (by == 8) {
+                    // head
+                    set_alpha_group("head", -1);
+                }
+                else if (by == 6 || by == 7) {
+                    // torso (except neck)
+                    set_alpha_group("torso", -1);
+                }
+                else if (by > 1 && by < 6) {
+                    // legs
+                    set_alpha_group("legs", -1);
+                }
+                else if (by == 1) {
+                    // feet
+                    set_alpha_group("feet", -1);
+                }
+            }
+            else if ((bx == 3 || bx == 6) && (by == 6 || by == 7)) {
+                // arms
+                set_alpha_group("arms", -1);
+            }
+            else if ((bx == 3 || bx == 6) && by == 5) {
+                // hands
+                set_alpha_group("hands", -1);
             }
         }
-        else if (name == "buttonbar2" || name == "buttonbar6") {
-            list buttonList = [
-                    "armslower",
-                    "armsfull",
-                    "hands",
-                    "crotch",
-                    "pelvis",
-                    "legsupper",
-                    "knees",
-                    "legslower"
-                    ];
-            set_alpha_group(buttonList, link, face);
-        }
-        else if (name == "buttonbar3" || name == "buttonbar7") {
-            list buttonList = [
-                    "legsfull",
-                    "feet",
-                    "ankles",
-                    "heels",
-                    "bridges",
-                    "toecleavages",
-                    "toes",
-                    "soles"
-                    ];
-            set_alpha_group(buttonList, link, face);
-        }
-        else if (name == "buttonbar4" || name == "buttonbar8") {
-            list buttonList = [
-                    "--",
-                    "--",
-                    "--",
-                    "--",
-                    "--",
-                    "--",
-                    "savealpha",
-                    "loadalpha"
-                    ];
-            string commandButton = llList2String(buttonList,face);
-            llOwnerSay("Saving and loading alpha is not yet implemented!");
-        }
-        else if (name == "backboard") {
-            // ignore click on backboard
+        else if (llGetSubString(name, 0, 4) == "alpha") {
+            integer b = ((integer)llGetSubString(name, 5, -1));
+            if (b == 0 && face == 7) {
+                // Hide all
+                reset_alpha(0.0);
+            }
+            else if (b == 1 && face == 7) {
+                // Show all
+                reset_alpha(1.0);
+            }
+            else {
+                set_alpha_group(llList2String(alpha_buttons, (b * 8) + face), -1);
+
+                // Set button color
+                vector face_color = llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]), 1);
+                if (face_color == offColor) {
+                    llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, buttonOnColor, 1.0]);
+                } else {
+                    llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
+                }
+            }
         }
         else if (name == "bom0") {
             // Bakes on Mesh
@@ -733,24 +751,8 @@ default {
                 llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
             }
         }
-        else if (name == "optionbox") {
-            // Do nothing here
-        }
         else {
-            // Handle alphas for touching the doll (that sounds baaaaaad...)
-            list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
-            string primName = llList2String(paramList, 0);
-            vector primColor = llList2Vector(paramList, 1);
-            integer alphaVal;
-
-            if (primColor == offColor) {
-                alphaVal=0;
-                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
-            } else {
-                alphaVal=1;
-                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
-            }
-            send_csv(["ALPHA", primName, face, alphaVal]);
+            // Do nothing here
         }
     }
 
