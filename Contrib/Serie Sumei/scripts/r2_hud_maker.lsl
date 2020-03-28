@@ -29,32 +29,14 @@
 // color buttons as well as hand and foot pose buttons.
 //
 // To build the HUD from scratch you will need to:
-// * Upload or obtain via whatever means the Alpha HUD mesh and the 'doll'
-//   mesh.  This script will throw an error if you start with a pre-linked
-//   alpha HUD but it should work anyway.  To prepare the alpha hud and doll
-//   meshes:
-//   * Remove all scripts
-//   * Make sure that the 'rotatebar' link is the root of the HUD linkset and
-//     the 'chest' link is the root of the doll linkset.  Thse are used for
-//     positioning, even so SL gets the positioning wrong compares to OpenSim.
 // * Create a new empty box prim named 'Object' and take a copy of it into
 //   inventory
 // * Copy the folloing objects into the new box's inventory on the ground:
 //   * the new box from inventory created above and name it 'Object'
-//   * the alpha HUD mesh and name it 'alpha-hud'
-//   * if the doll mes is not already linked into the alpha HUD linkset copy
-//     it and name it 'ruthdollv3'
 //   * the button meshes named '5x1-s_button', '6x1_button' and '4x2_button'
 //   * this script
 // * Light fuse (touch the box prim) and get away, the new HUD will be
 //   assembled around the box prim which will become the root prim of the HUD.
-// * The alpha HUD and the doll may not be linked as they may need size
-//   and/or position adjustments depending on how your mesh is linked.  Since
-//   they are both linksets you do not want to link them to the main HUD until
-//   you are very satisfied with their position.  Then link them and rejoice.
-// * Make any position and size adjustments as necessary to the alpha HUD mesh
-//   and doll, then link them both to the new HUD root prim.  Make sure that
-//   the center square HUD prim is last so it remains the root of the linkset.
 // * Remove this script from the HUD root prim and copy in the HUD script(s).
 // * The other objects are also not needed any longer in the root prim and
 //   can be removed.
@@ -112,10 +94,10 @@ string GetGridName() {
 }
 
 // The textures used in the HUD referenced below are included in the repo:
-// hud_texture: ruth2 v3 hud gradient.png
-// header_texture: ruth2 v3 hud header.png
-// skin_texture: ruth2 v3 hud.skin.png
-// options_texture: ruth2 v3 hud options.png
+// hud_texture: ruth2_v3_hud_gradient.png
+// header_texture: ruth2_v3_hud_header.png
+// skin_texture: ruth2_v3_hud_skin.png
+// options_texture: ruth2_v3_hud_options.png
 // alpha_button_texture: r2_hud_alpha_buttons.png
 // alpha_doll_texture: r2_hud_alpha_doll.png
 // fingernails_shape_texture: ruth 2.0 hud fingernails shape.png
@@ -131,12 +113,13 @@ get_textures() {
     if (is_SL()) {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
-        hud_texture = "76dbff9c-c2fd-ffe9-a37f-cb9e42f722fe";
+        hud_texture = "45f2b127-14bb-d728-e968-02069241cf71";
         skin_texture = "1cf48b3f-768d-652e-b789-4d0fa5e7085c";
-        alpha_button_texture = "";
+        alpha_button_texture = "29770bc5-af70-b94a-d279-ec1133bb6e2c";
+        alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
         if (ROTH) {
-            header_texture = "a231a9af-145e-417e-8e63-29b2437f7a1f";
-            options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
+            header_texture = "c54a2e5d-398e-2c1d-77ab-5353a20cbc23";
+            options_texture = "2811b063-02b4-8567-5242-caa574106f6c";
         } else {
             header_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
             options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
