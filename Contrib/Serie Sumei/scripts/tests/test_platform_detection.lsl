@@ -1,5 +1,6 @@
 // test_platform_detection.lsl - Test functions to determine the grid/platform
 // v1 - Create tests
+// v2 - Add Aditi, Halcyon
 
 integer VERBOSE = TRUE;
 
@@ -39,40 +40,79 @@ integer test_string(string actual, string expected, string desc) {
 // *****
 
 
-// Hack to detect Second Life vs OpenSim
+// Hack to detect Second Life vs other platforms that try to behave like SL
 // Relies on a bug in llParseString2List() in SL
 // http://grimore.org/fuss/lsl/bugs#splitting_strings_to_lists
-integer is_SL() {
-    string sa = "12999";
-//    list OS = [1,2,9,9,9];
-    list SL = [1,2,999];
-    list la = llParseString2List(sa, [], ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
-    return (la == SL);
+integer haz_SL_bug() {
+    // Expected result is [1,2,9,9,9];
+    return (llParseString2List("12999", [], ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) == [1,2,999]);
 }
 
-integer is_SL_verbose() {
-    string sa = "12999";
-    list OS = [1,2,9,9,9];
+integer haz_SL_bug_verbose() {
+    list expected = [1,2,9,9,9];
     list SL = [1,2,999];
-    list la = llParseString2List(sa, [], ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
-    log("is_SL(): llParseString2List(\"12999\"): " + llDumpList2String(la, ","));
-    if (la == OS)
-      log("  Appears to be OpenSimulator");
+    list la = llParseString2List("12999", [], ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+    log("haz_SL_bug(): llParseString2List(\"12999\") returns " + llDumpList2String(la, ","));
+    if (la == expected)
+      log("  Second Life not detected");
     if (la == SL)
-      log("  Appears to be Second Life");
+      log("  Second Life detected");
     return (la == SL);
 }
 
-// Wrapper for osGetGridName to simplify transition between environments
-string GetGridName() {
-    string grid_name;
-    // Comment out this line to run in SecondLife, un-comment it to run in OpenSim
-    grid_name = osGetGridName();
-    if (is_SL()) {
-        grid_name = llGetEnv("sim_channel");
+// Derive an identifier for specific grids
+// grid_name - only supported by some platforms/configurations, use it if present
+// sim_version - scanned for 'OSgrid'
+// simulator_hostname - scanned for 'aditi' and 'agni'
+string get_grid_name() {
+    string grid_name = llGetEnv("grid_name");
+    if (grid_name == "") {
+        string sim = llGetEnv("sim_channel");
+        if (sim == "Halcyon Server") {
+            // Should have set grid_name above
+        }
+        else if (sim == "OpenSim") {
+            string sim_version = llGetEnv("sim_version");
+            if (llSubStringIndex(sim_version, "OSgrid") >= 0) {
+                grid_name = "OSgrid";
+            }
+            if (grid_name == "") {
+                // Fall back to region name
+                grid_name = llGetRegionName();
+            }
+        }
+        else if (sim == "Second Life Server") {
+            if (llSubStringIndex(llGetEnv("simulator_hostname"), "aditi.lindenlab") >= 0) {
+                // Try to detect the SL beta grid
+                grid_name = "aditi";
+            } else {
+                // Return the name of the SL main grid
+                grid_name = "agni";
+            }
+        }
+        else {
+            // Fall back to region name
+            grid_name = llGetRegionName();
+        }
     }
-    llOwnerSay("grid: " + grid_name);
     return grid_name;
+}
+
+// Returns an identifier of the base sim platform
+// halcyon, opensim, secondlife
+string get_platform() {
+    string sim = llGetEnv("sim_channel");
+    string ret;
+    if (sim == "Halcyon Server") {
+        ret = "halcyon";
+    }
+    else if (sim == "OpenSim") {
+        ret = "opensim";
+    }
+    else if (sim == "Second Life Server") {
+        ret = "secondlife";
+    }
+    return ret;
 }
 
 say_env(string varname) {
@@ -82,9 +122,13 @@ say_env(string varname) {
 default {
     state_entry() {
         log("\nPlatform Detection Tests");
-        log("The tests for platform detection require manual inspection due to the chicken-and-egg problem of detecting the platform in order to test the detection. :)");
-        is_SL_verbose();
+        log("get_platform(): [" + get_platform() + "]");
+        log("get_grid_name(): [" + get_grid_name() + "]");
 
+        if (haz_SL_bug()) log("SL bug detected");
+        haz_SL_bug_verbose();
+
+        log(" ");
         log("RegionName: [" + llGetRegionName() + "]");
         say_env("simulator_hostname");
         say_env("estate_id");
