@@ -4,17 +4,18 @@
 
 // ss-a - 24Mar2019 <seriesumei@avimail.org> - Initial release - apply skins only
 // ss-b - 21Mar2020 <seriesumei@avimail.org> - Add Bakes on Mesh
+// ss-c - 31Mar2020 <seriesumei@avimail.org> - Change notecard to INI format, remove Omega
 
-// This script loads a notecard with button-to-skin
-// mappings and listens for link messages with button names to
+// This script loads a notecard with skin texture UUIDs
+// and listens for link messages with button names to
 // send the loaded skin textures to the body.
 
 // Commands (integer number, string message, key id)
-// 411, <button>|apply, * - Apply the textures identified by <button>
-
-// (planned features below)
-// 0, <channel>|appid, * - Set the app ID used in computing the channel
-// 0, <notecard>|notecard, * - Set the notecard name to load
+// 411: <button>|apply, * - Apply the textures identified by <button>
+// 42: appid,<appid> * - Set the app ID used in computing the channel
+// 42: notecard,<notecard> - Set the notecard name to load
+// 42: status - Return the applier status: notecard,skin_map
+// 42: thumbnails - Return a list of thumbnail UUIDs
 
 // It also responds to some link mesages with status information:
 // loaded card - returns name of loaded notecard, empty if no card is loaded
@@ -26,13 +27,16 @@ integer app_id;
 integer channel;
 
 // To simplify the creator's life we read Omega-compatible notecards
-string DEFAULT_NOTECARD = "!MASTER_CONFIG";
+string DEFAULT_NOTECARD = "!CONFIG";
 string notecard_name;
 key notecard_qid;
-list skin_config;
-list button_names;
-list thumbnails;
 integer line;
+string current_section;
+string current_buffer;
+
+list skin_config;
+list skin_map;
+list thumbnails;
 integer reading_notecard = FALSE;
 
 integer LINK_OMEGA = 411;
@@ -74,6 +78,13 @@ integer keyapp2chan(integer id) {
     return 0x80000000 | ((integer)("0x" + (string)llGetOwner()) ^ id);
 }
 
+send_region(string region) {
+    string skin_tex = llJsonGetValue(current_buffer, [region]);
+    if (skin_tex != "") {
+        send("TEXTURE," + region + "," + skin_tex);
+    }
+}
+
 // Send the list of thumbnails back to the HUD for display
 send_thumbnails() {
     llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV(
@@ -95,20 +106,12 @@ apply_texture(string button) {
         return;
     }
 
-    integer i;
-    for (; i < llGetListLength(skin_config); ++i) {
-        list d = llParseStringKeepNulls(llList2String(skin_config, i), ["|"], []);
-        if (llList2String(d, 0) == button) {
-            if (llList2String(d, 1) == "omegaHead") {
-                send("TEXTURE,head," + llList2String(d, 2));
-            }
-            if (llList2String(d, 1) == "lolasSkin") {
-                send("TEXTURE,upper," + llList2String(d, 2));
-            }
-            if (llList2String(d, 1) == "skin") {
-                send("TEXTURE,lower," + llList2String(d, 2));
-            }
-        }
+    integer i = llListFindList(skin_map, [button]);
+    if (i >= 0) {
+        current_buffer = llList2String(skin_config, i);
+        send_region("head");
+        send_region("upper");
+        send_region("lower");
     }
 }
 
@@ -146,14 +149,81 @@ load_notecard(string name) {
     llOwnerSay("ap: Reading notecard: " + notecard_name);
     if (can_haz_notecard(notecard_name)) {
         line = 0;
+        current_buffer = "";
         skin_config = [];
-        button_names = [];
+        skin_map = [];
         thumbnails = [];
         reading_notecard = TRUE;
         notecard_qid = llGetNotecardLine(notecard_name, line);
     }
 }
 
+save_section() {
+    // Save what we have
+    log(" " + current_section + " " + (string)current_buffer);
+    skin_config += current_buffer;
+    skin_map += current_section;
+
+    // Clean up for next line
+    current_buffer = "";
+    current_section = "";
+}
+
+read_config(string data) {
+    if (data == EOF) {
+        // All done
+        save_section();
+        return;
+    }
+
+    data = llStringTrim(data, STRING_TRIM_HEAD);
+    if (data != "" && llSubStringIndex(data, "#") != 0) {
+        if (llSubStringIndex(data, "[") == 0) {
+            // Save previous section if valid
+            save_section();
+            // Section header
+            integer end = llSubStringIndex(data, "]");
+            if (end != 0) {
+                // Well-formed section header
+                current_section = llGetSubString(data, 1, end-1);
+                log("Reading section " + current_section);
+                // Reset section globals
+            }
+        } else {
+            integer i = llSubStringIndex(data, "=");
+            if (i != -1) {
+                string attr = llToLower(llStringTrim(llGetSubString(data, 0, i-1), STRING_TRIM));
+                string value = llStringTrim(llGetSubString(data, i+1, -1), STRING_TRIM);
+
+                if (attr == "head" || attr == "omegaHead") {
+                    // Save head
+                    current_buffer = llJsonSetValue(current_buffer, ["head"], value);
+                }
+                else if (attr == "upper" || attr == "lolasSkin") {
+                    // Save upper body
+                    current_buffer = llJsonSetValue(current_buffer, ["upper"], value);
+                }
+                else if (attr == "lower" || attr == "skin") {
+                    // Save upper body
+                    current_buffer = llJsonSetValue(current_buffer, ["lower"], value);
+                }
+                else if (attr == "thumbnail") {
+                    // Save upper body
+                    current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], value);
+                    thumbnails += value;
+                }
+                else {
+//                    llOwnerSay("Unknown configuration value: " + name + " on line " + (string)line);
+                }
+            } else {
+                // not an assignment line
+//                llOwnerSay("Configuration could not be read on line " + (string)line);
+            }
+        }
+    }
+    notecard_qid = llGetNotecardLine(notecard_name, ++line);
+
+}
 init() {
     // Set up memory constraints
     llSetMemoryLimit(MEM_LIMIT);
@@ -166,8 +236,8 @@ init() {
     // Initialize channel
     channel = keyapp2chan(app_id);
 
-    reading_notecard = FALSE;
     log("ap: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+    reading_notecard = FALSE;
     load_notecard(notecard_name);
 
     haz_xtea = can_haz_script(XTEA_NAME);
@@ -180,36 +250,9 @@ default {
 
     dataserver(key query_id, string data) {
         if (query_id == notecard_qid) {
-            if (data != EOF) {
-                data = llStringTrim(data, STRING_TRIM_HEAD);
-                if (data != "" && llSubStringIndex(data, "*") != 0) {
-                    if (llSubStringIndex(data, "|") >= 0) {
-                        // Only save lines that might be valid
-                        list d = llParseStringKeepNulls(data, ["|"], []);
-                        if (llList2String(d, 1) == "thumbnail") {
-                            thumbnails += llList2String(d, 2);
-                        } else {
-                            skin_config += data;
-                            string b_name = llList2String(d, 0);
-                            if (llListFindList(button_names, [b_name]) < 0) {
-                                button_names += b_name;
-                                log(b_name);
-                            }
-                        }
-                    }
-                    else if (llSubStringIndex(data, "mode:") >= 0) {
-                        // process mode line
-                        string mode = llGetSubString(data, 5, -1);
-                        if (mode == "loud") {
-                            VERBOSE = TRUE;
-                        }
-                        else if (mode = "autodelete") {
-                            // remove notecard here someday
-                        }
-                    }
-                }
-                notecard_qid = llGetNotecardLine(notecard_name, ++line);
-            } else {
+            read_config(data);
+            if (data == EOF) {
+                // Do end work here
                 reading_notecard = FALSE;
                 llOwnerSay("ap: Finished reading notecard " + notecard_name);
                 llOwnerSay("ap: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
@@ -238,7 +281,7 @@ default {
                 llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV([
                     command,
                     notecard_name,
-                    button_names
+                    skin_map
                 ]), "");
             }
             else if (command == "THUMBNAILS") {

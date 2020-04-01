@@ -98,6 +98,27 @@ Reported in sim_version as 'Unix/Mono'.
     halcyon: []
     grid_name: []
 
+### OpenSimulator on Mono (Utopia Skye)
+
+    Platform Detection Tests
+    get_platform(): [opensim]
+    get_grid_name(): [Skye Dreams]
+    haz_SL_bug(): llParseString2List("12999") returns 1,2,9,9,9
+      Second Life not detected
+
+    RegionName: [Skye Dreams]
+    simulator_hostname: [rsrv11.utopiaskyegrid.com]
+    estate_id: [102]
+    estate_name: [Skye Dreams]
+    region_product_name: [Private Region]
+    sim_version: [OpenSim 0.9.2.0 Yeti Release       (Unix/Mono)]
+    sim_channel: [OpenSim]
+    region_start_time: [1585421854]
+    platform: []
+    script_engine: []
+    halcyon: []
+    grid_name: []
+
 ### OpenSimulator (standalone)
 
 A plain OpenSimulator install on Mono with minimal configuration.
