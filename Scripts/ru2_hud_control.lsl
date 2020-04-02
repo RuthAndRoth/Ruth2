@@ -4,6 +4,7 @@
 // Copyright 2019 Serie Sumei
 
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Controb/Serie Sumei
+// v3.1 02Apr2020 <seriesumei@avimail.org> - New alpha HUD button order, fix prim mapping
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -177,7 +178,30 @@ list element_map = [
     "legleft7", -1, "legslower", 2,
     "legleft8", -1, "legslower", 2,
 
+    "legright1", -1, "legsfull", 2,
+    "legright2", -1, "legsfull", 2,
+    "legright3", -1, "legsfull", 2,
+    "legright4", -1, "legsfull", 2,
+    "legright5", -1, "legsfull", 2,
+    "legright6", -1, "legsfull", 2,
+    "legright7", -1, "legsfull", 2,
+    "legright8", -1, "legsfull", 2,
+    "legleft1", -1, "legsfull", 2,
+    "legleft2", -1, "legsfull", 2,
+    "legleft3", -1, "legsfull", 2,
+    "legleft4", -1, "legsfull", 2,
+    "legleft5", -1, "legsfull", 2,
+    "legleft6", -1, "legsfull", 2,
+    "legleft7", -1, "legsfull", 2,
+    "legleft8", -1, "legsfull", 2,
+
     "feet", -1, "feet", 2,
+    "feet", 0, "ankles", 2,
+    "feet", 1, "heels", 2,
+    "feet", 2, "bridges", 2,
+    "feet", 3, "toecleavages", 2,
+    "feet", 4, "soles", 2,
+    "feet", 5, "toes", 2,
     "toenails", -1, "feet", 12
 ];
 // *****
@@ -358,7 +382,7 @@ set_alpha_group(list buttons, integer button_link, integer button_face) {
     }
 }
 
-reset_alpha() {
+reset_alpha(float alpha) {
     // Reset body and HUD doll
     list seen = [];
     list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
@@ -368,13 +392,13 @@ reset_alpha() {
         string prim_name = llList2String(element_map, i * element_stride);
         if (llListFindList(seen, [prim_name]) < 0) {
             seen += [prim_name];
-            set_alpha(prim_name, -1, 1.0);
+            set_alpha(prim_name, -1, alpha);
         }
     }
 
     // Reset HUD buttons
-    for(i = 0; i <= 1; ++i) {
-        set_alpha("alpha" + (string)i, -1, 1.0);
+    for(i = 0; i <= 7; ++i) {
+        set_alpha("buttonbar" + (string)i, -1, alpha);
     }
 }
 
@@ -562,60 +586,63 @@ default {
         }
         else if (name == "buttonbar1" || name == "buttonbar5") {
             list buttonList = [
-                    "reset",
+                    "head",
                     "chest",
                     "breasts",
                     "nipples",
                     "belly",
                     "backupper",
                     "backlower",
-                    "armsupper"
+                    "arms"
                     ];
-            if(face == 0) {
-                reset_alpha();
+            set_alpha_group(buttonList, link, face);
+        }
+        else if (name == "buttonbar2" || name == "buttonbar6") {
+            list buttonList = [
+                    "armsupper",
+                    "armslower",
+                    "hands",
+                    "fingernails",
+                    "crotch",
+                    "pelvis",
+                    "",
+                    "hideall"
+                    ];
+            if(face == 7) {
+                reset_alpha(0.0);
             } else {
                 set_alpha_group(buttonList, link, face);
             }
         }
-        else if (name == "buttonbar2" || name == "buttonbar6") {
-            list buttonList = [
-                    "armslower",
-                    "armsfull",
-                    "hands",
-                    "crotch",
-                    "pelvis",
-                    "legsupper",
-                    "knees",
-                    "legslower"
-                    ];
-            set_alpha_group(buttonList, link, face);
-        }
         else if (name == "buttonbar3" || name == "buttonbar7") {
             list buttonList = [
-                    "legsfull",
+                    "legs",
+                    "legsupper",
+                    "knees",
+                    "legslower",
                     "feet",
                     "ankles",
-                    "heels",
                     "bridges",
-                    "toecleavages",
-                    "toes",
-                    "soles"
+                    "heels"
                     ];
             set_alpha_group(buttonList, link, face);
         }
         else if (name == "buttonbar4" || name == "buttonbar8") {
             list buttonList = [
+                    "soles",
+                    "toecleavage",
+                    "toes",
+                    "toenails",
                     "--",
                     "--",
                     "--",
-                    "--",
-                    "--",
-                    "--",
-                    "savealpha",
-                    "loadalpha"
+                    "showall"
                     ];
-            string commandButton = llList2String(buttonList,face);
-            llOwnerSay("Saving and loading alpha is not yet implemented!");
+            if(face == 7) {
+                reset_alpha(1.0);
+            } else {
+                set_alpha_group(buttonList, link, face);
+            }
         }
         else if (name == "backboard") {
             // ignore click on backboard
