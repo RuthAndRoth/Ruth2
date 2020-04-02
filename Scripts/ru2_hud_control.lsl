@@ -3,25 +3,7 @@
 // Copyright 2017 Shin Ingen
 // Copyright 2019 Serie Sumei
 
-// ss-a 29Dec2018 <seriesumei@avimail.org> - Make alpha hud link-order independent
-// ss-b 30Dec2018 <seriesumei@avimail.org> - Auto-adjust position on attach
-// ss-c 31Dec2018 <seriesumei@avimail.org> - Combined HUD
-// ss-d 03Jan2019 <seriesumei@avimail.org> - Add skin panel
-// ss-d.2 06Jan2019 <seriesumei@avimail.org> - Fix OpenSim compatibility
-// ss-e 04Jan2019 <seriesumei@avimail.org> - New skin panel
-// ss-f 26Jan2019 <seriesumei@avimail.org> - New Options panel
-// ss-g 29Jan2019 <seriesumei@avimail.org> - Add toenail color to Options panel
-// ss-h 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change
-// ss-i 08Feb2019 <seriesumei@avimail.org> - Fix alpha reset to not fiddle with HUD links
-// ss-j 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
-// ss-k 10Feb2019 <seriesumei@avimail.org> - Adjust rotations for build script
-// ss-l 24Mar2019 <seriesumei@avimail.org> - Read skins from Omega-compatible notecard
-// ss-m 08Sep2019 <seriesumei@avimail.org> - change minimize behaviour
-// ss-n 24Jan2020 <seriesumei@avimail.org> - Add hand poses
-// ss-o 15Mar2020 <seriesumei@avimail.org> - Add ankle lock
-// ss-p 20Mar2020 <seriesumei@avimail.org> - Add foot poses
-// ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
-// ss-r 24Mar2020 <seriesumei@avimail.org> - Rework doll datastructures
+// v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Controb/Serie Sumei
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.

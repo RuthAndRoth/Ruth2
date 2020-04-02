@@ -13,14 +13,7 @@
 //**   along with this program.  If not, see <https://www.gnu.org/licenses/>
 //*********************************************************************************
 
-// ss-c 31Dec2018 <seriesumei@avimail.org> - Combined HUD
-// ss-d 03Jan2019 <seriesumei@avimail.org> - Add skin panel
-// ss-e 10Feb2019 <seriesumei@avimail.org> - Add option panel
-// ss-f 31Mar2019 <seriesumei@avimail.org> - Fix textures for SL vs OpenSim
-// ss-g 02Apr2019 <seriesumei@avimail.org> - Add skin buttons and tweak textures
-// ss-o 15Mar2020 <seriesumei@avimail.org> - Catch up to current state
-// ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
-// ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
+// v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Control/Serie Sumei
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's

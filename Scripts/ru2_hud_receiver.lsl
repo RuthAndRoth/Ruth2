@@ -3,14 +3,7 @@
 // Copyright 2017 Shin Ingen
 // Copyright 2019 Serie Sumei
 
-// v1 26Jan2019 <seriesumei@avimail.org> - Initial combination of body, feet
-//      and hands scripts, includes fingernails
-// v2 03Feb2019 <seriesumei@avimail.org> - Reset script on ownership change,
-//      listen on multiple APP_IDs
-// v3 09Feb2019 <seriesumei@avimail.org> - Add XTEA support
-// v4 06Apr2019 <seriesumei@avimail.org> - Fix initialization bug in OpenSim
-// v5 15Mar2020 <seriesumei@avimail.org> - Remove part type for hands and feet
-//      to handle when hands and feet are linked to body
+// v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
