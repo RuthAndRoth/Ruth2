@@ -1,4 +1,4 @@
-// ru2HUD_receiver.lsl - Ruth2 v3 HUD Receiver
+// ru2_hud_receiver.lsl - Ruth2 v3 HUD Receiver
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright 2017 Shin Ingen
 // Copyright 2019 Serie Sumei

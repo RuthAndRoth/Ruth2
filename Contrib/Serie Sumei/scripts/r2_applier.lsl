@@ -26,7 +26,6 @@ integer DEFAULT_APP_ID = 20181024;
 integer app_id;
 integer channel;
 
-// To simplify the creator's life we read Omega-compatible notecards
 string DEFAULT_NOTECARD = "!CONFIG";
 string notecard_name;
 key notecard_qid;
