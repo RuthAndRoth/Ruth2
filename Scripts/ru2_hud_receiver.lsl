@@ -130,20 +130,18 @@ do_alpha(list args) {
         float alpha = llList2Float(args, 3);
         integer link = llListFindList(prim_map, [target]);
         integer found = FALSE;
-        if (link > -1) {
-            // Found a matching part name, use it
-            found = TRUE;
+
+        if (target == "ALL") {
+            // Set entire linkset
+            integer i;
+            integer len = llGetListLength(prim_map);
+
+            for (; i < len; ++i) {
+                llSetLinkAlpha(i, alpha, face);
+            }
         }
-        // // Override link on hands and feet
-        // if (part_type == PART_TYPE_HANDS && target == "HANDS") {
-        //     link = LINK_ALL_CHILDREN;
-        //     found = TRUE;
-        // }
-        // else if (part_type == PART_TYPE_FEET && target == "FEET") {
-        //     link = LINK_ALL_CHILDREN;
-        //     found = TRUE;
-        // }
-        if (found) {
+        else if (link > -1) {
+            // Found a matching part name, use it
             llSetLinkAlpha(link, alpha, face);
         }
     }
