@@ -4,6 +4,7 @@
 // Copyright 2019 Serie Sumei
 
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
+// v3.1 03Apr2020 <seriesumei@avimail.org> - Add alphamode to v2 API
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -148,6 +149,30 @@ do_alpha(list args) {
     }
 }
 
+// ALPHA,<target>,<face>,<alpha>
+do_alphamode(list args) {
+    if (llGetListLength(args) > 4) {
+        string target = llStringTrim(llToUpper(llList2String(args, 1)), STRING_TRIM);
+        integer face = llList2Integer(args, 2);
+        integer alpha_mode = llList2Integer(args, 3);
+        integer mask_cutoff =  llList2Integer(args, 4);
+
+        integer i;
+        integer len = llGetListLength(prim_map);
+
+        for (; i < len; ++i) {
+            string name = llList2String(prim_map, i);
+            log(" name: " + name);
+            if (name == target || target == "ALL") {
+                llSetLinkPrimitiveParamsFast(i, [
+                    PRIM_ALPHA_MODE, face, alpha_mode, mask_cutoff
+                ]);
+            }
+        }
+
+    }
+}
+
 // STATUS,<hud-api-version>
 do_status(list args) {
     send_csv(["STATUS", API_VERSION, part_type, last_attach]);
@@ -268,6 +293,9 @@ default {
                 if (command == "ALPHA") {
                     do_alpha(cmdargs);
                 }
+                else if (command == "ALPHAMODE") {
+                    do_alphamode(cmdargs);
+                }
                 else if (command == "STATUS") {
                     do_status(cmdargs);
                 }
@@ -290,6 +318,9 @@ default {
 
                 if (command == "ALPHA") {
                     do_alpha(cmdargs);
+                }
+                else if (command == "ALPHAMODE") {
+                    do_alphamode(cmdargs);
                 }
                 else if (command == "STATUS") {
                     do_status(cmdargs);
