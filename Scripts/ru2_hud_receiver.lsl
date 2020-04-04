@@ -47,6 +47,9 @@ integer part_type;
 list prim_map = [];
 list prim_desc = [];
 
+integer element_stride = 4;
+list element_map = [];
+
 // Spew some info
 integer VERBOSE = FALSE;
 
@@ -70,6 +73,17 @@ integer XTEADECRYPTED = 3450924;
 
 integer haz_xtea = FALSE;
 
+// ***
+// Notecard
+string DEFAULT_NOTECARD = "!CONFIG";
+string notecard_name;
+key notecard_qid;
+integer line;
+string current_section;
+string current_buffer;
+integer reading_notecard = FALSE;
+//***
+
 // save the listen handles
 integer listen_main;
 integer listen_alt1;
@@ -81,6 +95,19 @@ log(string msg) {
     if (VERBOSE == 1) {
         llOwnerSay(msg);
     }
+}
+
+// See if the notecard is present in object inventory
+integer can_haz_notecard(string name) {
+    integer count = llGetInventoryNumber(INVENTORY_NOTECARD);
+    while (count--) {
+        if (llGetInventoryName(INVENTORY_NOTECARD, count) == name) {
+            log("ap: Found notecard: " + name);
+            return TRUE;
+        }
+    }
+    llOwnerSay("ap: Notecard " + name + " not found");
+    return FALSE;
 }
 
 integer can_haz_xtea() {
@@ -120,6 +147,68 @@ map_linkset() {
         prim_map += [llToUpper(llList2String(p, 0))];
         prim_desc += [llToUpper(llList2String(p, 1))];
     }
+}
+
+load_notecard(string name) {
+    notecard_name = name;
+    if (notecard_name == "") {
+        notecard_name = DEFAULT_NOTECARD;
+    }
+    llOwnerSay("Reading notecard: " + notecard_name);
+    if (can_haz_notecard(notecard_name)) {
+        line = 0;
+        current_buffer = "";
+        element_map = [];
+        reading_notecard = TRUE;
+        notecard_qid = llGetNotecardLine(notecard_name, line);
+    }
+}
+
+save_section() {
+    // Save what we have
+    log(" " + current_section + " " + (string)current_buffer);
+    // skin_config += current_buffer;
+    // skin_map += current_section;
+
+    // Clean up for next line
+    current_buffer = "";
+    current_section = "";
+}
+
+read_config(string data) {
+    if (data == EOF) {
+        // All done
+        save_section();
+        return;
+    }
+
+    data = llStringTrim(data, STRING_TRIM_HEAD);
+    if (data != "" && llSubStringIndex(data, "#") != 0) {
+        if (llSubStringIndex(data, "[") == 0) {
+            // Save previous section if valid
+            save_section();
+            // Section header
+            integer end = llSubStringIndex(data, "]");
+            if (end != 0) {
+                // Well-formed section header
+                current_section = llToLower(llGetSubString(data, 1, end-1));
+                log("Reading section " + current_section);
+                // Reset section globals
+            }
+        } else {
+            if (current_section = "elements") {
+                // <prim-name>, <face>, <group>, <body-region>
+                list d = llCSV2List(data);
+                element_map += [
+                    llToLower(llList2String(d, 0)),
+                    (integer)llList2String(d, 1),
+                    llToLower(llList2String(d, 2)),
+                    (integer)llList2String(d, 3)
+                ];
+            }
+        }
+    }
+    notecard_qid = llGetNotecardLine(notecard_name, ++line);
 }
 
 // ALPHA,<target>,<face>,<alpha>
@@ -237,6 +326,9 @@ default {
         last_attach = llGetAttached();
         log("state_entry() attached="+(string)last_attach);
 
+        reading_notecard = FALSE;
+        load_notecard(notecard_name);
+
         map_linkset();
 
         // Deduce part type from the linked names
@@ -264,6 +356,18 @@ default {
         // }
 
         log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+    }
+
+    dataserver(key query_id, string data) {
+        if (query_id == notecard_qid) {
+            read_config(data);
+            if (data == EOF) {
+                // Do end work here
+                reading_notecard = FALSE;
+                llOwnerSay("Finished reading notecard " + notecard_name);
+                llOwnerSay("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+            }
+        }
     }
 
     run_time_permissions(integer perm) {
