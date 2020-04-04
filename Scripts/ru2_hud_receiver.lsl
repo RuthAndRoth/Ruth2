@@ -4,7 +4,7 @@
 // Copyright 2019 Serie Sumei
 
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
-// v3.1 03Apr2020 <seriesumei@avimail.org> - Add alphamode to v2 API
+// v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -54,7 +54,7 @@ list element_map = [];
 integer VERBOSE = FALSE;
 
 // Memory limit
-integer MEM_LIMIT = 32000;
+integer MEM_LIMIT = 48000;
 
 // The name of the XTEA script
 string XTEA_NAME = "r2_xtea";
@@ -75,7 +75,7 @@ integer haz_xtea = FALSE;
 
 // ***
 // Notecard
-string DEFAULT_NOTECARD = "!CONFIG";
+string DEFAULT_NOTECARD = "!R2 CONFIG";
 string notecard_name;
 key notecard_qid;
 integer line;
@@ -102,11 +102,11 @@ integer can_haz_notecard(string name) {
     integer count = llGetInventoryNumber(INVENTORY_NOTECARD);
     while (count--) {
         if (llGetInventoryName(INVENTORY_NOTECARD, count) == name) {
-            log("ap: Found notecard: " + name);
+            log("Found notecard: " + name);
             return TRUE;
         }
     }
-    llOwnerSay("ap: Notecard " + name + " not found");
+    llOwnerSay("Notecard " + name + " not found");
     return FALSE;
 }
 
@@ -129,8 +129,26 @@ send(string msg) {
     }
 }
 
+// Send the list of command args as CSV, breaking up into chunks if the
+// length exceeds 1000 chars.  Chunked messages have a '+' char prepended
+// to the comamnd word (first word in the list) for all but the last chunk.
 send_csv(list msg) {
-    send(llList2CSV(msg));
+    string strmsg = llList2CSV(msg);
+    if (llStringLength(strmsg) > 1000) {
+        // break it up
+        string cmd = llList2String(msg, 0);
+        strmsg = llList2CSV(llList2List(msg, 1, -1));
+        do {
+            // Send a chunk with a marker on the command
+            // Make the chunk a bit smaller than above to allow for command overhead
+            send("+" + cmd + "," + llGetSubString(strmsg, 0, 990));
+            strmsg = llGetSubString(strmsg, 991, -1);
+        } while (llStringLength(strmsg) > 990);
+        // Send the remaining bit without the marker so the receiver knows this is the end
+        send(cmd + "," + strmsg);
+    } else {
+        send(strmsg);
+    }
 }
 
 // Calculate a channel number based on APP_ID and owner UUID
@@ -191,7 +209,7 @@ read_config(string data) {
             integer end = llSubStringIndex(data, "]");
             if (end != 0) {
                 // Well-formed section header
-                current_section = llToLower(llGetSubString(data, 1, end-1));
+                current_section = llToUpper(llGetSubString(data, 1, end-1));
                 log("Reading section " + current_section);
                 // Reset section globals
             }
@@ -200,9 +218,9 @@ read_config(string data) {
                 // <prim-name>, <face>, <group>, <body-region>
                 list d = llCSV2List(data);
                 element_map += [
-                    llToLower(llList2String(d, 0)),
+                    llToUpper(llList2String(d, 0)),
                     (integer)llList2String(d, 1),
-                    llToLower(llList2String(d, 2)),
+                    llToUpper(llList2String(d, 2)),
                     (integer)llList2String(d, 3)
                 ];
             }
@@ -320,6 +338,9 @@ do_texture(list args) {
 
 default {
     state_entry() {
+        // Set up memory constraints
+        llSetMemoryLimit(MEM_LIMIT);
+
         haz_xtea = can_haz_xtea();
 
         // Initialize attach state
@@ -398,6 +419,9 @@ default {
                 else if (command == "ALPHAMODE") {
                     do_alphamode(cmdargs);
                 }
+                else if (command == "ELEMENTS") {
+                    send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
+                }
                 else if (command == "STATUS") {
                     do_status(cmdargs);
                 }
@@ -423,6 +447,9 @@ default {
                 }
                 else if (command == "ALPHAMODE") {
                     do_alphamode(cmdargs);
+                }
+                else if (command == "ELEMENTS") {
+                    send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
                 }
                 else if (command == "STATUS") {
                     do_status(cmdargs);
