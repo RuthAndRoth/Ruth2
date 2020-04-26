@@ -22,6 +22,7 @@
 // ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
 // ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
 // ss-s 26Mar2020 <seriesumei@avimail.org> - Simplify alpha HUD
+// ss-t 26Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's
@@ -349,40 +350,78 @@ default {
                 PRIM_SIZE, hud_size
             ]);
 
-            log("Rezzing skin buttons");
+            log("Rezzing skin button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.57145>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.02000, 0.57145>, <PI, 0.0, 0.0>);
         }
         else if (counter == 13) {
-            log("Configuring skin tone button");
+            log("Configuring skin tone button 0");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "sk0",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.3, 0.05135>
+                PRIM_SIZE, <0.01, 0.25, 0.042>
             ]);
 
-            log("Rezzing BoM button");
+            log("Rezzing skin button 1");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, 0.0000, 0.65473>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.02000, 0.62130>, <PI, 0.0, 0.0>);
         }
         else if (counter == 14) {
-            log("Configuring BoM button");
+            log("Configuring skin tone button 1");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "bom0",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.275, 0.1, 0.0>, <0.35, -0.44, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.10653, 0.04670>
+                PRIM_NAME, "sk1",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.25, 0.042>
             ]);
 
-            log("Rezzing BoM preview");
+            log("Rezzing BoM button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.71111>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.1450, 0.5960>, <PI_BY_TWO, 0.0, 0.0>);
         }
         else if (counter == 15) {
-            log("Configuring BoM preview");
+            log("Configuring BoM button 0");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "bom0",
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.0920, 0.04670>
+            ]);
+
+            log("Rezzing amode button");
+            link_me = TRUE;
+            rez_object("Object", <-0.2025, 0.0975, 0.6650>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 16) {
+            log("Configuring amode button");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "amode",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+//                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.0920, 0.04670>
+            ]);
+
+            log("Rezzing eye button 0");
+            link_me = TRUE;
+            rez_object("5x1-s_button", <-0.2025, 0.0200, 0.7500>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 17) {
+            log("Configuring eye button 0");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "eye0",
+                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.25, 0.042>
+            ]);
+
+            log("Rezzing BoM button 1");
+            link_me = TRUE;
+            rez_object("Object", <-0.2025, -0.1450, 0.7500>, <PI_BY_TWO, 0.0, 0.0>);
+        }
+        else if (counter == 18) {
+            log("Configuring BoM button 1");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "bom1",
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.3, 0.05135>
+//                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.0920, 0.04670>
             ]);
 
         // ***** Option HUD *****

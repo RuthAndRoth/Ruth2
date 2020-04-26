@@ -5,6 +5,7 @@
 // ss-a - 24Mar2019 <seriesumei@avimail.org> - Initial release - apply skins only
 // ss-b - 21Mar2020 <seriesumei@avimail.org> - Add Bakes on Mesh
 // ss-c - 31Mar2020 <seriesumei@avimail.org> - Change notecard to INI format, remove Omega
+// ss-d - 26Mar2020 <seriesumei@avimail.org> - Fix reading linkes that end in '='
 
 // This script loads a notecard with skin texture UUIDs
 // and listens for link messages with button names to
@@ -192,7 +193,10 @@ read_config(string data) {
             integer i = llSubStringIndex(data, "=");
             if (i != -1) {
                 string attr = llToLower(llStringTrim(llGetSubString(data, 0, i-1), STRING_TRIM));
-                string value = llStringTrim(llGetSubString(data, i+1, -1), STRING_TRIM);
+                string value = "";
+                if (i < llStringLength(data)-1) {
+                    value = llStringTrim(llGetSubString(data, i+1, -1), STRING_TRIM);
+                }
 
                 if (attr == "head" || attr == "omegaHead") {
                     // Save head
