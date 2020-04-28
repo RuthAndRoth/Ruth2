@@ -22,7 +22,7 @@
 // ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
 // ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
 // ss-s 26Mar2020 <seriesumei@avimail.org> - Simplify alpha HUD
-// ss-t 26Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
+// ss-t 27Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's
@@ -115,7 +115,7 @@ get_textures() {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
         hud_texture = "45f2b127-14bb-d728-e968-02069241cf71";
-        skin_texture = "1cf48b3f-768d-652e-b789-4d0fa5e7085c";
+        skin_texture = "e88283b9-a7b1-4d9d-b183-5af4f9a75ecc";
         alpha_button_texture = "29770bc5-af70-b94a-d279-ec1133bb6e2c";
         alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
         if (ROTH) {
@@ -136,7 +136,7 @@ get_textures() {
             //       Maybe we don't care too much about that?
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
             hud_texture = "f38beb3f-6f3c-4072-b37e-1ee57f6e9ee4";
-            skin_texture = "2f45a3e9-d4a9-4ea0-bbc8-bc3ead7a0a0f";
+            skin_texture = "f3c6baee-25d9-4d6a-842a-472e1f55c097";
             alpha_button_texture = "3dc803d9-0057-4cb7-b951-9b8d5b3af84d";
             alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
             if (ROTH) {
@@ -386,24 +386,35 @@ default {
                 PRIM_SIZE, <0.01, 0.0920, 0.04670>
             ]);
 
-            log("Rezzing amode button");
+            log("Rezzing amode button 0");
+            link_me = TRUE;
+            rez_object("Object", <-0.2025, -0.0100, 0.6650>, <PI, 0.0, 0.0>);
+        }
+        else if (counter == 16) {
+            log("Configuring amode button 0");
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_NAME, "amode0",
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <-0.09995, -0.44, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.0920, 0.0350>
+            ]);
+
+            log("Rezzing amode button 1");
             link_me = TRUE;
             rez_object("Object", <-0.2025, 0.0975, 0.6650>, <PI, 0.0, 0.0>);
         }
-        else if (counter == 16) {
-            log("Configuring amode button");
+        else if (counter == 17) {
+            log("Configuring amode button 1");
             llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "amode",
-                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-//                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.0920, 0.04670>
+                PRIM_NAME, "amode1",
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.09, -0.44, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.0920, 0.0350>
             ]);
 
             log("Rezzing eye button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0200, 0.7500>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0200, 0.7580>, <PI, 0.0, 0.0>);
         }
-        else if (counter == 17) {
+        else if (counter == 18) {
             log("Configuring eye button 0");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "eye0",
@@ -413,14 +424,13 @@ default {
 
             log("Rezzing BoM button 1");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, -0.1450, 0.7500>, <PI_BY_TWO, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.1450, 0.7580>, <PI_BY_TWO, 0.0, 0.0>);
         }
-        else if (counter == 18) {
+        else if (counter == 19) {
             log("Configuring BoM button 1");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "bom1",
-                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-//                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
                 PRIM_SIZE, <0.01, 0.0920, 0.04670>
             ]);
 
