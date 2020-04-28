@@ -6,17 +6,18 @@
 // ss-b - 21Mar2020 <seriesumei@avimail.org> - Add Bakes on Mesh
 // ss-c - 31Mar2020 <seriesumei@avimail.org> - Change notecard to INI format, remove Omega
 // ss-d - 26Mar2020 <seriesumei@avimail.org> - Fix reading linkes that end in '='
+// ss-e - 28Mar2020 <seriesumei@avimail.org> - Change notecard format to load eyes
 
-// This script loads a notecard with skin texture UUIDs
+// This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
 // send the loaded skin textures to the body.
 
 // Commands (integer number, string message, key id)
 // 411: <button>|apply, * - Apply the textures identified by <button>
-// 42: appid,<appid> * - Set the app ID used in computing the channel
-// 42: notecard,<notecard> - Set the notecard name to load
-// 42: status - Return the applier status: notecard,skin_map
-// 42: thumbnails - Return a list of thumbnail UUIDs
+// 42: APPID,<appid> * - Set the app ID used in computing the channel
+// 42: NOTECARD,<notecard> - Set the notecard name to load
+// 42: STATUS - Return the applier status: notecard,skin_map
+// 42: THuMBNAILS - Return a list of thumbnail UUIDs
 
 // It also responds to some link mesages with status information:
 // loaded card - returns name of loaded notecard, empty if no card is loaded
@@ -31,13 +32,19 @@ string DEFAULT_NOTECARD = "!CONFIG";
 string notecard_name;
 key notecard_qid;
 integer line;
+integer reading_notecard = FALSE;
 string current_section;
 string current_buffer;
 
+// Skin textures
 list skin_config;
 list skin_map;
-list thumbnails;
-integer reading_notecard = FALSE;
+list skin_thumbnails;
+
+// Skin textures
+list eye_config;
+list eye_map;
+list eye_thumbnails;
 
 integer LINK_OMEGA = 411;
 integer LINK_RUTH_HUD = 40;
@@ -85,18 +92,29 @@ send_region(string region) {
     }
 }
 
-// Send the list of thumbnails back to the HUD for display
-send_thumbnails() {
+// Send the list of skin_thumbnails back to the HUD for display
+send_skin_thumbnails() {
     llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV(
         [
-            "THUMBNAILS",
+            "SKIN_THUMBNAILS",
             notecard_name
         ] +
-        thumbnails
+        skin_thumbnails
     ), "");
 }
 
-apply_texture(string button) {
+// Send the list of eye_thumbnails back to the HUD for display
+send_eye_thumbnails() {
+    llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV(
+        [
+            "EYE_THUMBNAILS",
+            notecard_name
+        ] +
+        eye_thumbnails
+    ), "");
+}
+
+apply_skin_texture(string button) {
     log("ap: button=" + button);
 
     if (button == "bom") {
@@ -115,6 +133,25 @@ apply_texture(string button) {
     }
 }
 
+apply_eye_texture(string button) {
+    log("ap: button=" + button);
+
+    if (button == "bom") {
+        send("TEXTURE,lefteye," + (string)IMG_USE_BAKED_EYES);
+        send("TEXTURE,righteye," + (string)IMG_USE_BAKED_EYES);
+        return;
+    }
+
+    integer i = llListFindList(eye_map, [button]);
+    if (i >= 0) {
+        current_buffer = llList2String(eye_config, i);
+        string eye_tex = llJsonGetValue(current_buffer, ["eyes"]);
+        send("TEXTURE,lefteye," + (string)eye_tex);
+        send("TEXTURE,righteye," + (string)eye_tex);
+//        send_region("eyes");
+    }
+}
+
 // See if the notecard is present in object inventory
 integer can_haz_notecard(string name) {
     integer count = llGetInventoryNumber(INVENTORY_NOTECARD);
@@ -124,7 +161,7 @@ integer can_haz_notecard(string name) {
             return TRUE;
         }
     }
-    llOwnerSay("ap: Notecard " + name + " not found");
+    llOwnerSay("applier: Notecard " + name + " not found");
     return FALSE;
 }
 
@@ -137,7 +174,7 @@ integer can_haz_script(string name) {
             return TRUE;
         }
     }
-    llOwnerSay("ap: Script " + name + " not found");
+    llOwnerSay("applier: Script " + name + " not found");
     return FALSE;
 }
 
@@ -146,14 +183,17 @@ load_notecard(string name) {
     if (notecard_name == "") {
         notecard_name = DEFAULT_NOTECARD;
     }
-    llOwnerSay("ap: Reading notecard: " + notecard_name);
+    llOwnerSay("applier: Reading notecard: " + notecard_name);
     if (can_haz_notecard(notecard_name)) {
         line = 0;
         current_buffer = "";
+        reading_notecard = TRUE;
         skin_config = [];
         skin_map = [];
-        thumbnails = [];
-        reading_notecard = TRUE;
+        skin_thumbnails = [];
+        eye_config = [];
+        eye_map = [];
+        eye_thumbnails = [];
         notecard_qid = llGetNotecardLine(notecard_name, line);
     }
 }
@@ -161,8 +201,30 @@ load_notecard(string name) {
 save_section() {
     // Save what we have
     log(" " + current_section + " " + (string)current_buffer);
-    skin_config += current_buffer;
-    skin_map += current_section;
+    string value;
+    value = llJsonGetValue(current_buffer, ["thumbnail"]);
+    if (llGetSubString(current_section, 0, 3) == "skin") {
+        skin_config += current_buffer;
+        skin_map += llGetSubString(current_section, 4, -1);
+        if (value != "" && value != JSON_INVALID) {
+            // Move the thumbnail UUID to that list
+            skin_thumbnails += value;
+            current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], JSON_DELETE);
+        } else {
+            skin_thumbnails += "";
+        }
+    }
+    else if (llGetSubString(current_section, 0, 3) == "eyes") {
+        eye_config += current_buffer;
+        eye_map += llGetSubString(current_section, 4, -1);
+        if (value != "" && value != JSON_INVALID) {
+            // Move the thumbnail UUID to that list
+            eye_thumbnails += value;
+            current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], JSON_DELETE);
+        } else {
+            eye_thumbnails += "";
+        }
+    }
 
     // Clean up for next line
     current_buffer = "";
@@ -187,7 +249,6 @@ read_config(string data) {
                 // Well-formed section header
                 current_section = llGetSubString(data, 1, end-1);
                 log("Reading section " + current_section);
-                // Reset section globals
             }
         } else {
             integer i = llSubStringIndex(data, "=");
@@ -213,7 +274,10 @@ read_config(string data) {
                 else if (attr == "thumbnail") {
                     // Save upper body
                     current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], value);
-                    thumbnails += value;
+                }
+                else if (attr == "eyes") {
+                    // Save eyes
+                    current_buffer = llJsonSetValue(current_buffer, ["eyes"], value);
                 }
                 else {
 //                    llOwnerSay("Unknown configuration value: " + name + " on line " + (string)line);
@@ -225,8 +289,8 @@ read_config(string data) {
         }
     }
     notecard_qid = llGetNotecardLine(notecard_name, ++line);
-
 }
+
 init() {
     // Set up memory constraints
     llSetMemoryLimit(MEM_LIMIT);
@@ -257,9 +321,10 @@ default {
             if (data == EOF) {
                 // Do end work here
                 reading_notecard = FALSE;
-                llOwnerSay("ap: Finished reading notecard " + notecard_name);
-                llOwnerSay("ap: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
-                send_thumbnails();
+                llOwnerSay("applier: Finished reading notecard " + notecard_name);
+                llOwnerSay("applier: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+                send_skin_thumbnails();
+                send_eye_thumbnails();
             }
         }
     }
@@ -273,7 +338,7 @@ default {
             string command = llList2String(cmdargs, 1);
             log("ap: command: " + command);
             if (command == "apply") {
-                apply_texture(llList2String(cmdargs, 0));
+                apply_skin_texture(llList2String(cmdargs, 0));
             }
         }
         if (number == LINK_RUTH_APP) {
@@ -287,8 +352,15 @@ default {
                     skin_map
                 ]), "");
             }
+            else if (command == "SKIN") {
+                apply_skin_texture(llList2String(cmdargs, 1));
+            }
+            else if (command == "EYES") {
+                apply_eye_texture(llList2String(cmdargs, 1));
+            }
             else if (command == "THUMBNAILS") {
-                send_thumbnails();
+                send_skin_thumbnails();
+                send_eye_thumbnails();
             }
             else if (command == "NOTECARD") {
                 load_notecard(llList2String(cmdargs, 1));
