@@ -1,10 +1,11 @@
-// ru2_hud_receiver.lsl - Ruth2 v3 HUD Receiver
+// r2_hud_receiver.lsl - Ruth2 v3 HUD Receiver
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright 2017 Shin Ingen
 // Copyright 2019 Serie Sumei
 
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
 // v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
+// v3.2 18Apr2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -32,6 +33,26 @@ integer MULTI_LISTEN = TRUE;
 
 // Which API version do we implement?
 integer API_VERSION = 2;
+
+// Enumerate the body region types as of Bakes on Mesh
+// We added our fingernail and toenail types at the end
+// The index of this list is the value of <body-region> in the element_map
+
+list regions = [
+    "HEAD",
+    "UPPER",
+    "LOWER",
+    "EYES",
+    "SKIRT",
+    "HAIR",
+    "LEFTARM",
+    "LEFTLEG",
+    "AUX1",
+    "AUX2",
+    "AUX3",
+    "FINGERNAILS",
+    "TOENAILS"
+];
 
 // The body part types are used to track which type the script is handling
 // and is inferred at start-up by looking for specific names in the linkset.
@@ -238,7 +259,32 @@ do_alpha(list args) {
         integer link = llListFindList(prim_map, [target]);
         integer found = FALSE;
 
-        if (target == "ALL") {
+        // Look for target in the region/group list
+        integer region = llListFindList(regions, [llToUpper(target)]);
+        if (region >= 0) {
+            // Put a texture on faces belonging to a group
+            list e3 = llList2ListStrided(llDeleteSubList(element_map, 0, 2), 0, -1, element_stride);
+            integer len = llGetListLength(e3);
+            integer i;
+            for (; i < len; ++i) {
+                // Look for matching groups in the element map
+                if (llList2Integer(e3, i) == region) {
+                    link = llListFindList(prim_map, [llList2String(element_map, i * element_stride)]);
+                    if (link >= 0) {
+                        llSetLinkAlpha(
+                            link,
+                            alpha,
+                            llList2Integer(element_map, (i * element_stride) + 1)
+                        );
+                    }
+                }
+            }
+        }
+        else if (link >= 0) {
+            // Target is a prim name
+            llSetLinkAlpha(link, alpha, face);
+        }
+        else if (target == "ALL") {
             // Set entire linkset
             integer i;
             integer len = llGetListLength(prim_map);
@@ -246,10 +292,6 @@ do_alpha(list args) {
             for (; i < len; ++i) {
                 llSetLinkAlpha(i, alpha, face);
             }
-        }
-        else if (link > -1) {
-            // Found a matching part name, use it
-            llSetLinkAlpha(link, alpha, face);
         }
     }
 }
@@ -283,53 +325,61 @@ do_status(list args) {
     send_csv(["STATUS", API_VERSION, part_type, last_attach]);
 }
 
+set_tex(string target, integer face, string texture, vector color) {
+    integer link = llListFindList(prim_map, [target]);
+    if (link >= 0) {
+        if (texture != "") {
+            llSetLinkPrimitiveParamsFast(
+                link,
+                [
+                    PRIM_TEXTURE,
+                    face,
+                    texture,
+                    <1,1,0>,
+                    <0,0,0>,
+                    0
+                ]
+            );
+        }
+        if (color.x > -1) {
+            // Only set if color is valid
+            llSetLinkColor(link, color, face);
+        }
+    }
+}
+
 // TEXTURE,<target>,<texture>[,<face>,<color>]
 do_texture(list args) {
     // Check for v1 args
     if (llGetListLength(args) >= 3) {
         string target = llStringTrim(llToUpper(llList2String(args, 1)), STRING_TRIM);
         string texture = llList2String(args, 2);
-        integer face;
-        vector color;
-        integer has_color = FALSE;
+        integer face = ALL_SIDES;
+        vector color = <-1, 0, 0>;  // not a legal color so we can test for it
         if (llGetListLength(args) > 3) {
-            has_color = TRUE;
             // Get v2 face
             face = llList2Integer(args, 3);
             // Get v2 color arg
             color = (vector)llList2String(args, 4);
         }
-        if (llListFindList(["FINGERNAILS", "HEAD", "LOWER", "TOENAILS", "UPPER"], [target]) < 0) {
-            log(" prim="+target);
-            // Search for a prim name
-            integer prim = llListFindList(prim_map, [target]);
-            if (prim > -1) {
-                llSetLinkColor(prim, color, face);
-            }
+        integer region = llListFindList(regions, [llToUpper(target)]);
+        if (region < 0) {
+            // Assume target is a prim name
+            set_tex(target, face, texture, color);
         } else {
+            // Put a texture on faces belonging to a group
+            list e3 = llList2ListStrided(llDeleteSubList(element_map, 0, 2), 0, -1, element_stride);
+            integer len = llGetListLength(e3);
             integer i;
-            integer x = llGetListLength(prim_desc);
-
-            for (; i < x; ++i) {
-                string objdesc = llList2String(prim_desc, i);
-
-                if (objdesc == target) {
-                    if (texture != "") {
-                        llSetLinkPrimitiveParamsFast(
-                            i,
-                            [
-                                PRIM_TEXTURE,
-                                ALL_SIDES,
-                                texture,
-                                <1,1,0>,
-                                <0,0,0>,
-                                0
-                            ]
-                        );
-                    }
-                    if (has_color) {
-                        llSetLinkColor(i, color, face);
-                    }
+            for (; i < len; ++i) {
+                // Look for matching groups in the element map
+                if (llList2Integer(e3, i) == region) {
+                    set_tex(
+                        llList2String(element_map, i * element_stride),
+                        llList2Integer(element_map, (i * element_stride) + 1),
+                        texture,
+                        color
+                    );
                 }
             }
         }
