@@ -136,7 +136,7 @@ get_textures() {
             //       Maybe we don't care too much about that?
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
             hud_texture = "f38beb3f-6f3c-4072-b37e-1ee57f6e9ee4";
-            skin_texture = "f3c6baee-25d9-4d6a-842a-472e1f55c097";
+            skin_texture = "11004d3b-f77b-41d9-acb7-95f000c80b86";
             alpha_button_texture = "3dc803d9-0057-4cb7-b951-9b8d5b3af84d";
             alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
             if (ROTH) {
@@ -345,14 +345,14 @@ default {
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "skinbox",
                 PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, skin_texture, <1.0, 0.7, 0.0>, <0.0, 0.15, 0.0>, 0.0,
+                PRIM_TEXTURE, 4, skin_texture, <1.0, 0.8, 0.0>, <0.0, 0.1, 0.0>, 0.0,
                 PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
                 PRIM_SIZE, hud_size
             ]);
 
             log("Rezzing skin button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.02000, 0.57145>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.57145>, <PI, 0.0, 0.0>);
         }
         else if (counter == 13) {
             log("Configuring skin tone button 0");
@@ -364,7 +364,7 @@ default {
 
             log("Rezzing skin button 1");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.02000, 0.62130>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.62130>, <PI, 0.0, 0.0>);
         }
         else if (counter == 14) {
             log("Configuring skin tone button 1");
@@ -376,43 +376,43 @@ default {
 
             log("Rezzing BoM button 0");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, -0.1450, 0.5960>, <PI_BY_TWO, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.1322, 0.6712>, <PI, 0.0, 0.0>);
         }
         else if (counter == 15) {
             log("Configuring BoM button 0");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "bom0",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.0920, 0.04670>
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <-0.331, -0.438, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.1200, 0.0350>
             ]);
 
             log("Rezzing amode button 0");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, -0.0100, 0.6650>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, 0.0110, 0.6712>, <PI, 0.0, 0.0>);
         }
         else if (counter == 16) {
             log("Configuring amode button 0");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "amode0",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <-0.09995, -0.44, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.0920, 0.0350>
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <0.028, -0.438, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.1200, 0.0350>
             ]);
 
             log("Rezzing amode button 1");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, 0.0975, 0.6650>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, 0.1360, 0.6712>, <PI, 0.0, 0.0>);
         }
         else if (counter == 17) {
             log("Configuring amode button 1");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "amode1",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.09, -0.44, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.0920, 0.0350>
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <0.028, -0.438, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.1200, 0.0350>
             ]);
 
             log("Rezzing eye button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0200, 0.7580>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.7580>, <PI, 0.0, 0.0>);
         }
         else if (counter == 18) {
             log("Configuring eye button 0");
@@ -424,14 +424,14 @@ default {
 
             log("Rezzing BoM button 1");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, -0.1450, 0.7580>, <PI_BY_TWO, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.1322, 0.807>, <PI, 0.0, 0.0>);
         }
         else if (counter == 19) {
             log("Configuring BoM button 1");
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "bom1",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.26, 0.1, 0.0>, <0.355, -0.44, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.0920, 0.04670>
+                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <-0.331, -0.438, 0.0>, 0.0,
+                PRIM_SIZE, <0.01, 0.1200, 0.0350>
             ]);
 
         // ***** Option HUD *****
