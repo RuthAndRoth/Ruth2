@@ -22,7 +22,7 @@
 // ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
 // ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
 // ss-s 26Mar2020 <seriesumei@avimail.org> - Simplify alpha HUD
-// ss-t 27Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
+// ss-t 28Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's
@@ -115,7 +115,7 @@ get_textures() {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
         hud_texture = "45f2b127-14bb-d728-e968-02069241cf71";
-        skin_texture = "e88283b9-a7b1-4d9d-b183-5af4f9a75ecc";
+        skin_texture = "98bdb0c7-22fd-c3da-2305-d9fcddd1975f";
         alpha_button_texture = "29770bc5-af70-b94a-d279-ec1133bb6e2c";
         alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
         if (ROTH) {
