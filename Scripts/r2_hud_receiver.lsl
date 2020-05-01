@@ -5,7 +5,7 @@
 
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
 // v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
-// v3.2 18Apr2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
+// v3.2 01May2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -259,16 +259,18 @@ do_alpha(list args) {
         integer link = llListFindList(prim_map, [target]);
         integer found = FALSE;
 
-        // Look for target in the region/group list
-        integer region = llListFindList(regions, [llToUpper(target)]);
-        if (region >= 0) {
+        // Look for target in the section list
+        // section is third in stride
+        list section_map = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
+        integer section = llListFindList(section_map, [target]);
+        if (section >= 0) {
             // Put a texture on faces belonging to a group
-            list e3 = llList2ListStrided(llDeleteSubList(element_map, 0, 2), 0, -1, element_stride);
-            integer len = llGetListLength(e3);
+            integer len = llGetListLength(section_map);
             integer i;
             for (; i < len; ++i) {
-                // Look for matching groups in the element map
-                if (llList2Integer(e3, i) == region) {
+                // Look for matching sections in the element map
+                if (llList2String(section_map, i) == target) {
+                    // Get link via link name in element_map
                     link = llListFindList(prim_map, [llList2String(element_map, i * element_stride)]);
                     if (link >= 0) {
                         llSetLinkAlpha(
@@ -296,7 +298,7 @@ do_alpha(list args) {
     }
 }
 
-// ALPHA,<target>,<face>,<alpha>
+// ALPHAMODE,<target>,<face>,<alpha>
 do_alphamode(list args) {
     if (llGetListLength(args) > 4) {
         string target = llStringTrim(llToUpper(llList2String(args, 1)), STRING_TRIM);
