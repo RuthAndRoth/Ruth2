@@ -7,6 +7,7 @@
 // ss-c - 31Mar2020 <seriesumei@avimail.org> - Change notecard to INI format, remove Omega
 // ss-d - 26Mar2020 <seriesumei@avimail.org> - Fix reading linkes that end in '='
 // ss-e - 28Mar2020 <seriesumei@avimail.org> - Change notecard format to load eyes
+// ss-f - 30Apr2020 <seriesumei@avimail.org> - Fix incompatibilities with Halcyon
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
@@ -23,6 +24,14 @@
 // loaded card - returns name of loaded notecard, empty if no card is loaded
 // buttons - list the loaded button names
 // icon - get an icon texture to display
+
+// Halcyon and older OpenSimulator builds may not have the Bakes on Mesh
+// constants defined.  If you get a compiler error that these are not defined
+// uncomment the following lines:
+// string IMG_USE_BAKED_UPPER = "";
+// string IMG_USE_BAKED_LOWER = "" ;
+// string IMG_USE_BAKED_HEAD = "";
+// string IMG_USE_BAKED_EYES = "";
 
 integer DEFAULT_APP_ID = 20181024;
 integer app_id;
@@ -118,6 +127,8 @@ apply_skin_texture(string button) {
     log("ap: button=" + button);
 
     if (button == "bom") {
+        // Note: if you get a compiler error that these are undefined
+        // uncomment the lines near the top of this script
         send("TEXTURE,upper," + (string)IMG_USE_BAKED_UPPER);
         send("TEXTURE,lower," + (string)IMG_USE_BAKED_LOWER);
         send("TEXTURE,head," + (string)IMG_USE_BAKED_HEAD);
@@ -348,8 +359,7 @@ default {
             if (command == "STATUS") {
                 llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV([
                     command,
-                    notecard_name,
-                    skin_map
+                    notecard_name
                 ]), "");
             }
             else if (command == "SKIN") {
