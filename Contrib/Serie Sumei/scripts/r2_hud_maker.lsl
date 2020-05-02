@@ -23,6 +23,7 @@
 // ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
 // ss-s 26Mar2020 <seriesumei@avimail.org> - Simplify alpha HUD
 // ss-t 28Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
+// ss-u 01May2020 <seriesumei@avimail.org> - Rearrange skin panel again (outline buttons)
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh and adds panes for a different skin applier than Shin's
@@ -136,7 +137,7 @@ get_textures() {
             //       Maybe we don't care too much about that?
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
             hud_texture = "f38beb3f-6f3c-4072-b37e-1ee57f6e9ee4";
-            skin_texture = "11004d3b-f77b-41d9-acb7-95f000c80b86";
+            skin_texture = "64184dac-b33b-4a1b-b200-7d09d8928b64";
             alpha_button_texture = "3dc803d9-0057-4cb7-b951-9b8d5b3af84d";
             alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
             if (ROTH) {
@@ -199,6 +200,18 @@ configure_color_buttons(string name) {
         PRIM_COLOR, 4, <0.6, 0.6, 0.6>, 1.00,
         PRIM_SIZE, color_button_size
     ]);
+}
+
+configure_outline_button(string name, vector size, vector taper, vector scale, vector offset) {
+    log("Configuring " + name);
+    llSetLinkPrimitiveParamsFast(2, [
+        PRIM_NAME, name,
+        PRIM_TYPE, PRIM_TYPE_BOX, PRIM_HOLE_DEFAULT, <0.0, 1.0, 0.0>, 0.0, ZERO_VECTOR, taper, ZERO_VECTOR,
+        PRIM_TEXTURE, 0, skin_texture, scale, offset, 0.0,
+        PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+        PRIM_SIZE, size
+    ]);
+
 }
 
 default {
@@ -352,7 +365,7 @@ default {
 
             log("Rezzing skin button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.57145>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0300, 0.5715>, <PI, 0.0, 0.0>);
         }
         else if (counter == 13) {
             log("Configuring skin tone button 0");
@@ -364,7 +377,7 @@ default {
 
             log("Rezzing skin button 1");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.62130>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0300, 0.62130>, <PI, 0.0, 0.0>);
         }
         else if (counter == 14) {
             log("Configuring skin tone button 1");
@@ -376,43 +389,28 @@ default {
 
             log("Rezzing BoM button 0");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, -0.1322, 0.6712>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.1400, 0.5715>, <0.0, 270.0, 90.0>*DEG_TO_RAD);
         }
         else if (counter == 15) {
-            log("Configuring BoM button 0");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "bom0",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <-0.331, -0.438, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.1200, 0.0350>
-            ]);
+            configure_outline_button("bom0", <0.0500, 0.0500, 0.0100>, <0.8, 0.8, 0.0>, <0.087, 0.087, 0.00>, <-0.375, -0.437, 0.0>);
 
             log("Rezzing amode button 0");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, 0.0110, 0.6712>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.0400, 0.6712>, <0.0, 270.0, 90.0>*DEG_TO_RAD);
         }
         else if (counter == 16) {
-            log("Configuring amode button 0");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "amode0",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <0.028, -0.438, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.1200, 0.0350>
-            ]);
+            configure_outline_button("amode0", <0.1200, 0.0350, 0.0100>, <0.9, 0.7, 0.0>, <0.255, 0.064, 0.00>, <0.0, -0.438, 0.0>);
 
             log("Rezzing amode button 1");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, 0.1360, 0.6712>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, 0.1000, 0.6712>, <0.0, 270.0, 90.0>*DEG_TO_RAD);
         }
         else if (counter == 17) {
-            log("Configuring amode button 1");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "amode1",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <0.028, -0.438, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.1200, 0.0350>
-            ]);
+            configure_outline_button("amode1", <0.1200, 0.0350, 0.0100>, <0.9, 0.7, 0.0>, <0.255, 0.064, 0.00>, <0.3134, -0.438, 0.0>);
 
             log("Rezzing eye button 0");
             link_me = TRUE;
-            rez_object("5x1-s_button", <-0.2025, 0.0000, 0.7580>, <PI, 0.0, 0.0>);
+            rez_object("5x1-s_button", <-0.2025, 0.0300, 0.7580>, <PI, 0.0, 0.0>);
         }
         else if (counter == 18) {
             log("Configuring eye button 0");
@@ -424,15 +422,10 @@ default {
 
             log("Rezzing BoM button 1");
             link_me = TRUE;
-            rez_object("Object", <-0.2025, -0.1322, 0.807>, <PI, 0.0, 0.0>);
+            rez_object("Object", <-0.2025, -0.1400, 0.7580>, <0.0, 270.0, 90.0>*DEG_TO_RAD);
         }
         else if (counter == 19) {
-            log("Configuring BoM button 1");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "bom1",
-                PRIM_TEXTURE, ALL_SIDES, skin_texture, <0.30, 0.09, 0.00>, <-0.331, -0.438, 0.0>, 0.0,
-                PRIM_SIZE, <0.01, 0.1200, 0.0350>
-            ]);
+            configure_outline_button("bom1", <0.0500, 0.0500, 0.0100>, <0.8, 0.8, 0.0>, <0.087, 0.087, 0.00>, <-0.375, -0.437, 0.0>);
 
         // ***** Option HUD *****
 
