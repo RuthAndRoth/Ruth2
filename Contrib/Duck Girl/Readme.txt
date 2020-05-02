@@ -11,3 +11,6 @@ Full body, feet, hands and head. Upload with simple physics using 00_PhysicsCube
 
 AGPL License - https://github.com/RuthAndRoth/Ruth2/tree/master/Licenses
 
+Second Life availability:
+https://marketplace.secondlife.com/p/ruth-upgrades-rc3-hands-feets-nails/15718054
+
