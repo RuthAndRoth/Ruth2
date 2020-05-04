@@ -164,13 +164,13 @@ get_textures() {
             //       compile in SL so editing the script would stll be required.
             //       Maybe we don't care too much about that?
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
-            hud_texture = "f38beb3f-6f3c-4072-b37e-1ee57f6e9ee4";
+            hud_texture = "2eee6e1a-66c5-4209-92b4-171820d5cfa5";
             skin_texture = "64184dac-b33b-4a1b-b200-7d09d8928b64";
-            alpha_button_texture = "3dc803d9-0057-4cb7-b951-9b8d5b3af84d";
+            alpha_button_texture = "4e97068e-7570-47c2-af2f-e7965c5d5078";
             alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
             if (ROTH) {
                 header_texture = "0bd02931-21e8-4b81-90d1-aca4349c0679";
-                options_texture = "bb329314-535c-4fcf-8da4-d6582f1c7d0c";
+                options_texture = "e89ff0c8-03a4-410d-bf0a-1352610cb701";
             } else {
                 header_texture = "2d80dac8-670a-4f46-8201-e7796a77afdd";
                 options_texture = "a97c448b-10a7-4a2c-a705-f9b73368c852";
