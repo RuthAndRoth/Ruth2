@@ -143,13 +143,13 @@ get_textures() {
     if (is_SL()) {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
-        hud_texture = "45f2b127-14bb-d728-e968-02069241cf71";
-        skin_texture = "e88283b9-a7b1-4d9d-b183-5af4f9a75ecc";
-        alpha_button_texture = "29770bc5-af70-b94a-d279-ec1133bb6e2c";
+        hud_texture = "7fc1e90b-b940-6e9f-aed9-85888a0a1eb3";
+        skin_texture = "206804f6-908a-8efb-00de-fe00b2604906";
+        alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
         alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
         if (ROTH) {
             header_texture = "c54a2e5d-398e-2c1d-77ab-5353a20cbc23";
-            options_texture = "2811b063-02b4-8567-5242-caa574106f6c";
+            options_texture = "43ec4359-6750-8c8a-4098-c8f79243eb25";
         } else {
             header_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
             options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
