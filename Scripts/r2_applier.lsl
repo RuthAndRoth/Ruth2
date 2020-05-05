@@ -1,13 +1,8 @@
 // r2_applier.lsl - SS Combo skin applier
 // SPDX-License-Identifier: CC-BY-3.0
-// Copyright 2019 Serie Sumei
+// Copyright 2020 Serie Sumei
 
-// ss-a - 24Mar2019 <seriesumei@avimail.org> - Initial release - apply skins only
-// ss-b - 21Mar2020 <seriesumei@avimail.org> - Add Bakes on Mesh
-// ss-c - 31Mar2020 <seriesumei@avimail.org> - Change notecard to INI format, remove Omega
-// ss-d - 26Mar2020 <seriesumei@avimail.org> - Fix reading linkes that end in '='
-// ss-e - 28Mar2020 <seriesumei@avimail.org> - Change notecard format to load eyes
-// ss-f - 30Apr2020 <seriesumei@avimail.org> - Fix incompatibilities with Halcyon
+// v2.0 - 04May2020 <seriesumei@avimail.org> - New applier script
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
