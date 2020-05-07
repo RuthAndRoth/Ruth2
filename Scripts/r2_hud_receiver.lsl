@@ -6,6 +6,7 @@
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
 // v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
 // v3.2 01May2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
+// v3.3 06May2020 <seriesumei@avimail.org> - Re-enable default hand animation
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -54,15 +55,12 @@ list regions = [
     "TOENAILS"
 ];
 
-// The body part types are used to track which type the script is handling
-// and is inferred at start-up by looking for specific names in the linkset.
-// Override this by directly setting PART_TYPE_DEFAULT below.
-integer PART_TYPE_NULL = 0;
-integer PART_TYPE_BODY = 1;
-integer PART_TYPE_HANDS = 2;
-integer PART_TYPE_FEET = 3;
-integer PART_TYPE_DEFAULT = 0;
-integer part_type;
+// Any linkset that includes a part named "hands" will run the
+// default hand pose
+integer has_hands = FALSE;
+string hand_animation = "bentohandrelaxedP2";
+// Refresh hand animation wait, in seconds
+float hand_refresh = 30.0;
 
 // Map prim name and descriptions to link numbers
 list prim_map = [];
@@ -324,7 +322,7 @@ do_alphamode(list args) {
 
 // STATUS,<hud-api-version>
 do_status(list args) {
-    send_csv(["STATUS", API_VERSION, part_type, last_attach]);
+    send_csv(["STATUS", API_VERSION, last_attach]);
 }
 
 set_tex(string target, integer face, string texture, vector color) {
@@ -404,18 +402,6 @@ default {
 
         map_linkset();
 
-        // Deduce part type from the linked names
-        part_type = PART_TYPE_DEFAULT;
-        if (~llListFindList(prim_map, ["CHEST"])) {
-            part_type = PART_TYPE_BODY;
-        }
-        // else if (~llListFindList(prim_map, ["HANDS"])) {
-        //     part_type = PART_TYPE_HANDS;
-        // }
-        // else if (~llListFindList(prim_map, ["FEET"])) {
-        //     part_type = PART_TYPE_FEET;
-        // }
-
         // Set up listener
         r2channel = keyapp2chan(APP_ID);
         listen_main = llListen(r2channel, "", "", "");
@@ -424,9 +410,11 @@ default {
             listen_alt1 = llListen(r2channel_alt1, "", "", "");
         }
 
-        // if (part_type == PART_TYPE_HANDS) {
-        //     llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
-        // }
+        has_hands = (~llListFindList(prim_map, ["HANDS"]) &&
+            llGetInventoryType(hand_animation) == INVENTORY_ANIMATION);
+        if (has_hands) {
+            llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
+        }
 
         log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     }
@@ -444,18 +432,18 @@ default {
     }
 
     run_time_permissions(integer perm) {
-        if (part_type == PART_TYPE_BODY && (perm & PERMISSION_TRIGGER_ANIMATION)) {
-            llStopAnimation("bentohandrelaxedP1");
-            llStartAnimation("bentohandrelaxedP1");
-            llSetTimerEvent(3);
+        if (has_hands && (perm & PERMISSION_TRIGGER_ANIMATION)) {
+            llStopAnimation(hand_animation);
+            llStartAnimation(hand_animation);
+            llSetTimerEvent(hand_refresh);
         }
     }
 
     timer() {
-        llSetTimerEvent(0);
-        // if (part_type == PART_TYPE_HANDS) {
-        //     llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
-        // }
+        llSetTimerEvent(hand_refresh);
+        if (has_hands) {
+            llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
+        }
     }
 
     listen(integer channel, string name, key id, string message) {
