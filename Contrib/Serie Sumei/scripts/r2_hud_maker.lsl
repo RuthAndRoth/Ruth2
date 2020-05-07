@@ -13,18 +13,8 @@
 //**   along with this program.  If not, see <https://www.gnu.org/licenses/>
 //*********************************************************************************
 
-// ss-c 31Dec2018 <seriesumei@avimail.org> - Combined HUD
-// ss-d 03Jan2019 <seriesumei@avimail.org> - Add skin panel
-// ss-e 10Feb2019 <seriesumei@avimail.org> - Add option panel
-// ss-f 31Mar2019 <seriesumei@avimail.org> - Fix textures for SL vs OpenSim
-// ss-g 02Apr2019 <seriesumei@avimail.org> - Add skin buttons and tweak textures
-// ss-o 15Mar2020 <seriesumei@avimail.org> - Catch up to current state
-// ss-q 21Mar2020 <seriesumei@avimail.org> - Add skin panel
-// ss-r 25Mar2020 <seriesumei@avimail.org> - Reorganize object rezzing
-// ss-s 26Mar2020 <seriesumei@avimail.org> - Simplify alpha HUD
-// ss-t 28Apr2020 <seriesumei@avimail.org> - Rearrange skin panel
-// ss-u 01May2020 <seriesumei@avimail.org> - Rearrange skin panel again (outline buttons)
-// ss-v 03May2020 <seriesumei@avimail.org> - Moar outline buttons
+// v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Control/Serie Sumei
+// v3.1 05May2020 <seriesumei@avimail.org> -  Merge Ruth2 and Roth2 alpha HUD creation
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh (for Ruth) or a new alpha HUD (for Roth) and adds panes
@@ -72,6 +62,7 @@ vector color_button_size = <0.01, 0.145, 0.025>;
 vector shape_button_size = <0.01, 0.295, 0.051>;
 vector alpha_button_scale = <0.25, 0.125, 0.0>;
 
+vector alpha_hud_pos;
 vector alpha_doll_pos;
 float alpha_button_left_offset;
 float alpha_button_right_offset;
@@ -154,6 +145,7 @@ get_textures() {
             header_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
             options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
             fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
+            alpha_hud_pos = <0.0, 1.03528, 0.24976>;
         }
         alpha_doll_pos = <0.0, 0.57, 0.18457>;
     } else {
@@ -175,6 +167,7 @@ get_textures() {
                 header_texture = "2d80dac8-670a-4f46-8201-e7796a77afdd";
                 options_texture = "a97c448b-10a7-4a2c-a705-f9b73368c852";
                 fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
+                alpha_hud_pos = <0.0, 0.811, 0.0>;
             }
             alpha_doll_pos = <-0.22416, 0.7, 0.0>;
         } else {
@@ -300,30 +293,50 @@ default {
 
             log("Rezzing alpha HUD");
             link_me = TRUE;
-            rez_object("Object", <0.0, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
+            if (ROTH) {
+                rez_object("Object", <0.0, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
+            } else {
+                rez_object("alpha-hud", alpha_hud_pos, <PI_BY_TWO, 0.0, -PI_BY_TWO>);
+            }
         }
         else if (counter == 3) {
             log("Configuring alpha HUD");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "alphabox",
-                PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
-                PRIM_SIZE, hud_size
-            ]);
+            if (ROTH) {
+                llSetLinkPrimitiveParamsFast(2, [
+                    PRIM_NAME, "alphabox",
+                    PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                    PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+                    PRIM_SIZE, hud_size
+                ]);
 
-            log("Rezzing alpha doll");
-            link_me = TRUE;
-            rez_object("Object", <-0.1975, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
+                log("Rezzing alpha doll");
+                link_me = TRUE;
+                rez_object("Object", <-0.1975, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
+            } else {
+                llSetLinkPrimitiveParamsFast(2, [
+                    PRIM_NAME, "rotatebar"
+                ]);
+
+                log("Rezzing alpha doll");
+                link_me = TRUE;
+                rez_object("ruthdollv3", alpha_doll_pos, <PI_BY_TWO, 0.0, -PI_BY_TWO>);
+            }
         }
         else if (counter == 4) {
             log("Configuring alpha doll");
-            llSetLinkPrimitiveParamsFast(2, [
-                PRIM_NAME, "alphadoll",
-                PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 4, alpha_doll_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
-                PRIM_SIZE, <0.01, 0.3, 0.3>
-            ]);
+            if (ROTH) {
+                llSetLinkPrimitiveParamsFast(2, [
+                    PRIM_NAME, "alphadoll",
+                    PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                    PRIM_TEXTURE, 4, alpha_doll_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                    PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
+                    PRIM_SIZE, <0.01, 0.3, 0.3>
+                ]);
+            } else {
+                llSetLinkPrimitiveParamsFast(2, [
+                    PRIM_NAME, "chest"
+                ]);
+            }
 
             log("Rezzing alpha button 0");
             link_me = TRUE;
