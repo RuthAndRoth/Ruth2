@@ -6,7 +6,7 @@
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
 // v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
 // v3.2 01May2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
-// v3.3 06May2020 <seriesumei@avimail.org> - Re-enable default hand animation
+// v3.3 07May2020 <seriesumei@avimail.org> - Re-enable default hand animation
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -58,7 +58,7 @@ list regions = [
 // Any linkset that includes a part named "hands" will run the
 // default hand pose
 integer has_hands = FALSE;
-string hand_animation = "bentohandrelaxedP2";
+string hand_animation = "bentohandrelaxedP1";
 // Refresh hand animation wait, in seconds
 float hand_refresh = 30.0;
 
@@ -68,6 +68,7 @@ list prim_desc = [];
 
 integer element_stride = 4;
 list element_map = [];
+list section_map = [];
 
 // Spew some info
 integer VERBOSE = FALSE;
@@ -258,8 +259,6 @@ do_alpha(list args) {
         integer found = FALSE;
 
         // Look for target in the section list
-        // section is third in stride
-        list section_map = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
         integer section = llListFindList(section_map, [target]);
         if (section >= 0) {
             // Put a texture on faces belonging to a group
@@ -386,6 +385,20 @@ do_texture(list args) {
     }
 }
 
+// Initialization after notecard has been completely read
+late_init() {
+    // Map sections from notecard
+    // section is third in stride
+    section_map = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
+
+    has_hands = (~llListFindList(section_map, ["HANDS"]) &&
+        llGetInventoryType(hand_animation) == INVENTORY_ANIMATION);
+    if (has_hands) {
+        log("Using hand animation " + hand_animation);
+        llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
+    }
+}
+
 default {
     state_entry() {
         // Set up memory constraints
@@ -410,12 +423,6 @@ default {
             listen_alt1 = llListen(r2channel_alt1, "", "", "");
         }
 
-        has_hands = (~llListFindList(prim_map, ["HANDS"]) &&
-            llGetInventoryType(hand_animation) == INVENTORY_ANIMATION);
-        if (has_hands) {
-            llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
-        }
-
         log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     }
 
@@ -425,6 +432,7 @@ default {
             if (data == EOF) {
                 // Do end work here
                 reading_notecard = FALSE;
+                late_init();
                 llOwnerSay("Finished reading notecard " + notecard_name);
                 llOwnerSay("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
             }
