@@ -6,7 +6,7 @@
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-v5 from Controb/Serie Sumei
 // v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
 // v3.2 01May2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
-// v3.3 07May2020 <seriesumei@avimail.org> - Re-enable default hand animation
+// v3.3 09May2020 <seriesumei@avimail.org> - Re-enable default hand animation
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -59,7 +59,9 @@ list regions = [
 // default hand pose
 integer has_hands = FALSE;
 string hand_animation = "bentohandrelaxedP1";
+
 // Refresh hand animation wait, in seconds
+// Set to 0.0 to disable the refresh
 float hand_refresh = 30.0;
 
 // Map prim name and descriptions to link numbers
@@ -135,7 +137,7 @@ integer can_haz_xtea() {
     integer count = llGetInventoryNumber(INVENTORY_SCRIPT);
     while (count--) {
         if (llGetInventoryName(INVENTORY_SCRIPT, count) == XTEA_NAME) {
-            llOwnerSay("Found XTEA script");
+            log("XTEA encryption enabled");
             return TRUE;
         }
     }
@@ -448,7 +450,6 @@ default {
     }
 
     timer() {
-        llSetTimerEvent(hand_refresh);
         if (has_hands) {
             llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
         }
@@ -469,6 +470,9 @@ default {
                 }
                 else if (command == "ELEMENTS") {
                     send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
+                }
+                else if (command == "RESETANIM") {
+                    llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
                 }
                 else if (command == "STATUS") {
                     do_status(cmdargs);
@@ -498,6 +502,9 @@ default {
                 }
                 else if (command == "ELEMENTS") {
                     send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
+                }
+                else if (command == "RESETANIM") {
+                    llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
                 }
                 else if (command == "STATUS") {
                     do_status(cmdargs);
