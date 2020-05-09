@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: CC-BY-3.0
 // Copyright 2020 Serie Sumei
 
-// v2.0 - 04May2020 <seriesumei@avimail.org> - New applier script
+// v2.0 - 09May2020 <seriesumei@avimail.org> - New applier script
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
@@ -80,7 +80,7 @@ send(string msg) {
         llSay(channel, msg);
     }
     if (VERBOSE == 1) {
-        llOwnerSay("ap: " + msg);
+        llOwnerSay("r2_applier: " + msg);
     }
 }
 
@@ -119,7 +119,7 @@ send_eye_thumbnails() {
 }
 
 apply_skin_texture(string button) {
-    log("ap: button=" + button);
+    log("r2_applier: button=" + button);
 
     if (button == "bom") {
         // Note: if you get a compiler error that these are undefined
@@ -140,7 +140,7 @@ apply_skin_texture(string button) {
 }
 
 apply_eye_texture(string button) {
-    log("ap: button=" + button);
+    log("r2_applier: button=" + button);
 
     if (button == "bom") {
         send("TEXTURE,lefteye," + (string)IMG_USE_BAKED_EYES);
@@ -163,11 +163,11 @@ integer can_haz_notecard(string name) {
     integer count = llGetInventoryNumber(INVENTORY_NOTECARD);
     while (count--) {
         if (llGetInventoryName(INVENTORY_NOTECARD, count) == name) {
-            log("ap: Found notecard: " + name);
+            log("r2_applier: Found notecard: " + name);
             return TRUE;
         }
     }
-    llOwnerSay("applier: Notecard " + name + " not found");
+    llOwnerSay("r2_applier: Notecard " + name + " not found, no textures will be loaded");
     return FALSE;
 }
 
@@ -176,11 +176,11 @@ integer can_haz_script(string name) {
     integer count = llGetInventoryNumber(INVENTORY_SCRIPT);
     while (count--) {
         if (llGetInventoryName(INVENTORY_SCRIPT, count) == name) {
-            log("ap: Found script: " + name);
+            log("r2_applier: Found script: " + name);
             return TRUE;
         }
     }
-    llOwnerSay("applier: Script " + name + " not found");
+    log("r2_applier: Script " + name + " not found");
     return FALSE;
 }
 
@@ -189,7 +189,7 @@ load_notecard(string name) {
     if (notecard_name == "") {
         notecard_name = DEFAULT_NOTECARD;
     }
-    llOwnerSay("applier: Reading notecard: " + notecard_name);
+    log("r2_applier: Reading notecard: " + notecard_name);
     if (can_haz_notecard(notecard_name)) {
         line = 0;
         current_buffer = "";
@@ -309,7 +309,7 @@ init() {
     // Initialize channel
     channel = keyapp2chan(app_id);
 
-    log("ap: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+    log("r2_applier: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     reading_notecard = FALSE;
     load_notecard(notecard_name);
 
@@ -327,8 +327,8 @@ default {
             if (data == EOF) {
                 // Do end work here
                 reading_notecard = FALSE;
-                llOwnerSay("applier: Finished reading notecard " + notecard_name);
-                llOwnerSay("applier: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
+                llOwnerSay("r2_applier: Finished reading notecard " + notecard_name);
+                llOwnerSay("r2_applier: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
                 send_skin_thumbnails();
                 send_eye_thumbnails();
             }
@@ -342,7 +342,7 @@ default {
             // <button>|<command>
             list cmdargs = llParseString2List(message, ["|"], [""]);
             string command = llList2String(cmdargs, 1);
-            log("ap: command: " + command);
+            log("r2_applier: command: " + command);
             if (command == "apply") {
                 apply_skin_texture(llList2String(cmdargs, 0));
             }
