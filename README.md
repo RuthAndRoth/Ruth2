@@ -1,3 +1,5 @@
+<img src="Textures/r2-logo-white-grey.png" width="75" height="75">
+
 # Ruth2 Mesh Avatar Project
 
 Ruth2 is a low-poly mesh body specifically designed for OpenSimulator.
