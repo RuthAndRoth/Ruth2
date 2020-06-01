@@ -1,5 +1,5 @@
 // r2_xtea.lsl - xtea MessageLinked wrapper
-// SPDX-License-Identifier: CC-BY-3.0
+// SPDX-License-Identifier: MIT
 // Modifications Copyright 2019 Serie Sumei
 
 // v1 - Initial release
@@ -43,7 +43,7 @@
 // it a constant below.  This requires the script to be distributed in
 // products no-modify.  The licensing of both versions allow this, the XTEA in
 // Fred's version is BSD, the original version of this one is public domain
-// per the code headers and all modifications are CC-BY-3.0.
+// per the code headers and all modifications are MIT.
 
 // This is the shared secret that is required at both ends to communicate
 // CHANGE THIS if you need any security at all

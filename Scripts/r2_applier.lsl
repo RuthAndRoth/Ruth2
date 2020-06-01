@@ -1,5 +1,5 @@
 // r2_applier.lsl - SS Combo skin applier
-// SPDX-License-Identifier: CC-BY-3.0
+// SPDX-License-Identifier: MIT
 // Copyright 2020 Serie Sumei
 
 // v2.0 - 09May2020 <seriesumei@avimail.org> - New applier script

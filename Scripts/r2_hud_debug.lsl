@@ -1,5 +1,5 @@
 // r2_hud_debug.lsl - Debugging functions for the Rut2/Roth2 avatar HUDs
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: MIT
 // Copyright 2020 Serie Sumei
 
 // v3.0 04Apr2020 <seriesumei@avimail.org> - New script, matches to the Ruth2 v3 scripts
