@@ -29,7 +29,7 @@ README.txt - !README - The in-world README to explain the box content and its us
 * Eyes
 * Shapes
 * Skins
-* Classic avatar underwear (jacket length)
+* Classic avatar underwear (options)
 * Sample hair attachment
 * Elf ears (unrigged, scripted to respond to Roth2 v2 HUD)
 * HUD debug script - add to HUD to get a debug menu on long mouse press
