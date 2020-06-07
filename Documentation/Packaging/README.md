@@ -1,6 +1,6 @@
 # Packaging Content
 
-The contents of the Ruth2 distribution boxes in-world
+The contents of the Ruth2 distribution boxes in-world.
 
 Note that in-world content represented here will have file extensions
 that may not be present in the names in inventory so they will render
