@@ -7,6 +7,7 @@
 // v3.1 04Apr2020 <seriesumei@avimail.org> - Add alphamode and elements to v2 API
 // v3.2 01May2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
 // v3.3 09May2020 <seriesumei@avimail.org> - Re-enable default hand animation
+// v3.4 20May2020 <seriesumei@avimail.org> - Only listen when attached by default
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -15,22 +16,20 @@
 // on the body with regard to linking and prim naming.  Link order does not
 // matter, everything works based on the prim name and description fields.
 
-// The body part is identified by looking for specific names in the linkset
-// during the initial scan: "chest" (for the body), "feet", "hands", "head".
-// This implies that the hands and feet need to be linked to a root prim in
-// order for the actual mesh parts to have the right name.  The body already
-// has this requirement so we can use the same root prim cube here too.
-
 // The commands have been expanded a bit to allow more flexibility in texturing
 // the parts.  It is still totally compatible with the RC2 and RC3 commands
-// provided the APP_ID is correct (we will handle that soon too).
+// provided the APP_ID is correct.
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.
 integer APP_ID = 20181024;
 integer APP_ID_ALT1 = 20171105;
 
+// Listen on alternate app ID channel
 integer MULTI_LISTEN = TRUE;
+
+// Only listen when attached
+integer ATTACHED_ONLY = TRUE;
 
 // Which API version do we implement?
 integer API_VERSION = 2;
@@ -201,6 +200,9 @@ load_notecard(string name) {
         element_map = [];
         reading_notecard = TRUE;
         notecard_qid = llGetNotecardLine(notecard_name, line);
+    } else {
+        // Force initialization when no notecard is present
+        late_init();
     }
 }
 
@@ -399,6 +401,18 @@ late_init() {
         log("Using hand animation " + hand_animation);
         llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
     }
+
+    // Set up listener
+    listen_main = 0;
+    listen_alt1 = 0;
+    r2channel = keyapp2chan(APP_ID);
+    r2channel_alt1 = keyapp2chan(APP_ID_ALT1);
+    if (!ATTACHED_ONLY || last_attach > 0) {
+        listen_main = llListen(r2channel, "", "", "");
+        if (MULTI_LISTEN) {
+            listen_alt1 = llListen(r2channel_alt1, "", "", "");
+        }
+    }
 }
 
 default {
@@ -412,18 +426,10 @@ default {
         last_attach = llGetAttached();
         log("state_entry() attached="+(string)last_attach);
 
-        reading_notecard = FALSE;
-        load_notecard(notecard_name);
-
         map_linkset();
 
-        // Set up listener
-        r2channel = keyapp2chan(APP_ID);
-        listen_main = llListen(r2channel, "", "", "");
-        if (MULTI_LISTEN) {
-            r2channel_alt1 = keyapp2chan(APP_ID_ALT1);
-            listen_alt1 = llListen(r2channel_alt1, "", "", "");
-        }
+        reading_notecard = FALSE;
+        load_notecard(notecard_name);
 
         log("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
     }
@@ -513,6 +519,20 @@ default {
                     do_texture(cmdargs);
                 }
         }
+    }
+
+    attach(key id) {
+        if (id == NULL_KEY) {
+            // Reset attach state
+            last_attach = 0;
+            llListenRemove(listen_main);
+            llListenRemove(listen_alt1);
+        } else {
+            // Record attach state
+            last_attach = llGetAttached();
+            late_init();
+        }
+        log("attach() attached="+(string)last_attach);
     }
 
     changed(integer change) {
