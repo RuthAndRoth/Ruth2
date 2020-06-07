@@ -1,20 +1,10 @@
-//*********************************************************************************
-//**   This program is free software: you can redistribute it and/or modify
-//**   it under the terms of the GNU Affero General Public License as
-//**   published by the Free Software Foundation, either version 3 of the
-//**   License, or (at your option) any later version.
-//**
-//**   This program is distributed in the hope that it will be useful,
-//**   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//**   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//**   GNU Affero General Public License for more details.
-//**
-//**   You should have received a copy of the GNU Affero General Public License
-//**   along with this program.  If not, see <https://www.gnu.org/licenses/>
-//*********************************************************************************
+// r2_hud_maker.lsl - RuthAndRoth HUD Creation
+// SPDX-License-Identifier: MIT
+// Copyright 2020 Serie Sumei
 
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Control/Serie Sumei
-// v3.1 05May2020 <seriesumei@avimail.org> -  Merge Ruth2 and Roth2 alpha HUD creation
+// v3.1 05May2020 <seriesumei@avimail.org> - Merge Ruth2 and Roth2 alpha HUD creation
+// v3.2 06Jun2020 <seriesumei@avimail.org> - Update Ruth alpha HUD
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh (for Ruth) or a new alpha HUD (for Roth) and adds panes
@@ -64,14 +54,31 @@ vector alpha_button_scale = <0.25, 0.125, 0.0>;
 
 vector alpha_hud_pos;
 vector alpha_doll_pos;
-float alpha_button_left_offset;
-float alpha_button_right_offset;
-
-list alpha_button_pos = [
+integer num_alpha_buttons;
+vector alpha_button_size;
+list alpha_button_pos;
+list alpha_button_pos_ROTH = [
     <-0.2085, 0.6225, 0.12>,
     <-0.2085, 0.7475, 0.12>,
     <-0.2085, 0.6225, -0.12>,
     <-0.2085, 0.7475, -0.12>
+];
+list alpha_button_pos_RUTH = [
+    <-0.0, 0.585, 0.13>,
+    <-0.0, 0.705, 0.13>,
+    <-0.0, 0.825, 0.13>,
+    <-0.0, 0.945, 0.13>,
+    <-0.0, 0.585, -0.13>,
+    <-0.0, 0.705, -0.13>,
+    <-0.0, 0.825, -0.13>,
+    <-0.0, 0.945, -0.13>
+];
+
+list alpha_button_hoffset;
+
+// Vertical offset for alpha button textures
+list alpha_button_voffset = [
+    0.4375, 0.3125, 0.1875, 0.0625, -0.0625, -0.1875, -0.3125, -0.4375
 ];
 
 list hand_button_pos = [
@@ -81,11 +88,6 @@ list hand_button_pos = [
     <-0.2085, -0.7452, -0.0708>,
     <-0.2085, -0.7452, 0.0305>,
     <-0.2085, -0.7452, 0.1316>
-];
-
-// Vertical offset for alpha button textures
-list alpha_button_voffset = [
-    0.4375, 0.3125, 0.1875, 0.0625, -0.0625, -0.1875, -0.3125, -0.4375
 ];
 
 // Spew debug info
@@ -123,27 +125,32 @@ string GetGridName() {
 // alpha_doll_texture: r2_hud_alpha_doll.png
 // fingernails_shape_texture: ruth 2.0 hud fingernails shape.png
 
-get_textures() {
+configure() {
     if (ROTH) {
-        alpha_button_left_offset = 0.125;
-        alpha_button_right_offset = 0.375;
+        num_alpha_buttons = 3;
+        alpha_button_pos = alpha_button_pos_ROTH;
+        alpha_button_size = <0.01, 0.125, 0.080>;
+        alpha_button_hoffset = [0.125, 0.375];
     } else {
-        alpha_button_left_offset = -0.375;
-        alpha_button_right_offset = -0.125;
+        num_alpha_buttons = 7;
+        alpha_button_pos = alpha_button_pos_RUTH;
+        alpha_button_size = <0.01, 0.120, 0.080>;
+        alpha_button_hoffset = [-0.375, -0.125, 0.125, 0.375];
     }
     if (is_SL()) {
         // Textures in SL
         // The textures listed are full-perm uploaded by seriesumei Resident
         hud_texture = "7fc1e90b-b940-6e9f-aed9-85888a0a1eb3";
         skin_texture = "206804f6-908a-8efb-00de-fe00b2604906";
-        alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
         alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
         if (ROTH) {
+            alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
             header_texture = "c54a2e5d-398e-2c1d-77ab-5353a20cbc23";
             options_texture = "43ec4359-6750-8c8a-4098-c8f79243eb25";
         } else {
-            header_texture = "c74e2f3e-d493-47e7-0042-58c240802c8a";
-            options_texture = "3857c5e8-95aa-1731-d27c-8ca3baa98d0b";
+            alpha_button_texture = "b8028bca-fa71-ccf5-114d-e22fba30bd89";
+            header_texture = "b2c45e77-282f-35b3-a148-c937e4076737";
+            options_texture = "cba58fc8-d4fd-82b5-1b11-ac9d877056c3";
             fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
             alpha_hud_pos = <0.0, 1.03528, 0.24976>;
         }
@@ -158,12 +165,13 @@ get_textures() {
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
             hud_texture = "2eee6e1a-66c5-4209-92b4-171820d5cfa5";
             skin_texture = "64184dac-b33b-4a1b-b200-7d09d8928b64";
-            alpha_button_texture = "4e97068e-7570-47c2-af2f-e7965c5d5078";
             alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
             if (ROTH) {
+                alpha_button_texture = "4e97068e-7570-47c2-af2f-e7965c5d5078";
                 header_texture = "0bd02931-21e8-4b81-90d1-aca4349c0679";
                 options_texture = "e89ff0c8-03a4-410d-bf0a-1352610cb701";
             } else {
+                alpha_button_texture = "4e97068e-7570-47c2-af2f-e7965c5d5078";
                 header_texture = "2d80dac8-670a-4f46-8201-e7796a77afdd";
                 options_texture = "a97c448b-10a7-4a2c-a705-f9b73368c852";
                 fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
@@ -237,7 +245,7 @@ configure_outline_button(string name, vector size, vector taper, vector scale, v
 
 default {
     touch_start(integer total_number) {
-        get_textures();
+        configure();
         build_pos = llGetPos();
         counter = 0;
         // set up root prim
@@ -344,9 +352,9 @@ default {
             rez_object("4x1_outline_button", llList2Vector(alpha_button_pos, 0), <PI, 0.0, 0.0>);
         }
         else if (counter == 5) {
-            list hoffset = [alpha_button_left_offset, alpha_button_right_offset];
-            // 0,1 = left; 2,3 = right
-            integer hindex = (num_repeat & 2) >> 1;
+            // Roth: 0,1 = left; 2,3 = right
+            // Ruth: 0,1,2,3 = left; 4,5,6,7 = right
+            integer hindex = (num_repeat & 6) >> 1;
             // even = 0, odd = 4
             integer vindex = (num_repeat & 1) << 2;
 
@@ -354,14 +362,14 @@ default {
             llSetLinkPrimitiveParamsFast(2, [
                 PRIM_NAME, "alpha" + (string)num_repeat,
                 PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-                PRIM_TEXTURE, 0, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex)+",0.0>"), PI_BY_TWO,
-                PRIM_TEXTURE, 2, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex+1)+",0.0>"), PI_BY_TWO,
-                PRIM_TEXTURE, 4, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex+2)+",0.0>"), PI_BY_TWO,
-                PRIM_TEXTURE, 6, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex+3)+",0.0>"), PI_BY_TWO,
+                PRIM_TEXTURE, 0, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(alpha_button_hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex)+",0.0>"), PI_BY_TWO,
+                PRIM_TEXTURE, 2, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(alpha_button_hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex+1)+",0.0>"), PI_BY_TWO,
+                PRIM_TEXTURE, 4, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(alpha_button_hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex+2)+",0.0>"), PI_BY_TWO,
+                PRIM_TEXTURE, 6, alpha_button_texture, alpha_button_scale, (vector)("<"+llList2String(alpha_button_hoffset, hindex)+","+llList2String(alpha_button_voffset, vindex+3)+",0.0>"), PI_BY_TWO,
                 PRIM_COLOR, ALL_SIDES, <1.0, 1.0, 1.0>, 1.00,
-                PRIM_SIZE, <0.01, 0.125, 0.080>
+                PRIM_SIZE, alpha_button_size
             ]);
-            if (num_repeat < 3) {
+            if (num_repeat < num_alpha_buttons) {
                 // do another one
                 num_repeat++;
                 counter--;
