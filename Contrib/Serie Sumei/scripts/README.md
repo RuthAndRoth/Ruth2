@@ -5,11 +5,9 @@ in the main Scripts directory.
 
 ## Versioning
 
-These scripts will carry a version similar to 'ss-X' where X is
-usually a letter.  The scripts in the Scripts directory will have
-a version similar to 'v3.N' where N is a number.  This hopefully
-makes it easier to distinguish between the two, as they may reference
-each other.
+These scripts will carry the version of the script it is based on with
+a suffix of the form 'ss-YYMMDD' for each following change.
 
-For example, ru2_hud_control.lsl ss-r was copied to
-Scripts/ru2_hud_control.lsl v3.0 for the initial version for Ruth2 v3.
+For example, ru2_hud_control.lsl v3.2 ss-200606 was copied from
+Roth2/Scripts/ro2_hud_control.lsl v3.2 for the port back to for Ruth2 v3.
+ss-200606 indicates the date of the last change.
