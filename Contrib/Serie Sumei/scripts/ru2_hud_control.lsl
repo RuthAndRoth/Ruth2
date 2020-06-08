@@ -6,7 +6,7 @@
 // v2.0 12Apr2020 <seriesumei@avimail.org> - Based on ru2_hud_control.lsl v3.2
 // v2.1 12Apr2020 <seriesumei@avimail.org> - New simpler alpha HUD
 // v2.2 13May2020 <seriesumei@avimail.org> - Rework skin panel
-// v3.2 06Jun2020 <seriesumei@avimail.org> - Backport to Ruth2 v3
+// v3.2 07Jun2020 <seriesumei@avimail.org> - Backport to Ruth2 v3
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -554,7 +554,8 @@ default {
         log("link=" + (string)link + " face=" + (string)face + " name=" + name);
 
         if (name == "rotatebar") {
-            if(face == 1||face == 3||face == 5||face == 7) {
+            integer bx = (integer)(pos.x * 2);
+            if (bx == 1) {
                 rotation localRot = llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0);
                 llSetLinkPrimitiveParamsFast(LINK_ROOT, [PRIM_ROT_LOCAL, llEuler2Rot(<0.0, -PI_BY_TWO, 0.0>)*localRot]);
             } else {
@@ -563,6 +564,9 @@ default {
             }
             // Save current alpha rotation
             alpha_rot = llRot2Euler(llList2Rot(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_ROT_LOCAL]), 0));
+        }
+        else if (name == "alphabox" || name == "optionbox" || name == "skinbox") {
+            // Ignore clicks on these
         }
         else if (name == "minbar" || name == "alphabar" || name == "optionbar" || name == "skinbar") {
             integer bx = (integer)(pos.x * 10);
