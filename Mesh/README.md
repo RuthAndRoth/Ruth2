@@ -15,14 +15,14 @@
   * bento hands	- Edit#15
 
   * NOW RUTH STANDARD
-    * flat feet	- Taarna Wells
+    * flat feet 	- Taarna Wells
     * medium feet	- Taarna Wells
-    * high feet	- Taarna Wells
+    * high feet 	- Taarna Wells
 
   * Extras
     * Curious high feet 		- Edit#14
     * Sundance high feet 		- Edit#15
-    * Ada flat feet(poseable) - Edit#15
+    * Ada flat feet (poseable) 		- Edit#15
 
   Toenails for all feet types are Sundance Haiku's toenails modified by
   Taarna Wells. It now uses only one UV map and will be easier to manage.
