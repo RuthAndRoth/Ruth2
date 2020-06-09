@@ -14,3 +14,6 @@ AGPL License - https://github.com/RuthAndRoth/Ruth2/tree/master/Licenses
 Second Life availability:
 https://marketplace.secondlife.com/p/ruth-upgrades-rc3-hands-feets-nails/15718054
 
+OpenSim availability:
+OSGrid RuthAndRoth region hop://login.osgrid.org/RuthAndRoth/142/104/22
+
