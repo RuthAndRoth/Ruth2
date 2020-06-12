@@ -1,0 +1,821 @@
+<?xml version='1.0' encoding='utf-8'?>
+<COLLADA version="1.4.1" xmlns="http://www.collada.org/2005/11/COLLADASchema">
+  <asset>
+    <contributor>
+      <author>Avastar User</author>
+      <authoring_tool>Avastar 2-4-1 on Blender 2.79 (sub 0)</authoring_tool>
+    </contributor>
+    <created>2018-11-06T17:45:39</created>
+    <modified>2018-11-06T17:45:39</modified>
+    <unit meter="1" name="meter" />
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_cameras />
+  <library_lights />
+  <library_effects />
+  <library_materials />
+  <library_geometries>
+    <geometry id="CubeRiggedHidden-mesh" name="CubeRiggedHidden">
+      <mesh>
+        <source id="CubeRiggedHidden-mesh-positions">
+          <float_array count="24" id="CubeRiggedHidden-mesh-positions-array">-0.025 -0.025 1.10641   -0.025 -0.025 1.15641   -0.025 0.025 1.10641   -0.025 0.025 1.15641   0.025 -0.025 1.10641   0.025 -0.025 1.15641   0.025 0.025 1.10641   0.025 0.025 1.15641  </float_array>
+          <technique_common>
+            <accessor count="8" source="#CubeRiggedHidden-mesh-positions-array" stride="3">
+              <param name="X" type="float" />
+              <param name="Y" type="float" />
+              <param name="Z" type="float" />
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="CubeRiggedHidden-mesh-normals">
+          <float_array count="18" id="CubeRiggedHidden-mesh-normals-array">-1 -0 0   0 1 0   1 -0 0   0 -1 0   0 0 -1   0 -0 1  </float_array>
+          <technique_common>
+            <accessor count="6" source="#CubeRiggedHidden-mesh-normals-array" stride="3">
+              <param name="X" type="float" />
+              <param name="Y" type="float" />
+              <param name="Z" type="float" />
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="CubeRiggedHidden-mesh-vertices">
+          <input semantic="POSITION" source="#CubeRiggedHidden-mesh-positions" />
+        </vertices>
+        <polylist count="12">
+          <input offset="0" semantic="VERTEX" source="#CubeRiggedHidden-mesh-vertices" />
+          <input offset="1" semantic="NORMAL" source="#CubeRiggedHidden-mesh-normals" />
+          <vcount>4 4 4 4 4 4</vcount>
+          <p>0 0  1 0  3 0  2 0     2 1  3 1  7 1  6 1     6 2  7 2  5 2  4 2     4 3  5 3  1 3  0 3     2 4  6 4  4 4  0 4     7 5  3 5  1 5  5 5    </p>
+        </polylist>
+      </mesh>
+      <extra>
+        <technique profile="MAYA">
+          <double_sided>1</double_sided>
+        </technique>
+      </extra>
+    </geometry>
+  </library_geometries>
+  <library_controllers>
+    <controller id="Avatar_001_CubeRiggedHidden-skin" name="Avatar_001">
+      <skin source="#CubeRiggedHidden-mesh">
+        <bind_shape_matrix>0 -1 0 0 1 0 0 0 0 0 1 0 0 0 0 1</bind_shape_matrix>
+        <source id="Avatar_001_CubeRiggedHidden-skin-joints">
+          <Name_array count="52" id="Avatar_001_CubeRiggedHidden-skin-joints-array">
+          mPelvis PELVIS BUTT mTorso BELLY LEFT_HANDLE RIGHT_HANDLE LOWER_BACK mChest CHEST
+          LEFT_PEC RIGHT_PEC UPPER_BACK mNeck NECK mHead HEAD mSkull mCollarLeft L_CLAVICLE
+          mShoulderLeft L_UPPER_ARM mElbowLeft L_LOWER_ARM mWristLeft L_HAND mCollarRight R_CLAVICLE mShoulderRight R_UPPER_ARM
+          mElbowRight R_LOWER_ARM mWristRight R_HAND mHipRight R_UPPER_LEG mKneeRight R_LOWER_LEG mAnkleRight R_FOOT
+          mFootRight mToeRight mHipLeft L_UPPER_LEG mKneeLeft L_LOWER_LEG mAnkleLeft L_FOOT mFootLeft mToeLeft
+          mEyeLeft mEyeRight
+          </Name_array>
+          <technique_common>
+            <accessor count="52" source="#Avatar_001_CubeRiggedHidden-skin-joints-array" stride="1">
+              <param name="JOINT" type="name" />
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Avatar_001_CubeRiggedHidden-skin-bind_poses">
+          <float_array count="832" id="Avatar_001_CubeRiggedHidden-skin-bind_poses-array">
+
+  1  0  0  0
+  0  1  0  0
+  0  0  1 -1.06702
+  0  0  0  1
+ 
+  8.36846  0 -1.17611  1.30114
+  0  6.25  0  0
+  0.818665  0  5.82511 -6.09215
+  0  0  0  1
+ 
+  10  0  0  0.55
+  0  8.71333  0  0
+  0  0  10 -9.67015
+  0  0  0  1
+ 
+  1  0  0  0
+  0  1  0  0
+  0  0  1 -1.15109
+  0  0  0  1
+ 
+  11.003  0 -1.54637  1.53378
+  0  7.69231  0  0
+  0.927821  0  6.60179 -7.88929
+  0  0  0  1
+ 
+  20  0  0  0
+  0  20  0 -2
+  0  0  20 -24.1818
+  0  0  0  1
+ 
+  20  0  0  0
+  0  20  0  2
+  0  0  20 -24.1818
+  0  0  0  1
+ 
+  11.1111  0  0  0
+  0  7.69231  0  0
+  0  0  6.66667 -7.82725
+  0  0  0  1
+ 
+  1.0101  0  0  0.0155232
+  0  1.04167  0  0
+  0  0  1 -1.35596
+  0  0  0  1
+ 
+  9.04323  0  1.59457 -2.3855
+  0  6.94444  0  0
+ -0.868241  0  4.92404 -7.01078
+  0  0  0  1
+
+
+
+ 
+  20.1454  0 -1.51121  0.0488758
+  0  20.8333  0 -1.64
+  1.49609  0  19.944 -28.0342
+  0  0  0  1
+ 
+  20.1454  0 -1.51121  0.0488758
+  0  20.8333  0  1.64
+  1.49609  0  19.944 -28.0342
+  0  0  0  1
+ 
+  11.2233  0  0  0.17248
+  0  8.01282  0  0
+  0  0  6.66667 -9.1531
+  0  0  0  1
+ 
+  1.18343  0  0  0.0293254
+  0  1.1976  0  0
+  0  0  1 -1.60707
+  0  0  0  1
+ 
+  23.6686  0  0  0.586507
+  0  19.9601  0  0
+  0  0  12.5 -20.3384
+  0  0  0  1
+ 
+  1.08108  0  0  0.0267891
+  0  1.08108  0  0
+  0  0  1.08108 -1.81914
+  0  0  0  1
+ 
+  9.82801  0  0  0.0617192
+  0  12.012  0  0
+  0  0  9.00901 -15.7428
+  0  0  0  1
+ 
+  1.08108  0  0  0.0267891
+  0  1.08108  0  0
+  0  0  1.08108 -1.89064
+  0  0  0  1
+ 
+  1  0  0  0.0360857
+  0  1  0 -0.0716784
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  14.2857  0  0  0.229796
+  0  7.14286  0 -0.511989
+  0  0  20 -30.8272
+  0  0  0  1
+
+
+
+ 
+  1  0  0  0.0360857
+  0  0.892857  0 -0.134534
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  20  0  0  0.721715
+  0  5.23211 -0.457751 -0.790581
+  0  1.74311  19.9239 -31.0076
+  0  0  0  1
+ 
+  1  0  0  0.0360857
+  0  0.847458  0 -0.363083
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  25  0  0  0.902143
+  0  6.04497 -0.316804 -2.82123
+  0  1.3084  24.9657 -38.6969
+  0  0  0  1
+ 
+  1  0  0  0.0360857
+  0  1  0 -0.670157
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  19.6962 -3.47296  0  3.01487
+  2.16763  12.2932 -0.654199 -7.80123
+  0.302935  1.71803  33.2876 -51.8719
+  0  0  0  1
+ 
+  1  0  0  0.0360857
+  0  1  0  0.072
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  14.2857  0  0  0.229796
+  0  7.14286  0  0.514286
+  0  0  20 -30.8272
+  0  0  0  1
+ 
+  1  0  0  0.0360857
+  0  0.892857  0  0.135195
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  20  0  0  0.721715
+  0  5.23211  0.457751  0.794451
+  0 -1.74311  19.9239 -31.0089
+  0  0  0  1
+
+
+
+ 
+  1  0  0  0.0360857
+  0  0.847458  0  0.36371
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  25  0  0  0.902143
+  0  6.04497  0.316804  2.8257
+  0 -1.3084  24.9657 -38.6978
+  0  0  0  1
+ 
+  1  0  0  0.0360857
+  0  1  0  0.671078
+  0  0  1 -1.52136
+  0  0  0  1
+ 
+  19.6962  3.47296  0  3.01807
+ -2.16763  12.2932  0.654199  7.81256
+  0.302935 -1.71803  33.2876 -51.8735
+  0  0  0  1
+ 
+  1  0  0 -0.03362
+  0  1  0  0.128806
+  0  0  1 -1.02593
+  0  0  0  1
+ 
+  11.1111  0  0 -0.151333
+  0  11.1111  0  0.875622
+  0  0  3.125 -2.51853
+  0  0  0  1
+ 
+  1  0  0 -0.03284
+  0  1  0  0.080171
+  0  0  1 -0.535007
+  0  0  0  1
+ 
+  16.6667  0  0 -0.214
+  0  16.6667  0  1.33618
+  0  0  4 -1.34003
+  0  0  0  1
+ 
+  1  0  0 -0.003971
+  0  1  0  0.080171
+  0  0  1 -0.0665131
+  0  0  0  1
+ 
+  7.57545  0 -1.33576 -0.579312
+  0  20  0  1.60342
+  3.47296  0  19.6962 -0.78372
+  0  0  0  1
+
+
+
+ 
+  1  0  0 -0.115927
+  0  1  0  0.080171
+  0  0  1 -0.00587612
+  0  0  0  1
+ 
+  1  0  0 -0.224927
+  0  1  0  0.080171
+  0  0  1 -0.00587612
+  0  0  0  1
+ 
+  1  0  0 -0.033757
+  0  1  0 -0.126765
+  0  0  1 -1.02602
+  0  0  0  1
+ 
+  11.1111  0  0 -0.152856
+  0  11.1111  0 -0.852944
+  0  0  3.125 -2.5188
+  0  0  0  1
+ 
+  1  0  0 -0.03287
+  0  1  0 -0.081197
+  0  0  1 -0.534964
+  0  0  0  1
+ 
+  16.6667  0  0 -0.2145
+  0  16.6667  0 -1.35328
+  0  0  4 -1.33986
+  0  0  0  1
+ 
+  1  0  0 -0.003983
+  0  1  0 -0.082575
+  0  0  1 -0.0665151
+  0  0  0  1
+ 
+  7.57545  0 -1.33576 -0.5794
+  0  20  0 -1.6515
+  3.47296  0  19.6962 -0.7838
+  0  0  0  1
+ 
+  1  0  0 -0.115939
+  0  1  0 -0.082575
+  0  0  1 -0.00589509
+  0  0  0  1
+ 
+  1  0  0 -0.224939
+  0  1  0 -0.082575
+  0  0  1 -0.00589509
+  0  0  0  1
+
+
+
+ 
+  1.08108  0  0 -0.0716719
+  0  1.08108  0 -0.039
+  0  0  1.08108 -1.89814
+  0  0  0  1
+ 
+  1.08108  0  0 -0.0716769
+  0  1.08108  0  0.039
+  0  0  1.08108 -1.89814
+  0  0  0  1
+</float_array>
+          <technique_common>
+            <accessor count="52" source="#Avatar_001_CubeRiggedHidden-skin-bind_poses-array" stride="16">
+              <param name="TRANSFORM" type="float4x4" />
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Avatar_001_CubeRiggedHidden-skin-weights">
+          <float_array count="8" id="Avatar_001_CubeRiggedHidden-skin-weights-array">1 1 1 1 1 1 1 1</float_array>
+          <technique_common>
+            <accessor count="8" source="#Avatar_001_CubeRiggedHidden-skin-weights-array" stride="1">
+              <param name="WEIGHT" type="float" />
+            </accessor>
+          </technique_common>
+        </source>
+        <joints>
+          <input semantic="JOINT" source="#Avatar_001_CubeRiggedHidden-skin-joints" />
+          <input semantic="INV_BIND_MATRIX" source="#Avatar_001_CubeRiggedHidden-skin-bind_poses" />
+        </joints>
+        <vertex_weights count="8">
+          <input offset="0" semantic="JOINT" source="#Avatar_001_CubeRiggedHidden-skin-joints" />
+          <input offset="1" semantic="WEIGHT" source="#Avatar_001_CubeRiggedHidden-skin-weights" />
+          <vcount>1 1 1 1 1 1 1 1</vcount>
+          <v>7 0    7 1    7 2    7 3    7 4    7 5    7 6    7 7   </v>
+        </vertex_weights>
+      </skin>
+    </controller>
+  </library_controllers>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Avatar_001" name="Avatar_001" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 0</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">1 1 1</scale>
+        <node id="mPelvis" name="mPelvis" sid="mPelvis" type="JOINT">
+          <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  1.06702
+  0  0  0  1
+</matrix>
+          <node id="PELVIS" name="PELVIS" sid="PELVIS" type="JOINT">
+            <matrix sid="transform">
+  1  0  0 -0.01
+  0  1  0  0
+  0  0  1 -0.02
+  0  0  0  1
+</matrix>
+          </node>
+          <node id="BUTT" name="BUTT" sid="BUTT" type="JOINT">
+            <matrix sid="transform">
+  1  0  0 -0.06
+  0  1  0  0
+  0  0  1 -0.1
+  0  0  0  1
+</matrix>
+          </node>
+          <node id="mTorso" name="mTorso" sid="mTorso" type="JOINT">
+            <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  0.0840729
+  0  0  0  1
+</matrix>
+            <node id="BELLY" name="BELLY" sid="BELLY" type="JOINT">
+              <matrix sid="transform">
+  1  0  0  0.028
+  0  1  0  0
+  0  0  1  0.04
+  0  0  0  1
+</matrix>
+            </node>
+            <node id="LEFT_HANDLE" name="LEFT_HANDLE" sid="LEFT_HANDLE" type="JOINT">
+              <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0.1
+  0  0  1  0.058
+  0  0  0  1
+</matrix>
+            </node>
+            <node id="RIGHT_HANDLE" name="RIGHT_HANDLE" sid="RIGHT_HANDLE" type="JOINT">
+              <matrix sid="transform">
+  1  0  0  0
+  0  1  0 -0.1
+  0  0  1  0.058
+  0  0  0  1
+</matrix>
+            </node>
+            <node id="LOWER_BACK" name="LOWER_BACK" sid="LOWER_BACK" type="JOINT">
+              <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  0.023
+  0  0  0  1
+</matrix>
+            </node>
+            <node id="mChest" name="mChest" sid="mChest" type="JOINT">
+              <matrix sid="transform">
+  1  0  0 -0.015368
+  0  1  0  0
+  0  0  1  0.204877
+  0  0  0  1
+</matrix>
+              <node id="CHEST" name="CHEST" sid="CHEST" type="JOINT">
+                <matrix sid="transform">
+  1  0  0  0.028
+  0  1  0  0
+  0  0  1  0.0700001
+  0  0  0  1
+</matrix>
+              </node>
+              <node id="LEFT_PEC" name="LEFT_PEC" sid="LEFT_PEC" type="JOINT">
+                <matrix sid="transform">
+  1  0  0  0.119
+  0  1  0  0.082
+  0  0  1  0.0420001
+  0  0  0  1
+</matrix>
+              </node>
+              <node id="RIGHT_PEC" name="RIGHT_PEC" sid="RIGHT_PEC" type="JOINT">
+                <matrix sid="transform">
+  1  0  0  0.119
+  0  1  0 -0.082
+  0  0  1  0.0420001
+  0  0  0  1
+</matrix>
+              </node>
+              <node id="UPPER_BACK" name="UPPER_BACK" sid="UPPER_BACK" type="JOINT">
+                <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  0.017
+  0  0  0  1
+</matrix>
+              </node>
+              <node id="mNeck" name="mNeck" sid="mNeck" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.009507
+  0  1  0  0
+  0  0  1  0.251108
+  0  0  0  1
+</matrix>
+                <node id="NECK" name="NECK" sid="NECK" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  0.02
+  0  0  0  1
+</matrix>
+                </node>
+                <node id="mHead" name="mHead" sid="mHead" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  0.0756299
+  0  0  0  1
+</matrix>
+                  <node id="HEAD" name="HEAD" sid="HEAD" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0.02
+  0  1  0  0
+  0  0  1  0.0700001
+  0  0  0  1
+</matrix>
+                  </node>
+                  <node id="mSkull" name="mSkull" sid="mSkull" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0
+  0  0  1  0.079
+  0  0  0  1
+</matrix>
+                  </node>
+                  <node id="mEyeRight" name="mEyeRight" sid="mEyeRight" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0.098466
+  0  1  0 -0.036
+  0  0  1  0.079
+  0  0  0  1
+</matrix>
+                  </node>
+                  <node id="mEyeLeft" name="mEyeLeft" sid="mEyeLeft" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0.098461
+  0  1  0  0.036
+  0  0  1  0.079
+  0  0  0  1
+</matrix>
+                  </node>
+                </node>
+              </node>
+              <node id="mCollarLeft" name="mCollarLeft" sid="mCollarLeft" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.020927
+  0  1  0  0.084665
+  0  0  1  0.165396
+  0  0  0  1
+</matrix>
+                <node id="L_CLAVICLE" name="L_CLAVICLE" sid="L_CLAVICLE" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0.02
+  0  1  0  0
+  0  0  1  0.02
+  0  0  0  1
+</matrix>
+                </node>
+                <node id="mShoulderLeft" name="mShoulderLeft" sid="mShoulderLeft" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0.079
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                  <node id="L_UPPER_ARM" name="L_UPPER_ARM" sid="L_UPPER_ARM" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0.12
+  0  0  1  0.00999999
+  0  0  0  1
+</matrix>
+                  </node>
+                  <node id="mElbowLeft" name="mElbowLeft" sid="mElbowLeft" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0.248
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                    <node id="L_LOWER_ARM" name="L_LOWER_ARM" sid="L_LOWER_ARM" type="JOINT">
+                      <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0.1
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                    </node>
+                    <node id="mWristLeft" name="mWristLeft" sid="mWristLeft" type="JOINT">
+                      <matrix sid="transform">
+  1  0  0  0
+  0  1  0  0.204846
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                      <node id="L_HAND" name="L_HAND" sid="L_HAND" type="JOINT">
+                        <matrix sid="transform">
+  1  0  0  0.01
+  0  1  0  0.05
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                      </node>
+                    </node>
+                  </node>
+                </node>
+              </node>
+              <node id="mCollarRight" name="mCollarRight" sid="mCollarRight" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.020927
+  0  1  0 -0.085
+  0  0  1  0.165396
+  0  0  0  1
+</matrix>
+                <node id="R_CLAVICLE" name="R_CLAVICLE" sid="R_CLAVICLE" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0.02
+  0  1  0  0
+  0  0  1  0.02
+  0  0  0  1
+</matrix>
+                </node>
+                <node id="mShoulderRight" name="mShoulderRight" sid="mShoulderRight" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0
+  0  1  0 -0.079418
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                  <node id="R_UPPER_ARM" name="R_UPPER_ARM" sid="R_UPPER_ARM" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0
+  0  1  0 -0.12
+  0  0  1  0.00999999
+  0  0  0  1
+</matrix>
+                  </node>
+                  <node id="mElbowRight" name="mElbowRight" sid="mElbowRight" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0
+  0  1  0 -0.248
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                    <node id="R_LOWER_ARM" name="R_LOWER_ARM" sid="R_LOWER_ARM" type="JOINT">
+                      <matrix sid="transform">
+  1  0  0  0
+  0  1  0 -0.1
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                    </node>
+                    <node id="mWristRight" name="mWristRight" sid="mWristRight" type="JOINT">
+                      <matrix sid="transform">
+  1  0  0  0
+  0  1  0 -0.205
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                      <node id="R_HAND" name="R_HAND" sid="R_HAND" type="JOINT">
+                        <matrix sid="transform">
+  1  0  0  0.01
+  0  1  0 -0.05
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                      </node>
+                    </node>
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+          <node id="mHipRight" name="mHipRight" sid="mHipRight" type="JOINT">
+            <matrix sid="transform">
+  1  0  0  0.03362
+  0  1  0 -0.128806
+  0  0  1 -0.041086
+  0  0  0  1
+</matrix>
+            <node id="R_UPPER_LEG" name="R_UPPER_LEG" sid="R_UPPER_LEG" type="JOINT">
+              <matrix sid="transform">
+  1  0  0 -0.02
+  0  1  0  0.05
+  0  0  1 -0.22
+  0  0  0  1
+</matrix>
+            </node>
+            <node id="mKneeRight" name="mKneeRight" sid="mKneeRight" type="JOINT">
+              <matrix sid="transform">
+  1  0  0 -0.000780001
+  0  1  0  0.048635
+  0  0  1 -0.490922
+  0  0  0  1
+</matrix>
+              <node id="R_LOWER_LEG" name="R_LOWER_LEG" sid="R_LOWER_LEG" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.02
+  0  1  0  0
+  0  0  1 -0.2
+  0  0  0  1
+</matrix>
+              </node>
+              <node id="mAnkleRight" name="mAnkleRight" sid="mAnkleRight" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.028869
+  0  1  0  0
+  0  0  1 -0.468494
+  0  0  0  1
+</matrix>
+                <node id="R_FOOT" name="R_FOOT" sid="R_FOOT" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0.077
+  0  1  0  0
+  0  0  1 -0.041
+  0  0  0  1
+</matrix>
+                </node>
+                <node id="mFootRight" name="mFootRight" sid="mFootRight" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0.111956
+  0  1  0  0
+  0  0  1 -0.060637
+  0  0  0  1
+</matrix>
+                  <node id="mToeRight" name="mToeRight" sid="mToeRight" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0.109
+  0  1  0  0
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+          <node id="mHipLeft" name="mHipLeft" sid="mHipLeft" type="JOINT">
+            <matrix sid="transform">
+  1  0  0  0.033757
+  0  1  0  0.126765
+  0  0  1 -0.040998
+  0  0  0  1
+</matrix>
+            <node id="L_UPPER_LEG" name="L_UPPER_LEG" sid="L_UPPER_LEG" type="JOINT">
+              <matrix sid="transform">
+  1  0  0 -0.02
+  0  1  0 -0.05
+  0  0  1 -0.22
+  0  0  0  1
+</matrix>
+            </node>
+            <node id="mKneeLeft" name="mKneeLeft" sid="mKneeLeft" type="JOINT">
+              <matrix sid="transform">
+  1  0  0 -0.000886999
+  0  1  0 -0.045568
+  0  0  1 -0.491053
+  0  0  0  1
+</matrix>
+              <node id="L_LOWER_LEG" name="L_LOWER_LEG" sid="L_LOWER_LEG" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.02
+  0  1  0  0
+  0  0  1 -0.2
+  0  0  0  1
+</matrix>
+              </node>
+              <node id="mAnkleLeft" name="mAnkleLeft" sid="mAnkleLeft" type="JOINT">
+                <matrix sid="transform">
+  1  0  0 -0.028887
+  0  1  0  0.001378
+  0  0  1 -0.468449
+  0  0  0  1
+</matrix>
+                <node id="L_FOOT" name="L_FOOT" sid="L_FOOT" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0.077
+  0  1  0  0
+  0  0  1 -0.041
+  0  0  0  1
+</matrix>
+                </node>
+                <node id="mFootLeft" name="mFootLeft" sid="mFootLeft" type="JOINT">
+                  <matrix sid="transform">
+  1  0  0  0.111956
+  0  1  0  0
+  0  0  1 -0.06062
+  0  0  0  1
+</matrix>
+                  <node id="mToeLeft" name="mToeLeft" sid="mToeLeft" type="JOINT">
+                    <matrix sid="transform">
+  1  0  0  0.109
+  0  1  0  0
+  0  0  1  0
+  0  0  0  1
+</matrix>
+                  </node>
+                </node>
+              </node>
+            </node>
+          </node>
+        </node>
+      </node>
+      <node id="CubeRiggedHidden" name="CubeRiggedHidden" type="NODE">
+        <translate sid="location">0 0 0</translate>
+        <rotate sid="rotationZ">0 0 1 0</rotate>
+        <rotate sid="rotationY">0 1 0 0</rotate>
+        <rotate sid="rotationX">1 0 0 0</rotate>
+        <scale sid="scale">1 1 1</scale>
+        <instance_controller url="#Avatar_001_CubeRiggedHidden-skin">
+          <skeleton>#mPelvis</skeleton>
+        </instance_controller>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene" />
+  </scene>
+</COLLADA>
