@@ -1,0 +1,14 @@
+yellow: 255,255,0 AKA 1.0,1.0,0.0
+cyan: 26,255,255 AKA 0.1,1.0, 1.0
+magenta: 204,0,204 AKA 0.8,0.0.0.8
+black 50,50,50 AKA 0.2,0.2,.02 (so we can see wireframe under it)
+red 153,0,0 AKA 0.6,0.0,0.0
+blue 128,128,255 AKA 0.5.0.5.1.0
+white 255,255,255 AKA 1.0,1.0,1.0
+green 64,255,64 AKA 0.25,1.0,0.25 or similar. This one could be 0,255,0 if the yellow is shaded. 
+    
+I'm using a color palette designed to be perceived by the approx. one out of twelve people who have some form of shift or blindness in their color perception. Starting with the basic RGB values, then brightening or shading each incrementally to allow distinct grayscale values.
+
+The order of the color bands matters to the color blind: green and any other color except for white is a problem for someone. OTOH, even the most severely affected can usually see at least a little yellow. No arrangement made me happy in all directions.   
+
+
