@@ -24,14 +24,18 @@ Various Authors and contributors to the Git Repo in alphabetical order are:
 * Ada Radius
 * Ai Austin
 * Chimera Firecaster
+* Duck Girl
 * Elenia Boucher
 * Fred Beckhusen
 * Fritigern Gothly
 * Joe Builder
+* Kayaker Magic
 * Lelani Carver
 * Leona Morro
 * Mike Dickson
 * Noxluna Nightfire
+* Sean Heavy
+* Serie Sumei
 * Shin Ingen
 * Sundance Haiku 
 
