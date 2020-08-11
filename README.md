@@ -17,7 +17,7 @@ OpenSimulator Community.
 
 ## Current Release
 
-Ruth2 v3 is the current release and is best obtained from the Ruth reposiotory (not this Ruth2 one) via the "archive-ruth-rc3" branch.
+Ruth2 v3 is the current release and is best obtained from the Ruth repository (not this Ruth2 one) via the "archive-ruth-rc3" branch.
 https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
 
 Ruth2 v4 is currently being prepared and contributions are scattered until the release is ready.
