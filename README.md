@@ -17,12 +17,16 @@ OpenSimulator Community.
 
 ## Current Release
 
-The Ruth2 current release files are in the Mesh directory.
+Ruth2 v3 is the current release and is best obtained from the Ruth reposiotory (not this Ruth2 one) via the "archive-ruth-rc3" branch.
+https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
+
+Ruth2 v4 is currently being prepared and contributions are scattered until the release is ready.
+
 
 ## Previous Release
 
-Previous releases of Ruth2 may be found in the old Ruth repo on Github and
-in a number of places both in Second Life and OSGrid as listed above.
+Previous releases of Ruth2 may be found in the archive-ruth-rc2 and archice-ruth-rc3 branches of
+the old Ruth repo on Github and in a number of places both in Second Life and OSGrid as listed above.
 
 ## Personal Directories
 
