@@ -4,7 +4,7 @@ Ruth2 v2 - Open Source Mesh Avatar for Virtual Worlds - a single layer mesh that
    - Release Box and Contents Preparation
 
 2020-08-11
-  - Meshes amended for all Fingernails and Toenails based on GitHub.com/RuthAndRoth/Ruth2/Contrib/Ada Radius/ (Draft 11)
+  - Meshes amended for all Fingernails based on GitHub.com/RuthAndRoth/Ruth2/Contrib/Ada Radius/ (Draft 11)
   
 2020-08-05
   - Meshes amended for Eyelashes and FingernailsLong based on GitHub.com/RuthAndRoth/Ruth2/Contrib/Ada Radius/ (Draft 10)
