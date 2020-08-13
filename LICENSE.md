@@ -15,23 +15,24 @@ The mesh body parts are AGPL. The AGPL license allows personal use of these mesh
 The button mesh included in this package were generated from prim builds by Serie Sumei.  They are licensed under Creative Commons CC-BY-3.0.
 
 Various Authors and contributors to the Git Repo in alphabetical order are:
-Ada Radius
-Ai Austin
-Chimera Firecaster
-Duck Girl
-Elenia Boucher
-Fred Beckhusen
-Fritigern Gothly
-Joe Builder
-Kayaker Magic
-Lelani Carver
-Leona Morro
-Mike Dickson
-Noxluna Nightfire
-Sean Heavy
-Serie Sumei
-Shin Ingen
-Sundance Haiku
+
+* Ada Radius
+* Ai Austin
+* Chimera Firecaster
+* Duck Girl
+* Elenia Boucher
+* Fred Beckhusen
+* Fritigern Gothly
+* Joe Builder
+* Kayaker Magic
+* Lelani Carver
+* Leona Morro
+* Mike Dickson
+* Noxluna Nightfire
+* Sean Heavy
+* Serie Sumei
+* Shin Ingen
+* Sundance Haiku
 
 Other contributions and testing by members of the OpenSimulator Community.
 
