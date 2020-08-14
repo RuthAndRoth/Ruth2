@@ -73,6 +73,24 @@ Ruth2 v4 - Mesh Uploads - This box is not normally needed.  It contains mesh for
 * Collada (.dae) Mesh for all Ruth2 v4 elements as originally uploaded and before part renaming, attaching a root prim or any texturing.
 
 ============================================================
+APPEARANCE SLIDERS
+
+See this Wiki page for information on Bento Mesh Bodies and Heads...
+http://wiki.secondlife.com/wiki/Project_Bento_Resources_and_Information
+
+The following avatar appearance slider controls are not supported due to technical constraints as described in this Wiki page...
+http://wiki.secondlife.com/wiki/Project_Bento_Skeleton_Guide
+
+* Head Shape
+* Eyelash Length
+* Eye Pop
+* Ear Angle
+* Attached Earlobe
+* Jowls
+* Chin Cleft
+* Upper Chin Cleft
+
+============================================================
 KNOWN ISSUES AND TROUBLESHOOTING
 
 Not all the appearance sliders will work on the mesh body and parts.
