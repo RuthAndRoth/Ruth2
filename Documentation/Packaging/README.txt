@@ -29,7 +29,7 @@ Ruth2 v4 - Mesh Avatar - This is the normal distribution box and is designed so 
 * Ruth2 v4 Fingernails (5 options)
 * Ruth2 v4 HUD
 * Initial skin, shape, basic eyes, basic hair, and basic hair tattoo
-* Dark gray underwear
+* Basic underwear
 
 Ruth2 v4 - Mesh Avatar - Business
 
@@ -44,7 +44,7 @@ A special version of Ruth2 v4 with smoother body shape. This is the normal Busin
 * Ruth2 v4 Fingernails (2 options: short and oval)
 * Ruth2 v4 HUD
 * Initial skin, shape, basic eyes, basic hair, and basic hair tattoo
-* Dark gray underwear
+* Basic underwear
 
 Ruth2 v4 - Extras - This is a box of useful extra elements and options.
 * !README-EXTRAS and !LICENSE
@@ -56,7 +56,7 @@ Ruth2 v4 - Extras - This is a box of useful extra elements and options.
 * Ruth2 v4 Headless (Body+Feet+Hands)
 * Ruth2 v4 Head+Vneck (section of body)
 * Ruth2 v4 Elf Ears
-* Dark grey underwear alternatives
+* Basic underwear alternatives
 * Shoe height adjustments for fixed medium and high feet
 * Alternative skins
 * Alternative shapes
