@@ -98,6 +98,27 @@ Reported in sim_version as 'Unix/Mono'.
     halcyon: []
     grid_name: []
 
+### OpenSimulator (3rd Rock Grid)
+
+    Platform Detection Tests
+    get_platform(): [opensim]
+    get_grid_name(): [3rdrockgrid]
+    haz_SL_bug(): llParseString2List("12999") returns 1,2,9,9,9
+      Second Life not detected
+
+    RegionName: [170Test]
+    simulator_hostname: [r067.3rdrockgrid.com]
+    estate_id: [230]
+    estate_name: [Butch]
+    region_product_name: [Mainland]
+    sim_version: [OpenSim 0.8.2.1-DWG16c-3RGPost_Fixes       (Win/.NET)]
+    sim_channel: [OpenSim]
+    region_start_time: [1590555362]
+    platform: []
+    script_engine: []
+    halcyon: []
+    grid_name: []
+
 ### OpenSimulator on Mono (Utopia Skye)
 
     Platform Detection Tests

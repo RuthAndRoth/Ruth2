@@ -1,6 +1,7 @@
 // test_platform_detection.lsl - Test functions to determine the grid/platform
 // v1 - Create tests
 // v2 - Add Aditi, Halcyon
+// v3 - Add 3rd Rock Grid
 
 integer VERBOSE = TRUE;
 
@@ -75,6 +76,9 @@ string get_grid_name() {
             string sim_version = llGetEnv("sim_version");
             if (llSubStringIndex(sim_version, "OSgrid") >= 0) {
                 grid_name = "OSgrid";
+            }
+            else if (llSubStringIndex(llGetEnv("simulator_hostname"), "3rdrockgrid.com") >= 0) {
+                grid_name = "3rdrockgrid";
             }
             if (grid_name == "") {
                 // Fall back to region name
