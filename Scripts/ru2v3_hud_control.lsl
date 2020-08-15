@@ -1,35 +1,35 @@
-// ro2_hud_control.lsl - Roth2 v3 HUD Controller
+// ru2_hud_control.lsl - Ruth2 v3 HUD Controller
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright 2017 Shin Ingen
-// Copyright 2020 Serie Sumei
+// Copyright 2019 Serie Sumei
 
-// v2.0 12Apr2020 <seriesumei@avimail.org> - Based on ru2_hud_control.lsl v3.2
-// v2.1 12Apr2020 <seriesumei@avimail.org> - New simpler alpha HUD
-// v2.2 13May2020 <seriesumei@avimail.org> - Rework skin panel
-// v2.3 21Jun2020 <seriesumei@avimail.org> - Updates to compile on OpenSimulator 0.8
+// v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Controb/Serie Sumei
+// v3.1 02Apr2020 <seriesumei@avimail.org> - New alpha HUD button order, fix prim mapping
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
-
-// Older OpenSimulator builds may not have the PRIM_ALPHA_MODE_*
-// constants defined.  If you get a compiler error that these are not defined
-// uncomment the following lines:
-// integer PRIM_ALPHA_MODE_NONE = 0;
-// integer PRIM_ALPHA_MODE_BLEND = 1;
-// integer PRIM_ALPHA_MODE_MASK = 2;
-// integer PRIM_ALPHA_MODE_EMISSIVE = 3;
 
 // The app ID is used on calculating the actual channel number used for communication
 // and must match in both the HUD and receivers.
 integer APP_ID = 20181024;
 
 vector alphaOnColor = <0.000, 0.000, 0.000>;
-vector buttonOnColor = <0.400, 0.700, 0.400>;
-vector faceOnColor = <0.800, 1.000, 0.800>;
+vector buttonOnColor = <0.000, 1.000, 0.000>;
 vector offColor = <1.000, 1.000, 1.000>;
+
+vector tglOnColor = <0.000, 1.000, 0.000>;
+vector tglOffColor = <1.000, 1.000, 1.000>;
 
 // Which API version do we implement?
 integer API_VERSION = 2;
+
+list fingernails = [
+    "fingernailsshort::fingernails",
+    "fingernailsmedium::fingernails",
+    "fingernailslong::fingernails",
+    "fingernailsoval::fingernails",
+    "fingernailspointed::fingernails"
+];
 
 list fingernail_colors = [
     <0.80, 0.78, 0.74>,
@@ -45,7 +45,7 @@ list fingernail_colors = [
 ];
 
 // Keep a mapping of link number to prim name
-list link_map = [];
+list prim_map = [];
 
 integer num_links = 0;
 
@@ -66,7 +66,7 @@ vector last_rot;
 integer VERBOSE = FALSE;
 
 // Memory limit
-integer MEM_LIMIT = 65000;
+integer MEM_LIMIT = 64000;
 
 // Ruth link messages
 integer LINK_RUTH_HUD = 40;
@@ -97,7 +97,7 @@ integer visible_fingernails = 0;
 
 // Enumerate the body region types as of Bakes on Mesh
 // We added our fingernail and toenail types at the end
-// The index of this list is the value of <body-region> in the element maps
+// The index of this list is the value of <body-region> in the element_map
 
 list regions = [
     "head",
@@ -115,37 +115,95 @@ list regions = [
     "toenails"
 ];
 
-// A JSON buffer to save the alpha values of elements:
-// key - element name
-// value - 16-bit alpha values, 1 bit per face: 0 == visible, 1 == invisible
-// Note this representation is opposite of the usage in the rest of this script where
-// alpha values are integer representations of the actual face alpha float
-string current_alpha = "{}";
+// <prim-name>, <face>, <button-group>, <body-region>
 
-// Alpha HUD button map
-// These are also used as section names in mapping alpha sections in the mesh
-list alpha_buttons = [
-    // alpha0
-    "",
-    "head",
-    "neck",
-    "arms",
-    "hands",
-    "fingernails",
-    "",
-    "hide",
-    // alpha1
-    "",
-    "",
-    "torso",
-    "legs",
-    "feet",
-    "toenails",
-    "",
-    "show"
+integer element_stride = 4;
+list element_map = [
+    "head", -1, "head", 0,
+    "chest", -1, "chest", 1,
+    "breastright", -1, "breasts", 1,
+    "breastleft", -1, "breasts", 1,
+    "breastright", 0, "nipples", 1,
+    "breastleft", 0, "nipples", 1,
+    "belly", -1, "belly", 1,
+
+    "backupper", -1, "backupper", 1,
+    "backlower", -1, "backlower", 1,
+
+    "armright", 0, "armsupper", 1,
+    "armright", 1, "armsupper", 1,
+    "armright", 2, "armsupper", 1,
+    "armright", 3, "armsupper", 1,
+    "armleft", 0, "armsupper", 1,
+    "armleft", 1, "armsupper", 1,
+    "armleft", 2, "armsupper", 1,
+    "armleft", 3, "armsupper", 1,
+    "armright", 4, "armslower", 1,
+    "armright", 5, "armslower", 1,
+    "armright", 6, "armslower", 1,
+    "armright", 7, "armslower", 1,
+    "armleft", 4, "armslower", 1,
+    "armleft", 5, "armslower", 1,
+    "armleft", 6, "armslower", 1,
+    "armleft", 7, "armslower", 1,
+
+    "armright", -1, "arms", 1,
+    "armleft", -1, "arms", 1,
+    "hands", -1, "hands", 1,
+    "fingernails", -1, "hands", 11,
+
+    "pelvisback", 7, "crotch", 2,
+    "pelvisfront", 5, "crotch", 2,
+    "pelvisfront", 6, "crotch", 2,
+    "pelvisfront", 7, "crotch", 2,
+    "pelvisback", -1, "pelvis", 2,
+    "pelvisfront", -1, "pelvis", 2,
+
+    "legright1", -1, "legsupper", 2,
+    "legright2", -1, "legsupper", 2,
+    "legright3", -1, "legsupper", 2,
+    "legleft1", -1, "legsupper", 2,
+    "legleft2", -1, "legsupper", 2,
+    "legleft3", -1, "legsupper", 2,
+
+    "legright4", -1, "knees", 2,
+    "legright5", -1, "knees", 2,
+    "legleft4", -1, "knees", 2,
+    "legleft5", -1, "knees", 2,
+
+    "legright6", -1, "legslower", 2,
+    "legright7", -1, "legslower", 2,
+    "legright8", -1, "legslower", 2,
+    "legleft6", -1, "legslower", 2,
+    "legleft7", -1, "legslower", 2,
+    "legleft8", -1, "legslower", 2,
+
+    "legright1", -1, "legsfull", 2,
+    "legright2", -1, "legsfull", 2,
+    "legright3", -1, "legsfull", 2,
+    "legright4", -1, "legsfull", 2,
+    "legright5", -1, "legsfull", 2,
+    "legright6", -1, "legsfull", 2,
+    "legright7", -1, "legsfull", 2,
+    "legright8", -1, "legsfull", 2,
+    "legleft1", -1, "legsfull", 2,
+    "legleft2", -1, "legsfull", 2,
+    "legleft3", -1, "legsfull", 2,
+    "legleft4", -1, "legsfull", 2,
+    "legleft5", -1, "legsfull", 2,
+    "legleft6", -1, "legsfull", 2,
+    "legleft7", -1, "legsfull", 2,
+    "legleft8", -1, "legsfull", 2,
+
+    "feet", -1, "feet", 2,
+    "feet", 0, "ankles", 2,
+    "feet", 1, "heels", 2,
+    "feet", 2, "bridges", 2,
+    "feet", 3, "toecleavages", 2,
+    "feet", 4, "soles", 2,
+    "feet", 5, "toes", 2,
+    "toenails", -1, "feet", 12
 ];
-
-
 // *****
 
 // ***
@@ -153,6 +211,12 @@ list alpha_buttons = [
 string gcPrevRtAnim = "";     //the previously selected animation on the right side
 string gcPrevLfAnim = "";     //the previously selected animation on the left side
 string gcWhichSide = "";      //Whether the currently selected animation is a right or left hand
+integer gnButtonNo = 0;       //The number of the button pressed by the user
+integer gnPrimNo;             //The prim which contains the button pressed
+integer gnPrimFace;           //The face of the prim containing the button pressed
+integer gnButtonStart;        //The starting number of a group of buttons
+vector gvONColor =  <0.224, 0.800, 0.800>;  //Teal color to indicate the button has been pressed
+vector gvOFFColor = <1.0, 1.0, 1.0>;  //white color to indicate the button has not been pressed
 
 integer hp_index = 0;
 integer do_hp = FALSE;
@@ -172,45 +236,12 @@ integer do_fp = FALSE;
 
 // ***
 // Skin / Bakes on Mesh
-integer current_skin = -1;
-integer current_eye = -1;
-integer alpha_mode;
-integer mask_cutoff = 128;
-
-// Map skin selections to button faces
-// Stride 2: <sk0+N>, <face>
-list skin_button_faces = [
-    // 0, 0,    unused
-    // 0, 2,    BoM
-    0, 4,
-    0, 6,
-    1, 0,
-    1, 2,
-    1, 4,
-    // 1, 6,    unused
-    // 2, 0,    unused
-    2, 2,
-    2, 4,
-    2, 6,
-    3, 0,
-    3, 2,
-    3, 4
-    // 3, 6,    unused
-];
-
-// Map eye selections to button faces
-// Stride 2: <eye0+N>, <face>
-list eye_button_faces = [
-    // 0, 0,    unused
-    // 0, 2,    BoM
-    0, 4,
-    0, 6,
-    1, 0,
-    1, 2,
-    1, 4
-    // 1, 6,    unused
-];
-
+integer SkinLink = 0;
+integer BoMEnabled = FALSE;
+integer BoMLink = 0;
+integer BoMTexLink = 0;
+integer BoMFace = 4;
+integer ShowBoMPreview = FALSE;
 // ***
 
 log(string msg) {
@@ -241,7 +272,7 @@ integer can_haz_script(string name) {
             return TRUE;
         }
     }
-    log("Script " + name + " not found");
+    llOwnerSay("Script " + name + " not found");
     return FALSE;
 }
 
@@ -304,61 +335,14 @@ adjust_pos() {
     }
 }
 
-
-// *****
-// get/set alpha values in JSON buffer
-
-// j - JSON value storage
-// name - link_name
-// face - integer face, -1 returns the unmasked 16 bit value
-// Internal JSON values are ones complement, ie a 1 bit means the face is not visible
-integer json_get_alpha(string j, string name, integer face) {
-    integer cur_val = (integer)llJsonGetValue(j, [name]);
-    if (face < 0) {
-        // All faces, return aggregate value masked to 16 bits
-        cur_val = ~cur_val & 0xffff;
-    } else {
-        cur_val = (cur_val & (1 << face)) == 0;
-    }
-    return cur_val;
-}
-
-// j - JSON value storage
-// name - link_name
-// face - integer face, -1 sets all 16 bits in the value
-// value - alpha boolean, 0 = invisible, 1 = visible
-// Internal JSON values are ones complement, ie a 1 bit means the face is not visible
-string json_set_alpha(string j, string name, integer face, integer value) {
-    value = !value;  // logical NOT for internal storage
-    integer cur_val = (integer)llJsonGetValue(j, [name]);
-    integer mask;
-    integer cmd;
-    if (face < 0) {
-        // All faces
-        mask = 0x0000;
-        // One's complement
-        cmd = -value;
-    } else {
-        mask = ~(1 << face);
-        cmd = (value << face);
-    }
-    // Mask final value to 16 bits
-    cur_val = ((cur_val & mask) | cmd) & 0xffff;
-    return llJsonSetValue(j, [name], (string)(cur_val));
-}
-// *****
-
-
 // Set the alpha val of all links matching name
 set_alpha(string name, integer face, float alpha) {
-    log("set_alpha(): name="+name+" face="+(string)face+" alpha="+(string)alpha);
-    send_csv(["ALPHA", name, face, alpha]);
-    current_alpha = json_set_alpha(current_alpha, name, face, (integer)alpha);
     integer link;
     for (; link < num_links; ++link) {
         // Set color for all matching link names
-        if (llList2String(link_map, link) == name) {
+        if (llList2String(prim_map, link) == name) {
             // Reset links that appear in the list of body parts
+            send_csv(["ALPHA", name, face, alpha]);
             if (alpha == 0) {
                 llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
             } else {
@@ -368,42 +352,59 @@ set_alpha(string name, integer face, float alpha) {
     }
 }
 
-// alpha = -1 toggles the current saved value
-set_alpha_section(string section_name, integer alpha) {
+set_alpha_group(list buttons, integer button_link, integer button_face) {
+    string button_name = llList2String(buttons, button_face);
+    list paramList = llGetLinkPrimitiveParams(button_link, [PRIM_NAME, PRIM_COLOR, button_face]);
+    vector face_color = llList2Vector(paramList, 1);
+
+    // Toggle the group button state
+    integer alphaVal;
+    log("set_alpha_group(): button: " + button_name + " link=" + (string)button_link + " face=" + (string)button_face);
+    if (face_color == offColor) {
+        alphaVal = 0;
+        llSetLinkPrimitiveParamsFast(button_link, [PRIM_COLOR, button_face, buttonOnColor, 1.0]);
+    } else {
+        alphaVal = 1;
+        llSetLinkPrimitiveParamsFast(button_link, [PRIM_COLOR, button_face, offColor, 1.0]);
+    }
+
+    // Set doll face state
     integer i;
-    integer len = llGetListLength(alpha_buttons);
+    list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
+    integer len = llGetListLength(groups);
     for (i = 0; i <= len; ++i) {
-        if (llList2String(alpha_buttons, i) == section_name) {
-            if (alpha < 0) {
-                // Toggle the current value
-                log("json: " + current_alpha);
-                alpha = !json_get_alpha(current_alpha, section_name, 0);
-                log("val: " + (string)alpha);
-            }
-            send_csv(["ALPHA", section_name, 0, alpha]);
-            current_alpha = json_set_alpha(current_alpha, section_name, 0, (integer)alpha);
+        if (llList2String(groups, i) == button_name) {
+            // process matching group entry
+            string prim_name = llList2String(element_map, i * element_stride);
+            integer doll_face = llList2Integer(element_map, (i * element_stride) + 1);
+            set_alpha(prim_name, doll_face, alphaVal);
         }
     }
 }
 
 reset_alpha(float alpha) {
     // Reset body and HUD doll
-    integer len = llGetListLength(alpha_buttons);
-    integer section;
-    for (section = 0; section < len; ++section) {
-        string section_name = llList2String(alpha_buttons, section);
-        send_csv(["ALPHA", section_name, 0, alpha]);
-        current_alpha = json_set_alpha(current_alpha, section_name, 0, (integer)alpha);
+    list seen = [];
+    list groups = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
+    integer len = llGetListLength(groups);
+    integer i;
+    for (i = 0; i <= len; ++i) {
+        string prim_name = llList2String(element_map, i * element_stride);
+        if (llListFindList(seen, [prim_name]) < 0) {
+            seen += [prim_name];
+            set_alpha(prim_name, -1, alpha);
+        }
     }
 
     // Reset HUD buttons
-    integer link;
-    integer j;
-    for (link = 0; link <= 3; ++link) {
-        for (j=0; j < 8; j+=2) {
-            set_outline_link_face_state("alpha", link, j, 1.0, (alpha < 0.01));
-        }
+    for(i = 0; i <= 7; ++i) {
+        set_alpha("buttonbar" + (string)i, -1, alpha);
     }
+}
+
+// Send to listening Omega-compatible relay scripts
+apply_texture(string button) {
+    llMessageLinked(LINK_THIS, 411, button + "|apply", "");
 }
 
 // Literal API for TEXTURE v2 command
@@ -430,58 +431,30 @@ set_ankle_color(integer link) {
     }
 }
 
-// Look up link/face in map
-integer lookup_button(list face_map, integer xlink, integer face) {
-    integer i;
-    for (i = 0; i < llGetListLength(face_map); i += 2) {
-        if (llList2Integer(face_map, i) == xlink &&
-            llList2Integer(face_map, i+1) == face) {
-                return i / 2;
-        }
-    }
-    return -1;
-}
-
-// Set state of an outline button given a link and face
-set_outline_link_face_state(string prefix, integer xlink, integer face, float alpha, integer enabled) {
-    integer link = llListFindList(link_map, [prefix + (string)xlink]);
-    if (link >= 0) {
-        if (enabled) {
-            llSetLinkPrimitiveParamsFast(link, [
-                PRIM_COLOR, face, faceOnColor, alpha,
-                PRIM_COLOR, face+1, buttonOnColor, alpha,
-                PRIM_TEXTURE, face+1, TEXTURE_BLANK, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
-            ]);
-        } else {
-            llSetLinkPrimitiveParamsFast(link, [
-                PRIM_COLOR, face, <1.0, 1.0, 1.0>, alpha,
-                PRIM_COLOR, face+1, offColor, alpha,
-                PRIM_TEXTURE, face+1, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+set_bom_color(integer link) {
+    if (BoMEnabled) {
+        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, BoMFace, <0.0, 1.0, 0.0>, 1.0]);
+        if (ShowBoMPreview) {
+            llSetLinkPrimitiveParamsFast(BoMTexLink, [
+                PRIM_COLOR, 0, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 0, IMG_USE_BAKED_HEAD, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 1, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 1, IMG_USE_BAKED_UPPER, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 2, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 2, IMG_USE_BAKED_LOWER, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 3, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 3, IMG_USE_BAKED_LEFTARM, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 4, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 4, IMG_USE_BAKED_LEFTLEG, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
+                PRIM_COLOR, 5, <1.0, 1.0, 1.0>, 1.0,
+                PRIM_TEXTURE, 5, IMG_USE_BAKED_EYES, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
             ]);
         }
-    }
-}
-
-// Sets the texture and outline of an outline button using a map of button
-// numbers to link/face
-set_outline_button_state(list face_map, string prefix, integer index, integer enabled) {
-    integer xlink = llList2Integer(face_map, (index * 2));
-    integer face = llList2Integer(face_map, (index * 2) + 1);
-    set_outline_link_face_state(prefix, xlink, face, 1.0, enabled);
-}
-
-// Sets the texture and outline of an outline button using a map of button
-// numbers to link/face
-set_outline_button_tex(list face_map, string prefix, integer index, string texture) {
-    integer xlink = llList2Integer(face_map, (index * 2));
-    integer face = llList2Integer(face_map, (index * 2) + 1);
-    integer link = llListFindList(link_map, [prefix + (string)xlink]);
-    if (link >= 0) {
-        llSetLinkPrimitiveParamsFast(link, [
-            PRIM_COLOR, face, <1.0, 1.0, 1.0>, 1.0,
-            PRIM_TEXTURE, face, texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
-            PRIM_COLOR, face+1, offColor, 1.0,
-            PRIM_TEXTURE, face+1, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+    } else {
+        llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, BoMFace, <1.0, 1.0, 1.0>, 1.0]);
+        llSetLinkPrimitiveParamsFast(BoMTexLink, [
+            PRIM_COLOR, 0, <1.0, 1.0, 1.0>, 0.0,
+            PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
         ]);
     }
 }
@@ -490,8 +463,6 @@ init() {
     // Initialize attach state
     last_attach = llGetAttached();
     log("state_entry() attached=" + (string)last_attach);
-
-    alpha_mode = PRIM_ALPHA_MODE_MASK;
 
     r2channel = keyapp2chan(APP_ID);
     llListen(r2channel+1, "", "", "");
@@ -504,9 +475,18 @@ init() {
     for (; i < num_links; ++i) {
         list p = llGetLinkPrimitiveParams(i, [PRIM_NAME]);
         string name = llList2String(p, 0);
-        link_map += [name];
+        prim_map += [name];
         if (name == "fp0") {
             AnkleLockLink = i;
+        }
+        if (name == "bom0") {
+            BoMLink = i;
+        }
+        if (name == "bom1") {
+            BoMTexLink = i;
+        }
+        if (name == "sk0") {
+            SkinLink = i;
         }
     }
 
@@ -534,7 +514,7 @@ default {
                 string command = llToUpper(llList2String(cmdargs, 0));
 
                 if (command == "STATUS") {
-                    log(
+                    llOwnerSay(
                         "STATUS: " +
                         "API v" + llList2String(cmdargs, 1) + ", " +
                         "Type " + llList2String(cmdargs, 2) + ", " +
@@ -604,140 +584,80 @@ default {
                 llRequestPermissions(llDetectedKey(0), PERMISSION_ATTACH);
             }
         }
-        else if (name == "alphadoll") {
-            // Handle the doll before the buttons
-            integer bx = (integer)(pos.x * 10);
-            integer by = (integer)(pos.y * 10);
-            if ((pos.x > 0.475 && pos.x < 0.525) && (pos.y > 0.775 && pos.y < 0.8)) {
-                // neck
-                set_alpha_section("neck", -1);
-            }
-            else if (bx == 4 || bx == 5) {
-                if (by == 8) {
-                    // head
-                    set_alpha_section("head", -1);
-                }
-                else if (by == 6 || by == 7) {
-                    // torso (except neck)
-                    set_alpha_section("torso", -1);
-                }
-                else if (by > 1 && by < 6) {
-                    // legs
-                    set_alpha_section("legs", -1);
-                }
-                else if (by == 1) {
-                    // feet
-                    set_alpha_section("feet", -1);
-                }
-            }
-            else if ((bx == 3 || bx == 6) && (by == 6 || by == 7)) {
-                // arms
-                set_alpha_section("arms", -1);
-            }
-            else if ((bx == 3 || bx == 6) && by == 5) {
-                // hands
-                set_alpha_section("hands", -1);
-            }
+        else if (name == "buttonbar1" || name == "buttonbar5") {
+            list buttonList = [
+                    "head",
+                    "chest",
+                    "breasts",
+                    "nipples",
+                    "belly",
+                    "backupper",
+                    "backlower",
+                    "arms"
+                    ];
+            set_alpha_group(buttonList, link, face);
         }
-        else if (llGetSubString(name, 0, 4) == "alpha") {
-            integer b = ((integer)llGetSubString(name, 5, -1));
-            if (b == 1 && face == 6) {
-                // Hide all
+        else if (name == "buttonbar2" || name == "buttonbar6") {
+            list buttonList = [
+                    "armsupper",
+                    "armslower",
+                    "hands",
+                    "fingernails",
+                    "crotch",
+                    "pelvis",
+                    "",
+                    "hideall"
+                    ];
+            if(face == 7) {
                 reset_alpha(0.0);
-            }
-            else if (b == 3 && face == 6) {
-                // Show all
-                reset_alpha(1.0);
-            }
-            else {
-                set_alpha_section(llList2String(alpha_buttons, (b * 4) + (face >> 1)), -1);
-
-                // Set button color
-                vector face_color = llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]), 1);
-                set_outline_link_face_state("alpha", b, face, 1.0, (face_color == offColor));
+            } else {
+                set_alpha_group(buttonList, link, face);
             }
         }
-        else if (llGetSubString(name, 0, 4) == "amode") {
-            // Alpha Mode
-            if (face == 2) {
-                // Alpha Masking
-                alpha_mode = PRIM_ALPHA_MODE_MASK;
-                set_outline_link_face_state("amode", 0, 2, 1.0, TRUE);
-                set_outline_link_face_state("amode", 0, 4, 1.0, FALSE);
+        else if (name == "buttonbar3" || name == "buttonbar7") {
+            list buttonList = [
+                    "legs",
+                    "legsupper",
+                    "knees",
+                    "legslower",
+                    "feet",
+                    "ankles",
+                    "bridges",
+                    "heels"
+                    ];
+            set_alpha_group(buttonList, link, face);
+        }
+        else if (name == "buttonbar4" || name == "buttonbar8") {
+            list buttonList = [
+                    "soles",
+                    "toecleavage",
+                    "toes",
+                    "toenails",
+                    "--",
+                    "--",
+                    "--",
+                    "showall"
+                    ];
+            if(face == 7) {
+                reset_alpha(1.0);
+            } else {
+                set_alpha_group(buttonList, link, face);
             }
-            else if (face == 4) {
-                // Alpha Blending
-                alpha_mode = PRIM_ALPHA_MODE_BLEND;
-                set_outline_link_face_state("amode", 0, 2, 1.0, FALSE);
-                set_outline_link_face_state("amode", 0, 4, 1.0, TRUE);
-            }
-            string cmd = llList2CSV(["ALPHAMODE", "all", -1, alpha_mode, mask_cutoff]);
-            log(cmd);
-            send(cmd);
+        }
+        else if (name == "backboard") {
+            // ignore click on backboard
+        }
+        else if (name == "bom0") {
+            // Bakes on Mesh
+            BoMEnabled = TRUE;
+            set_bom_color(BoMLink);
+            apply_texture("bom");
         }
         else if (llGetSubString(name, 0, 1) == "sk") {
             // Skin appliers
-            integer b = (integer)llGetSubString(name, 2, -1);
-            // BoM button is hard coded to xlink 0, face 2
-            if (b == 0 && face == 2) {
-                // Skin Bakes on Mesh
-                if (current_skin >= 0) {
-                    set_outline_button_state(skin_button_faces, "sk", current_skin, FALSE);
-                }
-                current_skin = -1;
-                set_outline_link_face_state("sk", b, face, 1.0, TRUE);
-                llMessageLinked(LINK_THIS, LINK_RUTH_APP, llList2CSV(["skin", "bom"]), "");
-            } else {
-                integer index = lookup_button(skin_button_faces, b, face);
-                if (index >= 0) {
-                    if (current_skin >= 0) {
-                        set_outline_button_state(skin_button_faces, "sk", current_skin, FALSE);
-                    } else {
-                        // BoM button is hard coded to xlink 0, face 2
-                        set_outline_link_face_state("sk", 0, 2, 1.0, FALSE);
-                    }
-                    current_skin = index;
-                    set_outline_button_state(skin_button_faces, "sk", index, TRUE);
-                    llMessageLinked(
-                        LINK_THIS,
-                        LINK_RUTH_APP,
-                        llList2CSV(["skin", (string)(index+1)]),
-                        ""
-                    );
-                }
-            }
-        }
-        else if (llGetSubString(name, 0, 2) == "eye") {
-            // Eye appliers
-            integer b = (integer)llGetSubString(name, 3, -1);
-            // BoM button is hard coded to xlink 0, face 2
-            if (b == 0 && face == 2) {
-                // Eyes Bakes on Mesh
-                if (current_eye >= 0) {
-                    set_outline_button_state(eye_button_faces, "eye", current_eye, FALSE);
-                }
-                current_eye = -1;
-                set_outline_link_face_state("eye", b, face, 1.0, TRUE);
-                llMessageLinked(LINK_THIS, LINK_RUTH_APP, llList2CSV(["eyes", "bom"]), "");
-           } else {
-                integer index = lookup_button(eye_button_faces, b, face);
-                if (index >= 0) {
-                    if (current_eye >= 0) {
-                        set_outline_button_state(eye_button_faces, "eye", current_eye, FALSE);
-                    } else {
-                        // BoM button is hard coded to xlink 0, face 2
-                        set_outline_link_face_state("eye", 0, 2, 1.0, FALSE);
-                    }
-                    current_eye = index;
-                    set_outline_button_state(eye_button_faces, "eye", index, TRUE);
-                    llMessageLinked(
-                        LINK_THIS,
-                        LINK_RUTH_APP,
-                        llList2CSV(["eyes", (string)(index+1)]),
-                        ""
-                    );
-                }
-            }
+            BoMEnabled = FALSE;
+            set_bom_color(BoMLink);
+            apply_texture((string)face);
         }
         else if (llGetSubString(name, 0, 2) == "fnc") {
             // Fingernail color
@@ -792,30 +712,16 @@ default {
         else if (llGetSubString(name, 0, 1) == "hp") {
             // Hand poses
             integer b = ((integer)llGetSubString(name, 2, -1));
-            // There are 4 buttons per link but 2 faces per button
-            // All of the left buttons (hp0-hp2) come first then all
-            // of the right buttons (hp3-hp5) but the animations
-            // are L,R,L,R,... order.
-
-            // TODO: add stop button??
-            // Stop
-            //hp_index = 0;
-
-            // First get the delta for the R side buttons to overlap the left
-            integer delta = ((integer)(b / 3) * 3);
-
-            // Calculate the usual 8 face stride and add one for the right side
-            // and another one because the list is 1-based
-            hp_index = ((b - delta) * 8) + face + ((integer)(b / 3)) + 1;
-
-            integer i;
-            for (i=0; i<8; i+=2) {
-                set_outline_link_face_state("hp", 0+delta, i, 0.0, FALSE);
-                set_outline_link_face_state("hp", 1+delta, i, 0.0, FALSE);
-                set_outline_link_face_state("hp", 2+delta, i, 0.0, FALSE);
+            // 4 buttons per link
+            if (b == 0) {
+                // Stop
+                hp_index = 0;
+            } else {
+                list facemap = [2, 4, 6, 8, 1, 3, 5, 7];
+                // Calculate which column
+                hp_index = ((b - 1) * 8) + llList2Integer(facemap, face);
             }
-            set_outline_link_face_state("hp", b, face, 0.4, TRUE);
-
+            log("index: " + (string)hp_index);
             do_hp = TRUE;
             llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
         }
@@ -836,8 +742,24 @@ default {
                 llRequestPermissions(llDetectedKey(0), PERMISSION_TRIGGER_ANIMATION);
             }
         }
-        else {
+        else if (name == "optionbox") {
             // Do nothing here
+        }
+        else {
+            // Handle alphas for touching the doll (that sounds baaaaaad...)
+            list paramList = llGetLinkPrimitiveParams(link, [PRIM_NAME, PRIM_COLOR, face]);
+            string primName = llList2String(paramList, 0);
+            vector primColor = llList2Vector(paramList, 1);
+            integer alphaVal;
+
+            if (primColor == offColor) {
+                alphaVal=0;
+                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, alphaOnColor, 1.0]);
+            } else {
+                alphaVal=1;
+                llSetLinkPrimitiveParamsFast(link, [PRIM_COLOR, face, offColor, 1.0]);
+            }
+            send_csv(["ALPHA", primName, face, alphaVal]);
         }
     }
 
@@ -850,42 +772,15 @@ default {
             if (command == "STATUS") {
                 log("Loaded notecard: " + llList2String(cmdargs, 1));
             }
-            else if (command == "SKIN_THUMBNAILS") {
+            else if (command == "THUMBNAILS") {
                 log("Loaded notecard: " + llList2String(cmdargs, 1));
-                integer len = llGetListLength(skin_button_faces);
+                integer len = llGetListLength(cmdargs);
                 integer i;
-                // Walk returned thumbnail list
-                for (i = 0; i < len; ++i) {
-                    string tex = llList2String(cmdargs, i + 2);
-                    if (tex == "") {
-                        tex = TEXTURE_TRANSPARENT;
-                    }
-                    set_outline_button_tex(skin_button_faces, "sk", i, tex);
-                }
-                if (current_skin == -1) {
-                    // Skin Bakes on Mesh
-                    set_outline_link_face_state("sk", 0, 2, 1.0, TRUE);
-                } else {
-                    set_outline_button_state(skin_button_faces, "sk", current_skin, TRUE);
-                }
-            }
-            else if (command == "EYE_THUMBNAILS") {
-                log("Loaded notecard: " + llList2String(cmdargs, 1));
-                integer len = llGetListLength(eye_button_faces);
-                integer i;
-                // Walk returned thumbnail list
-                for (i = 0; i < len; ++i) {
-                    string tex = llList2String(cmdargs, i + 2);
-                    if (tex == "") {
-                        tex = TEXTURE_TRANSPARENT;
-                    }
-                    set_outline_button_tex(eye_button_faces, "eye", i, tex);
-                }
-                if (current_eye == -1) {
-                    // Eyes Bakes on Mesh
-                    set_outline_link_face_state("eye", 0, 2, 1.0, TRUE);
-                } else {
-                    set_outline_button_state(eye_button_faces, "eye", current_eye, TRUE);
+                for (i = 2; i <= len; ++i) {
+                    llSetLinkPrimitiveParamsFast(SkinLink, [
+                        PRIM_COLOR, i-2, <1.0, 1.0, 1.0>, 1.0,
+                        PRIM_TEXTURE, i-2, llList2String(cmdargs, i), <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                    ]);
                 }
             }
         }
@@ -906,7 +801,7 @@ default {
                 }
                 // removing all anims can create problems - this sorts things out
                 llStartAnimation("stand");
-//                llOwnerSay("All finished: " + (string)len + llGetSubString(" animations",0,-1 - (len == 1))+" stopped.\n");
+                llOwnerSay("All finished: " + (string)len + llGetSubString(" animations",0,-1 - (len == 1))+" stopped.\n");
                 do_hp = FALSE;
             }
             else if (do_hp && hp_index > 0) {
@@ -924,6 +819,8 @@ default {
                         //When the Animation number matches the button number
                         if (anim != "") {
                             log("hp anim: " + anim);
+//                            ColorButton();
+                            //it also returns a value for gcWhichSide
 
                             if ((hp_index % 2) == 1) {
                                 log(" left");
@@ -941,6 +838,7 @@ default {
                                 gcPrevRtAnim = anim;
                             }
                             llStartAnimation(anim);
+                            //llOwnerSay("We started: "+anim+"  gcPrevLfAnim is: "+gcPrevLfAnim+"  " + "gcPrevRtAnim is: "+gcPrevRtAnim);
                             lFlag = TRUE; //We found the animation
                         }
                     }
@@ -986,6 +884,7 @@ default {
                             }
                             PrevFootAnim = anim;
                             llStartAnimation(anim);
+//                            llOwnerSay("We started: " + anim + "  PrevFootAnim is: " + PrevFootAnim);
                             nCounter = nTotCount;   // Implicit break
                         }
                     }
