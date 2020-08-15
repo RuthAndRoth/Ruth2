@@ -3,6 +3,7 @@
 // Copyright 2020 Serie Sumei
 
 // v2.0 - 09May2020 <seriesumei@avimail.org> - New applier script
+// v2.1 - 21Jun2020 <seriesumei@avimail.org> - Rework skin data to not use JSON functions
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
@@ -38,14 +39,18 @@ key notecard_qid;
 integer line;
 integer reading_notecard = FALSE;
 string current_section;
-string current_buffer;
+list current_buffer;
 
 // Skin textures
+// skin_config stores 5 sub-elements: section, thumbnail, head, upper, lower
+integer skin_stride = 5;
 list skin_config;
 list skin_map;
 list skin_thumbnails;
 
-// Skin textures
+// Eye textures
+// eye_config stores 3 sub-elements: section, thumbnail, eyes
+integer eye_stride = 3;
 list eye_config;
 list eye_map;
 list eye_thumbnails;
@@ -89,13 +94,6 @@ integer keyapp2chan(integer id) {
     return 0x80000000 | ((integer)("0x" + (string)llGetOwner()) ^ id);
 }
 
-send_region(string region) {
-    string skin_tex = llJsonGetValue(current_buffer, [region]);
-    if (skin_tex != "") {
-        send("TEXTURE," + region + "," + skin_tex);
-    }
-}
-
 // Send the list of skin_thumbnails back to the HUD for display
 send_skin_thumbnails() {
     llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV(
@@ -118,24 +116,30 @@ send_eye_thumbnails() {
     ), "");
 }
 
+// This is the v1 TEXTURE API
+send_texture(string region, string tex) {
+    if (region != "" && tex != "") {
+        send("TEXTURE," + region + "," + tex);
+    }
+}
+
 apply_skin_texture(string button) {
     log("r2_applier: button=" + button);
 
     if (button == "bom") {
         // Note: if you get a compiler error that these are undefined
         // uncomment the lines near the top of this script
-        send("TEXTURE,upper," + (string)IMG_USE_BAKED_UPPER);
-        send("TEXTURE,lower," + (string)IMG_USE_BAKED_LOWER);
-        send("TEXTURE,head," + (string)IMG_USE_BAKED_HEAD);
+        send_texture("head", IMG_USE_BAKED_HEAD);
+        send_texture("upper", IMG_USE_BAKED_UPPER);
+        send_texture("lower", IMG_USE_BAKED_LOWER);
         return;
     }
 
     integer i = llListFindList(skin_map, [button]);
     if (i >= 0) {
-        current_buffer = llList2String(skin_config, i);
-        send_region("head");
-        send_region("upper");
-        send_region("lower");
+        send_texture("head", llList2String(skin_config, (i * skin_stride) + 2));
+        send_texture("upper", llList2String(skin_config, (i * skin_stride) + 3));
+        send_texture("lower", llList2String(skin_config, (i * skin_stride) + 4));
     }
 }
 
@@ -143,18 +147,16 @@ apply_eye_texture(string button) {
     log("r2_applier: button=" + button);
 
     if (button == "bom") {
-        send("TEXTURE,lefteye," + (string)IMG_USE_BAKED_EYES);
-        send("TEXTURE,righteye," + (string)IMG_USE_BAKED_EYES);
+        send_texture("lefteye", IMG_USE_BAKED_EYES);
+        send_texture("righteye", IMG_USE_BAKED_EYES);
         return;
     }
 
     integer i = llListFindList(eye_map, [button]);
     if (i >= 0) {
-        current_buffer = llList2String(eye_config, i);
-        string eye_tex = llJsonGetValue(current_buffer, ["eyes"]);
-        send("TEXTURE,lefteye," + (string)eye_tex);
-        send("TEXTURE,righteye," + (string)eye_tex);
-//        send_region("eyes");
+        string eye_tex = llList2String(eye_config, (i * eye_stride) + 2);
+        send_texture("lefteye", eye_tex);
+        send_texture("righteye", eye_tex);
     }
 }
 
@@ -192,7 +194,8 @@ load_notecard(string name) {
     log("r2_applier: Reading notecard: " + notecard_name);
     if (can_haz_notecard(notecard_name)) {
         line = 0;
-        current_buffer = "";
+        // Need to pre-load current_buffer, must be at least the longest stride
+        current_buffer = ["", "", "", "", ""];
         reading_notecard = TRUE;
         skin_config = [];
         skin_map = [];
@@ -208,14 +211,16 @@ save_section() {
     // Save what we have
     log(" " + current_section + " " + (string)current_buffer);
     string value;
-    value = llJsonGetValue(current_buffer, ["thumbnail"]);
+
+    // Get thumbnail
+    value = llList2String(current_buffer, 1);
+
     if (llGetSubString(current_section, 0, 3) == "skin") {
         skin_config += current_buffer;
         skin_map += llGetSubString(current_section, 4, -1);
-        if (value != "" && value != JSON_INVALID) {
+        if (value != "") {
             // Move the thumbnail UUID to that list
             skin_thumbnails += value;
-            current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], JSON_DELETE);
         } else {
             skin_thumbnails += "";
         }
@@ -223,17 +228,17 @@ save_section() {
     else if (llGetSubString(current_section, 0, 3) == "eyes") {
         eye_config += current_buffer;
         eye_map += llGetSubString(current_section, 4, -1);
-        if (value != "" && value != JSON_INVALID) {
+        if (value != "") {
             // Move the thumbnail UUID to that list
             eye_thumbnails += value;
-            current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], JSON_DELETE);
         } else {
             eye_thumbnails += "";
         }
     }
 
     // Clean up for next line
-    current_buffer = "";
+    // Need to pre-load current_buffer, must be at least the longest stride
+    current_buffer = ["", "", "", "", ""];
     current_section = "";
 }
 
@@ -254,6 +259,7 @@ read_config(string data) {
             if (end != 0) {
                 // Well-formed section header
                 current_section = llGetSubString(data, 1, end-1);
+                current_buffer = llListReplaceList(current_buffer, [current_section], 0, 0);
                 log("Reading section " + current_section);
             }
         } else {
@@ -267,23 +273,23 @@ read_config(string data) {
 
                 if (attr == "head" || attr == "omegaHead") {
                     // Save head
-                    current_buffer = llJsonSetValue(current_buffer, ["head"], value);
+                    current_buffer = llListReplaceList(current_buffer, [value], 2, 2);
                 }
                 else if (attr == "upper" || attr == "lolasSkin") {
                     // Save upper body
-                    current_buffer = llJsonSetValue(current_buffer, ["upper"], value);
+                    current_buffer = llListReplaceList(current_buffer, [value], 3, 3);
                 }
                 else if (attr == "lower" || attr == "skin") {
                     // Save upper body
-                    current_buffer = llJsonSetValue(current_buffer, ["lower"], value);
+                    current_buffer = llListReplaceList(current_buffer, [value], 4, 4);
                 }
                 else if (attr == "thumbnail") {
                     // Save upper body
-                    current_buffer = llJsonSetValue(current_buffer, ["thumbnail"], value);
+                    current_buffer = llListReplaceList(current_buffer, [value], 1, 1);
                 }
                 else if (attr == "eyes") {
                     // Save eyes
-                    current_buffer = llJsonSetValue(current_buffer, ["eyes"], value);
+                    current_buffer = llListReplaceList(current_buffer, [value], 2, 2);
                 }
                 else {
 //                    llOwnerSay("Unknown configuration value: " + name + " on line " + (string)line);

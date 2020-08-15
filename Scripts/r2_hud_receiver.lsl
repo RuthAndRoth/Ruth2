@@ -8,6 +8,7 @@
 // v3.2 01May2020 <seriesumei@avimail.org> - Use notecard element map for skins, alpha
 // v3.3 09May2020 <seriesumei@avimail.org> - Re-enable default hand animation
 // v3.4 20May2020 <seriesumei@avimail.org> - Only listen when attached by default
+// v3.5 19Jun2020 <seriesumei@avimail.org> - Changes for OpenSim 0.8 compatibility
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -395,7 +396,7 @@ late_init() {
     // section is third in stride
     section_map = llList2ListStrided(llDeleteSubList(element_map, 0, 1), 0, -1, element_stride);
 
-    has_hands = (~llListFindList(section_map, ["HANDS"]) &&
+    has_hands = (llListFindList(section_map, ["HANDS"]) >= 0 &&
         llGetInventoryType(hand_animation) == INVENTORY_ANIMATION);
     if (has_hands) {
         log("Using hand animation " + hand_animation);
@@ -475,7 +476,8 @@ default {
                     do_alphamode(cmdargs);
                 }
                 else if (command == "ELEMENTS") {
-                    send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
+                    send_csv(["ELEMENTS", ""]);
+//                    send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
                 }
                 else if (command == "RESETANIM") {
                     llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
@@ -507,7 +509,8 @@ default {
                     do_alphamode(cmdargs);
                 }
                 else if (command == "ELEMENTS") {
-                    send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
+                    send_csv(["ELEMENTS", ""]);
+//                    send_csv(["ELEMENTS", llList2Json(JSON_ARRAY, element_map)]);
                 }
                 else if (command == "RESETANIM") {
                     llRequestPermissions(llGetOwner(), PERMISSION_TRIGGER_ANIMATION);
