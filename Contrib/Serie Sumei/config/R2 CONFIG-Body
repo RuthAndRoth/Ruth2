@@ -1,0 +1,9 @@
+# Ruth2 v4 body Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+body, 0, neck, 1, 1
+body, 1, pelvis, 2, 1
+body, 2, arms, 1, 1
+body, 3, legs, 2, 1
+body, 4, torso, 1, 2

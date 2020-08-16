@@ -1,0 +1,5 @@
+# Ruth2 v4 feet Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+feet, -1, feet, 2, 6

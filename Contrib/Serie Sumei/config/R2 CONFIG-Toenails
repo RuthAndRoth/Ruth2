@@ -1,0 +1,7 @@
+# Ruth2 v4 toenails Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+toenails, 0, toenailtop, 12, 6
+toenails, 1, toenailunder, 12, 6
+toenails, 2, toenailtip, 12, 6

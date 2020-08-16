@@ -1,0 +1,7 @@
+# Ruth2 v4 vneck Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+head, 0, head, 0, 1
+head, 1, neck, 1, 1
+head, 2, torso, 1, 1

@@ -1,0 +1,6 @@
+# Ruth2 v4 eyes Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+lefteye, -1, eyes, 3, 6
+righteye, -1, eyes, 3, 6

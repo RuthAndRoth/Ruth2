@@ -1,0 +1,5 @@
+# Ruth2 v4 head Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+head, 0, head, 0, 1

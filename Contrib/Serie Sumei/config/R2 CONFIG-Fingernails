@@ -1,0 +1,7 @@
+# Ruth2 v4 fingernails Configuration
+
+# <link-name>, <face>, <section>, <body-region>, <group>
+[Elements]
+fingernails, 0, fingernailtop, 11, 6
+fingernails, 1, fingernailunder, 11, 6
+fingernails, 2, fingernailtip, 11, 6
