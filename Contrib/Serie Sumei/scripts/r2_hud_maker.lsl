@@ -5,6 +5,7 @@
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Control/Serie Sumei
 // v3.1 05May2020 <seriesumei@avimail.org> - Merge Ruth2 and Roth2 alpha HUD creation
 // v3.2 07Jun2020 <seriesumei@avimail.org> - Update Ruth alpha HUD
+// v3.3 15Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh (for Ruth) or a new alpha HUD (for Roth) and adds panes
@@ -32,6 +33,7 @@
 
 // Which HUD to build?
 integer ROTH = FALSE;
+integer RUTH_V3 = FALSE;
 
 vector build_pos;
 integer link_me = FALSE;
@@ -63,7 +65,7 @@ list alpha_button_pos_ROTH = [
     <-0.2085, 0.6225, -0.12>,
     <-0.2085, 0.7475, -0.12>
 ];
-list alpha_button_pos_RUTH = [
+list alpha_button_pos_RUTH_V3 = [
     <-0.0, 0.585, 0.13>,
     <-0.0, 0.705, 0.13>,
     <-0.0, 0.825, 0.13>,
@@ -126,14 +128,18 @@ string GetGridName() {
 // fingernails_shape_texture: ruth 2.0 hud fingernails shape.png
 
 configure() {
-    if (ROTH) {
+    if (!RUTH_V3) {
         num_alpha_buttons = 3;
         alpha_button_pos = alpha_button_pos_ROTH;
         alpha_button_size = <0.01, 0.125, 0.080>;
-        alpha_button_hoffset = [0.125, 0.375];
+        if (ROTH) {
+            alpha_button_hoffset = [0.125, 0.375];
+        } else {
+            alpha_button_hoffset = [-0.375, -0.125];
+        }
     } else {
         num_alpha_buttons = 7;
-        alpha_button_pos = alpha_button_pos_RUTH;
+        alpha_button_pos = alpha_button_pos_RUTH_V3;
         alpha_button_size = <0.01, 0.120, 0.080>;
         alpha_button_hoffset = [-0.375, -0.125, 0.125, 0.375];
     }
@@ -142,11 +148,18 @@ configure() {
         // The textures listed are full-perm uploaded by seriesumei Resident
         hud_texture = "7fc1e90b-b940-6e9f-aed9-85888a0a1eb3";
         skin_texture = "206804f6-908a-8efb-00de-fe00b2604906";
-        alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
         if (ROTH) {
+            alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
             alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
             header_texture = "c54a2e5d-398e-2c1d-77ab-5353a20cbc23";
             options_texture = "43ec4359-6750-8c8a-4098-c8f79243eb25";
+        }
+        else if (!RUTH_V3) {
+            alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
+            alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
+            header_texture = "b2c45e77-282f-35b3-a148-c937e4076737";
+            options_texture = "cba58fc8-d4fd-82b5-1b11-ac9d877056c3";
+            fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
         } else {
             alpha_button_texture = "b8028bca-fa71-ccf5-114d-e22fba30bd89";
             header_texture = "b2c45e77-282f-35b3-a148-c937e4076737";
@@ -164,11 +177,18 @@ configure() {
             // The textures listed are full-perm uploaded by serie sumei to OSGrid
             hud_texture = "2eee6e1a-66c5-4209-92b4-171820d5cfa5";
             skin_texture = "64184dac-b33b-4a1b-b200-7d09d8928b64";
-            alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
             if (ROTH) {
+                alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
                 alpha_button_texture = "4e97068e-7570-47c2-af2f-e7965c5d5078";
                 header_texture = "0bd02931-21e8-4b81-90d1-aca4349c0679";
                 options_texture = "e89ff0c8-03a4-410d-bf0a-1352610cb701";
+            }
+            else if (!RUTH_V3) {
+                alpha_doll_texture = "45292011-feb6-4d0b-b4b0-5d1464943fdd";
+                alpha_button_texture = "475f423a-4975-455e-9f46-4b0394dbc43f";
+                header_texture = "f299c09d-284a-4b0e-931e-52a776a654b0";
+                options_texture = "d05082f4-86d7-4816-97f8-6db0f2ace14b";
+                fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
             } else {
                 alpha_button_texture = "290f0f22-594c-480b-8cb8-e542621b5c8e";
                 header_texture = "f299c09d-284a-4b0e-931e-52a776a654b0";
@@ -299,7 +319,7 @@ default {
 
             log("Rezzing alpha HUD");
             link_me = TRUE;
-            if (ROTH) {
+            if (!RUTH_V3) {
                 rez_object("Object", <0.0, 0.6894, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
             } else {
                 rez_object("box_inside", <0.0, 0.765, 0.0>, <PI_BY_TWO, 0.0, 0.0>);
@@ -307,7 +327,7 @@ default {
         }
         else if (counter == 3) {
             log("Configuring alpha HUD");
-            if (ROTH) {
+            if (!RUTH_V3) {
                 llSetLinkPrimitiveParamsFast(2, [
                     PRIM_NAME, "alphabox",
                     PRIM_TEXTURE, ALL_SIDES, hud_texture, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
@@ -336,7 +356,7 @@ default {
         }
         else if (counter == 4) {
             log("Configuring alpha rotatebar");
-            if (ROTH) {
+            if (!RUTH_V3) {
                 // Rosh skips this step
             } else {
                 llSetLinkPrimitiveParamsFast(2, [
@@ -353,7 +373,7 @@ default {
         }
         else if (counter == 5) {
             log("Configuring alpha doll");
-            if (ROTH) {
+            if (!RUTH_V3) {
                 llSetLinkPrimitiveParamsFast(2, [
                     PRIM_NAME, "alphadoll",
                     PRIM_TEXTURE, ALL_SIDES, TEXTURE_TRANSPARENT, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0,
@@ -573,6 +593,10 @@ default {
         }
         else if (counter == 27) {
             configure_color_buttons("fnc0");
+            // Make first button BoM
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_TEXTURE, 0, skin_texture, <0.087, 0.087, 0.00>, <-0.375, -0.437, 0.0>, 0.0
+            ]);
 
             log("Rezzing fingernail color buttons");
             link_me = TRUE;
@@ -587,6 +611,10 @@ default {
         }
         else if (counter == 29) {
             configure_color_buttons("tnc0");
+            // Make first button BoM
+            llSetLinkPrimitiveParamsFast(2, [
+                PRIM_TEXTURE, 0, skin_texture, <0.087, 0.087, 0.00>, <-0.375, -0.437, 0.0>, 0.0
+            ]);
 
             log("Rezzing toenail color buttons");
             link_me = TRUE;
