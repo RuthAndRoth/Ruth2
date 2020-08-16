@@ -9,7 +9,7 @@ in the HUD scripts.
   control scripts.
 
 * test_platform_detection.lsl - Tests and provides a debugging framework
-  for platfrm detection in LSL and OSSL.
+  for platform detection in LSL and OSSL.
 
 
 # Scripting Platforms
