@@ -4,6 +4,7 @@
 
 // v2.0 - 09May2020 <seriesumei@avimail.org> - New applier script
 // v2.1 - 21Jun2020 <seriesumei@avimail.org> - Rework skin data to not use JSON functions
+// v2.2 - 16Aug2020 <seriesumei@avimail.org> - Add nail colors to config notecard
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
@@ -14,6 +15,9 @@
 // 42: APPID,<appid> * - Set the app ID used in computing the channel
 // 42: NOTECARD,<notecard> - Set the notecard name to load
 // 42: STATUS - Return the applier status: notecard,skin_map
+// 42: SKIN - Apply skin texture
+// 42: EYES - Apply eye texture
+// 42: NAILS - Return a list of nail colors
 // 42: THuMBNAILS - Return a list of thumbnail UUIDs
 
 // It also responds to some link mesages with status information:
@@ -58,6 +62,11 @@ list eye_thumbnails;
 integer LINK_OMEGA = 411;
 integer LINK_RUTH_HUD = 40;
 integer LINK_RUTH_APP = 42;
+
+// Nail colors
+// Color 0 is used for BoM
+vector DEFAULT_BOM_COLOR = <1.0, 1.0, 1.0>;
+list nail_colors = [];
 
 // Memory limit
 integer MEM_LIMIT = 64000;
@@ -113,6 +122,17 @@ send_eye_thumbnails() {
             notecard_name
         ] +
         eye_thumbnails
+    ), "");
+}
+
+// Send the list of nail_colors back to the HUD for display
+send_nail_colors() {
+    llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV(
+        [
+            "NAILS",
+            notecard_name
+        ] +
+        nail_colors
     ), "");
 }
 
@@ -203,6 +223,7 @@ load_notecard(string name) {
         eye_config = [];
         eye_map = [];
         eye_thumbnails = [];
+        nail_colors = [DEFAULT_BOM_COLOR];
         notecard_qid = llGetNotecardLine(notecard_name, line);
     }
 }
@@ -234,6 +255,10 @@ save_section() {
         } else {
             eye_thumbnails += "";
         }
+    }
+    else if (llGetSubString(current_section, 0, 4) == "nails") {
+        // The section name is the first item in the list, pop it off
+        nail_colors += llDeleteSubList(current_buffer, 0, 0);
     }
 
     // Clean up for next line
@@ -291,6 +316,11 @@ read_config(string data) {
                     // Save eyes
                     current_buffer = llListReplaceList(current_buffer, [value], 2, 2);
                 }
+                else if (current_section == "nails") {
+                    // Save nail colors
+                    integer slot = (integer)attr;
+                    current_buffer = llListReplaceList(current_buffer, [value], slot, slot);
+                }
                 else {
 //                    llOwnerSay("Unknown configuration value: " + name + " on line " + (string)line);
                 }
@@ -337,6 +367,7 @@ default {
                 llOwnerSay("r2_applier: Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
                 send_skin_thumbnails();
                 send_eye_thumbnails();
+                send_nail_colors();
             }
         }
     }
@@ -368,6 +399,9 @@ default {
             }
             else if (command == "EYES") {
                 apply_eye_texture(llList2String(cmdargs, 1));
+            }
+            else if (command == "NAILS") {
+                send_nail_colors();
             }
             else if (command == "THUMBNAILS") {
                 send_skin_thumbnails();
