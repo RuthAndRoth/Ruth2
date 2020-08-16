@@ -9,6 +9,7 @@
 // v3.3 09May2020 <seriesumei@avimail.org> - Re-enable default hand animation
 // v3.4 20May2020 <seriesumei@avimail.org> - Only listen when attached by default
 // v3.5 19Jun2020 <seriesumei@avimail.org> - Changes for OpenSim 0.8 compatibility
+// v3.6 15Aug2020 <seriesumei@avimail.org> - Rename fingernail and toenail regions
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -51,8 +52,8 @@ list regions = [
     "AUX1",
     "AUX2",
     "AUX3",
-    "FINGERNAILS",
-    "TOENAILS"
+    "FNAILS",
+    "TNAILS"
 ];
 
 // Any linkset that includes a part named "hands" will run the
