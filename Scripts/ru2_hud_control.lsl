@@ -1,4 +1,4 @@
-// ro2_hud_control.lsl - Roth2 v3 HUD Controller
+// ru2_hud_control.lsl - Roth2 v3 HUD Controller
 // SPDX-License-Identifier: AGPL-3.0-or-later
 // Copyright 2017 Shin Ingen
 // Copyright 2020 Serie Sumei
@@ -7,6 +7,7 @@
 // v2.1 12Apr2020 <seriesumei@avimail.org> - New simpler alpha HUD
 // v2.2 13May2020 <seriesumei@avimail.org> - Rework skin panel
 // v2.3 21Jun2020 <seriesumei@avimail.org> - Updates to compile on OpenSimulator 0.8
+// v2.4 16Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -31,18 +32,21 @@ vector offColor = <1.000, 1.000, 1.000>;
 // Which API version do we implement?
 integer API_VERSION = 2;
 
-list fingernail_colors = [
-    <0.80, 0.78, 0.74>,
-    <0.76, 0.69, 0.57>,
-    <0.97, 0.57, 0.97>,
-    <0.86, 0.14, 0.63>,
-    <0.78, 0.19, 0.41>,
-    <1.00, 0.00, 0.00>,
-    <0.75, 0.00, 0.00>,
-    <0.50, 0.00, 0.00>,
-    <0.25, 0.00, 0.00>,
-    <0.12, 0.12, 0.11>
-];
+// TODO(ss): put this into the config notecard
+string WHITE_4x4 = "7aa8a1f6-b1d1-4395-a335-f4ac58c37381";
+
+// Alpha settings for 'on' nails: [top, under, tip]
+list nail_alpha = [0.20, 1.00, 0.80];
+
+list nail_colors;
+
+// Save last selected color
+vector fingernail_color = ZERO_VECTOR;
+vector toenail_color = ZERO_VECTOR;
+
+// Nail BoM channels
+string FINGERNAILS_BOM = IMG_USE_BAKED_AUX1;
+string TOENAILS_BOM = IMG_USE_BAKED_AUX2;
 
 // Keep a mapping of link number to prim name
 list link_map = [];
@@ -136,8 +140,8 @@ list alpha_buttons = [
     "hide",
     // alpha1
     "",
-    "",
     "torso",
+    "pelvis",
     "legs",
     "feet",
     "toenails",
@@ -380,7 +384,15 @@ set_alpha_section(string section_name, integer alpha) {
                 alpha = !json_get_alpha(current_alpha, section_name, 0);
                 log("val: " + (string)alpha);
             }
-            send_csv(["ALPHA", section_name, 0, alpha]);
+            if (alpha > 0 && (section_name == "fingernails")) {
+                fingernails_on(fingernail_color);
+            }
+            else if (alpha > 0 && (section_name == "toenails")) {
+                toenails_on(toenail_color);
+            }
+            else {
+                send_csv(["ALPHA", section_name, -1, alpha]);
+            }
             current_alpha = json_set_alpha(current_alpha, section_name, 0, (integer)alpha);
         }
     }
@@ -392,7 +404,15 @@ reset_alpha(float alpha) {
     integer section;
     for (section = 0; section < len; ++section) {
         string section_name = llList2String(alpha_buttons, section);
-        send_csv(["ALPHA", section_name, 0, alpha]);
+        if (alpha > 0 && (section_name == "fingernails")) {
+            fingernails_on(fingernail_color);
+        }
+        else if (alpha > 0 && (section_name == "toenails")) {
+            toenails_on(toenail_color);
+        }
+        else {
+            send_csv(["ALPHA", section_name, -1, alpha]);
+        }
         current_alpha = json_set_alpha(current_alpha, section_name, 0, (integer)alpha);
     }
 
@@ -411,6 +431,26 @@ texture_v2(string name, string tex, integer face, vector color) {
     string cmd = llList2CSV(["TEXTURE", name, tex, face, color]);
     log(cmd);
     send(cmd);
+}
+
+fingernails_on(vector color) {
+    send_csv(["ALPHAMODE", "fingernailunder", 1, PRIM_ALPHA_MODE_MASK, mask_cutoff]);
+    send_csv(["ALPHA", "fingernailtop", 0, llList2Float(nail_alpha, 0)]);
+    send_csv(["ALPHA", "fingernailunder", 1, llList2Float(nail_alpha, 1)]);
+    send_csv(["ALPHA", "fingernailtip", 2, llList2Float(nail_alpha, 2)]);
+    send_csv(["TEXTURE", "fingernails", WHITE_4x4, 0, <237,227,222>]);
+    send_csv(["TEXTURE", "fingernails", WHITE_4x4, 2, <237,227,222>]);
+    send_csv(["TEXTURE", "fingernails", WHITE_4x4, 1, color]);
+}
+
+toenails_on(vector color) {
+    send_csv(["ALPHAMODE", "toenailunder", 1, PRIM_ALPHA_MODE_MASK, mask_cutoff]);
+    send_csv(["ALPHA", "toenailtop", 0, llList2Float(nail_alpha, 0)]);
+    send_csv(["ALPHA", "toenailunder", 1, llList2Float(nail_alpha, 1)]);
+    send_csv(["ALPHA", "toenailtip", 2, llList2Float(nail_alpha, 2)]);
+    send_csv(["TEXTURE", "toenails", WHITE_4x4, 0, <237,227,222>]);
+    send_csv(["TEXTURE", "toenails", WHITE_4x4, 2, <237,227,222>]);
+    send_csv(["TEXTURE", "toenails", WHITE_4x4, 1, color]);
 }
 
 integer is_ankle_lock_running() {
@@ -612,16 +652,26 @@ default {
                 // neck
                 set_alpha_section("neck", -1);
             }
+            else if (by == 6 || by == 7) {
+                if (pos.x > 0.44 && pos.x < 0.56) {
+                    // torso (except neck)
+                    set_alpha_section("torso", -1);
+                }
+                else if (pos.x > 0.37 && pos.x < 0.63) {
+                    // arms
+                    set_alpha_section("arms", -1);
+                }
+            }
             else if (bx == 4 || bx == 5) {
                 if (by == 8) {
                     // head
                     set_alpha_section("head", -1);
                 }
-                else if (by == 6 || by == 7) {
-                    // torso (except neck)
-                    set_alpha_section("torso", -1);
+                else if (by == 4 || by == 5) {
+                    // pelvis
+                    set_alpha_section("pelvis", -1);
                 }
-                else if (by > 1 && by < 6) {
+                else if (by == 2 || by == 3) {
                     // legs
                     set_alpha_section("legs", -1);
                 }
@@ -630,11 +680,7 @@ default {
                     set_alpha_section("feet", -1);
                 }
             }
-            else if ((bx == 3 || bx == 6) && (by == 6 || by == 7)) {
-                // arms
-                set_alpha_section("arms", -1);
-            }
-            else if ((bx == 3 || bx == 6) && by == 5) {
+            else if ((bx == 3 || bx == 6) && (by == 4 || by == 5)) {
                 // hands
                 set_alpha_section("hands", -1);
             }
@@ -743,13 +789,19 @@ default {
             // Fingernail color
             integer b = (integer)llGetSubString(name, 3, -1);
             integer index = (b * 5) + face;
-            if (index >= 0 && index <= 9) {
+            if (index == 0) {
+                // BoM
                 texture_v2(
                     "fingernails",
-                    "",
+                    FINGERNAILS_BOM,
                     ALL_SIDES,
-                    llList2Vector(fingernail_colors, index)
+                    llList2Vector(nail_colors, index)
                 );
+                send_csv(["ALPHA", "fingernails", -1, 1.0]);
+            }
+            else if (index >= 1 && index <= 9) {
+                fingernail_color = llList2Vector(nail_colors, index);
+                fingernails_on(fingernail_color);
             }
         }
         else if (llGetSubString(name, 0, 2) == "fns") {
@@ -780,13 +832,18 @@ default {
             // Toenail color
             integer b = (integer)llGetSubString(name, 3, -1);
             integer index = (b * 5) + face;
-            if (index >= 0 && index <= 9) {
+            if (index == 0) {
+                // BoM
                 texture_v2(
                     "toenails",
-                    "",
+                    TOENAILS_BOM,
                     ALL_SIDES,
-                    llList2Vector(fingernail_colors, index)
+                    llList2Vector(nail_colors, index)
                 );
+            }
+            else if (index >= 1 && index <= 9) {
+                toenail_color = llList2Vector(nail_colors, index);
+                toenails_on(toenail_color);
             }
         }
         else if (llGetSubString(name, 0, 1) == "hp") {
@@ -886,6 +943,38 @@ default {
                     set_outline_link_face_state("eye", 0, 2, 1.0, TRUE);
                 } else {
                     set_outline_button_state(eye_button_faces, "eye", current_eye, TRUE);
+                }
+            }
+            else if (command == "NAILS") {
+                log("Loaded notecard: " + llList2String(cmdargs, 1));
+                list links = [
+                    llListFindList(link_map, ["fnc0"]),
+                    llListFindList(link_map, ["fnc1"]),
+                    llListFindList(link_map, ["tnc0"]),
+                    llListFindList(link_map, ["tnc1"])
+                ];
+                integer len = llGetListLength(cmdargs) - 2;
+                integer i;
+                nail_colors = [];
+                // Walk returned color list
+                for (i = 1; i < len; ++i) {
+                    string tex = TEXTURE_BLANK;
+                    string color = llList2String(cmdargs, i + 2);
+                    if (color == "") {
+                        tex = TEXTURE_TRANSPARENT;
+                        color = "<1,1,1>";
+                    }
+                    integer link = i / 5;
+                    integer face = i % 5;
+                    llSetLinkPrimitiveParamsFast(llList2Integer(links, link), [
+                        PRIM_COLOR, face, (vector)color, 1.0,
+                        PRIM_TEXTURE, face, tex, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                    ]);
+                    llSetLinkPrimitiveParamsFast(llList2Integer(links, link+2), [
+                        PRIM_COLOR, face, (vector)color, 1.0,
+                        PRIM_TEXTURE, face, tex, <1.0, 1.0, 0.0>, <0.0, 0.0, 0.0>, 0.0
+                    ]);
+                    nail_colors += color;
                 }
             }
         }
