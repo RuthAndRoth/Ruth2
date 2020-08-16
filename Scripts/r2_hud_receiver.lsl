@@ -9,7 +9,7 @@
 // v3.3 09May2020 <seriesumei@avimail.org> - Re-enable default hand animation
 // v3.4 20May2020 <seriesumei@avimail.org> - Only listen when attached by default
 // v3.5 19Jun2020 <seriesumei@avimail.org> - Changes for OpenSim 0.8 compatibility
-// v3.6 15Aug2020 <seriesumei@avimail.org> - Rename fingernail and toenail regions
+// v3.6 16Aug2020 <seriesumei@avimail.org> - Rename fingernail and toenail regions
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -266,7 +266,20 @@ do_alpha(list args) {
 
         // Look for target in the section list
         integer section = llListFindList(section_map, [target]);
-        if (section >= 0) {
+        if (target == "ALL") {
+            // Set entire linkset
+            integer i;
+            integer len = llGetListLength(prim_map);
+
+            for (; i < len; ++i) {
+                llSetLinkAlpha(i, alpha, face);
+            }
+        }
+        else if (link >= 0) {
+            // Target is a prim name
+            llSetLinkAlpha(link, alpha, face);
+        }
+        else if (section >= 0) {
             // Put a texture on faces belonging to a group
             integer len = llGetListLength(section_map);
             integer i;
@@ -283,19 +296,6 @@ do_alpha(list args) {
                         );
                     }
                 }
-            }
-        }
-        else if (link >= 0) {
-            // Target is a prim name
-            llSetLinkAlpha(link, alpha, face);
-        }
-        else if (target == "ALL") {
-            // Set entire linkset
-            integer i;
-            integer len = llGetListLength(prim_map);
-
-            for (; i < len; ++i) {
-                llSetLinkAlpha(i, alpha, face);
             }
         }
     }
