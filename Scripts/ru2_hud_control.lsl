@@ -32,13 +32,12 @@ vector offColor = <1.000, 1.000, 1.000>;
 // Which API version do we implement?
 integer API_VERSION = 2;
 
-// TODO(ss): put this into the config notecard
-string WHITE_4x4 = "f48f143c-c1d4-17ba-b6ea-fd442dac32cf";
-
 // Alpha settings for 'on' nails: [top, under, tip]
 list nail_alpha = [0.20, 1.00, 0.80];
 
+// Configured values read from notecard
 list nail_colors;
+string nail_texture;
 
 // Save last selected color
 vector fingernail_color = ZERO_VECTOR;
@@ -438,9 +437,9 @@ fingernails_on(vector color) {
     send_csv(["ALPHA", "fingernailtop", 0, llList2Float(nail_alpha, 0)]);
     send_csv(["ALPHA", "fingernailunder", 1, llList2Float(nail_alpha, 1)]);
     send_csv(["ALPHA", "fingernailtip", 2, llList2Float(nail_alpha, 2)]);
-    send_csv(["TEXTURE", "fingernails", WHITE_4x4, 0, <237,227,222>]);
-    send_csv(["TEXTURE", "fingernails", WHITE_4x4, 2, <237,227,222>]);
-    send_csv(["TEXTURE", "fingernails", WHITE_4x4, 1, color]);
+    send_csv(["TEXTURE", "fingernails", nail_texture, 0, <237,227,222>]);
+    send_csv(["TEXTURE", "fingernails", nail_texture, 2, <237,227,222>]);
+    send_csv(["TEXTURE", "fingernails", nail_texture, 1, color]);
 }
 
 toenails_on(vector color) {
@@ -448,9 +447,9 @@ toenails_on(vector color) {
     send_csv(["ALPHA", "toenailtop", 0, llList2Float(nail_alpha, 0)]);
     send_csv(["ALPHA", "toenailunder", 1, llList2Float(nail_alpha, 1)]);
     send_csv(["ALPHA", "toenailtip", 2, llList2Float(nail_alpha, 2)]);
-    send_csv(["TEXTURE", "toenails", WHITE_4x4, 0, <237,227,222>]);
-    send_csv(["TEXTURE", "toenails", WHITE_4x4, 2, <237,227,222>]);
-    send_csv(["TEXTURE", "toenails", WHITE_4x4, 1, color]);
+    send_csv(["TEXTURE", "toenails", nail_texture, 0, <237,227,222>]);
+    send_csv(["TEXTURE", "toenails", nail_texture, 2, <237,227,222>]);
+    send_csv(["TEXTURE", "toenails", nail_texture, 1, color]);
 }
 
 integer is_ankle_lock_running() {
@@ -946,7 +945,7 @@ default {
                 }
             }
             else if (command == "NAILS") {
-                log("Loaded notecard: " + llList2String(cmdargs, 1));
+                nail_texture = llList2String(cmdargs, 1);
                 list links = [
                     llListFindList(link_map, ["fnc0"]),
                     llListFindList(link_map, ["fnc1"]),

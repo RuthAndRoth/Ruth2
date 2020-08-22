@@ -4,7 +4,7 @@
 
 // v2.0 - 09May2020 <seriesumei@avimail.org> - New applier script
 // v2.1 - 21Jun2020 <seriesumei@avimail.org> - Rework skin data to not use JSON functions
-// v2.2 - 16Aug2020 <seriesumei@avimail.org> - Add nail colors to config notecard
+// v2.2 - 22Aug2020 <seriesumei@avimail.org> - Add nail colors to config notecard
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
@@ -67,6 +67,7 @@ integer LINK_RUTH_APP = 42;
 // Color 0 is used for BoM
 vector DEFAULT_BOM_COLOR = <1.0, 1.0, 1.0>;
 list nail_colors = [];
+string nail_texture = "";
 
 // Memory limit
 integer MEM_LIMIT = 64000;
@@ -130,7 +131,7 @@ send_nail_colors() {
     llMessageLinked(LINK_THIS, LINK_RUTH_HUD, llList2CSV(
         [
             "NAILS",
-            notecard_name
+            nail_texture
         ] +
         nail_colors
     ), "");
@@ -317,9 +318,14 @@ read_config(string data) {
                     current_buffer = llListReplaceList(current_buffer, [value], 2, 2);
                 }
                 else if (current_section == "nails") {
-                    // Save nail colors
-                    integer slot = (integer)attr;
-                    current_buffer = llListReplaceList(current_buffer, [value], slot, slot);
+                    if (attr == "texture") {
+                        // Save default nail texture
+                        nail_texture = value;
+                    } else {
+                        // Save nail colors
+                        integer slot = (integer)attr;
+                        current_buffer = llListReplaceList(current_buffer, [value], slot, slot);
+                    }
                 }
                 else {
 //                    llOwnerSay("Unknown configuration value: " + name + " on line " + (string)line);
