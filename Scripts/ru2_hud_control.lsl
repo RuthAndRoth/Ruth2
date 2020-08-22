@@ -7,7 +7,7 @@
 // v2.1 12Apr2020 <seriesumei@avimail.org> - New simpler alpha HUD
 // v2.2 13May2020 <seriesumei@avimail.org> - Rework skin panel
 // v2.3 21Jun2020 <seriesumei@avimail.org> - Updates to compile on OpenSimulator 0.8
-// v2.4 16Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
+// v2.4 22Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -33,7 +33,7 @@ vector offColor = <1.000, 1.000, 1.000>;
 integer API_VERSION = 2;
 
 // TODO(ss): put this into the config notecard
-string WHITE_4x4 = "7aa8a1f6-b1d1-4395-a335-f4ac58c37381";
+string WHITE_4x4 = "f48f143c-c1d4-17ba-b6ea-fd442dac32cf";
 
 // Alpha settings for 'on' nails: [top, under, tip]
 list nail_alpha = [0.20, 1.00, 0.80];
@@ -789,18 +789,18 @@ default {
             // Fingernail color
             integer b = (integer)llGetSubString(name, 3, -1);
             integer index = (b * 5) + face;
+            fingernail_color = (vector)llList2String(nail_colors, index);
             if (index == 0) {
                 // BoM
                 texture_v2(
                     "fingernails",
                     FINGERNAILS_BOM,
                     ALL_SIDES,
-                    llList2Vector(nail_colors, index)
+                    fingernail_color
                 );
                 send_csv(["ALPHA", "fingernails", -1, 1.0]);
             }
             else if (index >= 1 && index <= 9) {
-                fingernail_color = llList2Vector(nail_colors, index);
                 fingernails_on(fingernail_color);
             }
         }
@@ -832,17 +832,17 @@ default {
             // Toenail color
             integer b = (integer)llGetSubString(name, 3, -1);
             integer index = (b * 5) + face;
+            toenail_color = (vector)llList2String(nail_colors, index);
             if (index == 0) {
                 // BoM
                 texture_v2(
                     "toenails",
                     TOENAILS_BOM,
                     ALL_SIDES,
-                    llList2Vector(nail_colors, index)
+                    toenail_color
                 );
             }
             else if (index >= 1 && index <= 9) {
-                toenail_color = llList2Vector(nail_colors, index);
                 toenails_on(toenail_color);
             }
         }
@@ -955,7 +955,7 @@ default {
                 ];
                 integer len = llGetListLength(cmdargs) - 2;
                 integer i;
-                nail_colors = [];
+                nail_colors = [llList2String(cmdargs, 2)];
                 // Walk returned color list
                 for (i = 1; i < len; ++i) {
                     string tex = TEXTURE_BLANK;
