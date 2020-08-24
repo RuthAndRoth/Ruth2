@@ -1,0 +1,41 @@
+Ruth2 v4 Testing README
+
+2020-08-22
+
+* Nails texture set via CONFIG notecard
+
+2020-08-16
+
+* Alpha HUD functional
+  * new doll texture looks a bit more girlish
+  * add button and area for Pelvis region/face
+  * all mesh R2 CONFIG notecards present and tested
+* Nails functional
+  * Alpha buttons work for nails, preserving selected color
+    * known bug: BoM is not preserved yet
+  * Nail color selection is operational, colors are set in the HUD CONFIG notecard
+
+
+2020-08-14
+
+Initial assembly of one basic body and HUD
+* body parts have a face/prim config notecard and the standard r2_hud_receiver script
+* the HUD is basically the working Ruth2 v3 HUD I had assembled with the Roth2 v2 alpha panel
+
+Many things still do not work, so rather here are the things are somewhat working:
+
+* Alpha
+  * The Alpha HUD still has the Roth textures and labels, the only real difference will be the split legs into upper and lower, at the moment those two faces are handled as one.  The buttons and segments do generally work as expected aside from the below...
+  * The fingernails and toenails need some work for the alpha function as the pre-set alpha values get reset
+
+* Skin
+  * All of the skins in the CONFIG notecard are still from Roth, however it all works applying skins and eyes as selected
+  * The BoM and Alpha masking/blending buttons work correctly
+
+* Options
+  * None of this panel is functioning, all of the nail-related buttons are still wired up for my v3 configuration
+  * The hand poses would work if the HUD was loaded with the pose animations (use a Roth2 v2 HUD to check this)
+
+
+
+Serie
