@@ -6,7 +6,7 @@
 
 # Skin textures
 
-# Linda Kellie Female 1 Bushy
+# Linda Kellie Female 1 Normal
 [skin1]
 head=e0462212-bd66-49e0-ba37-ac495c365ad4
 upper=5a2121f4-aece-4b7f-9bd0-c5ea9ba8a058
@@ -20,19 +20,19 @@ upper=70c8313f-bab7-4515-8df1-970fe5fefe38
 lower=96da7a88-3678-46a5-a6f0-ebbb6a61a108
 thumbnail=e0462212-bd66-49e0-ba37-ac495c365ad4
 
-# Linda Kellie Professional Lady 1 a
+# Linda Kellie Professional Lady 1a
 [skin3]
 head=46eb02b0-1d72-4d89-ac60-2db60cf180b6
 upper=7d3b3cb2-2fd5-47d4-b8b8-f9fc030b9e2e
 lower=ce9100c1-77ec-47cb-897a-26a6f081ddf9
 thumbnail=46eb02b0-1d72-4d89-ac60-2db60cf180b6
 
-# Linda Kellie Professional Lady 1 b
+# Linda Kellie Professional Lady 1b
 [skin4]
-head=6aa5bc93-5635-421f-84a9-160b97c201a6
+head=740f3b0a-78ee-4544-aba4-eff8404f3e28
 upper=396e4252-794e-4a45-b7b9-f1af05226f38
 lower=1269652d-2f10-4776-910c-672cf7b8d31a
-thumbnail=6aa5bc93-5635-421f-84a9-160b97c201a6
+thumbnail=740f3b0a-78ee-4544-aba4-eff8404f3e28
 
 #
 [skin5]
@@ -55,12 +55,19 @@ upper=60b4e794-b1c1-4432-9323-12e15f1cf1fe
 lower=2ff5fc39-a5ce-434f-ad6b-9e8540d0edf7
 thumbnail=87d31d31-6afd-42f9-b25d-5492d3d3deb6
 
-# Robin Wood Sylvia Caramel
+# Robin Wood Sylvia Peach Licorice
 [skin8]
-head=318b2634-9909-4a5e-8abd-68a48b7fcb47
-upper=38bac7ce-0f3d-4959-9ce4-ec354f3c422e
-lower=c22c1521-a2a6-4ff3-b698-2c1feb63dce3
-thumbnail=318b2634-9909-4a5e-8abd-68a48b7fcb47
+head=02f98e33-ca7a-4622-95dc-ec5c6a287e79
+upper=88f71218-7da6-4eec-9686-5516ec6872db
+lower=62058284-0e7c-46a7-b9ec-003ddf825609
+thumbnail=02f98e33-ca7a-4622-95dc-ec5c6a287e79
+
+# Robin Wood Sylvia Truffle Licorice
+[skin9]
+head=a004c538-ec32-4830-819c-3401bf3a047d
+upper=597d1b95-5b5b-4c65-a805-a8260cefbc7c
+lower=0f862e0d-29bc-40fb-b309-36419d93b3b1
+thumbnail=a004c538-ec32-4830-819c-3401bf3a047d
 
 
 # Eye textures
@@ -94,7 +101,7 @@ thumbnail=0c5bcc87-1cce-433e-b26e-5bf700bb08a0
 # Nail colors
 
 [nails]
-1=<0.76, 0.69, 0.57>
+1=<0.63, 0.40, 0.37>
 2=<0.97, 0.57, 0.97>
 3=<0.86, 0.14, 0.63>
 4=<0.78, 0.19, 0.41>
