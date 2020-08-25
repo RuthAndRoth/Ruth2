@@ -6,33 +6,33 @@
 
 # Skin textures
 
-# Linda Kellie Female 1 Bushy
+# Linda Kellie Female 1 Normal
 [skin1]
-head=b9f4e6ac-647d-a767-b6d7-ec129d0b63a5
-upper=64b3d1a1-1efb-99c8-e287-cff42f48c6a5
-lower=24b7eae1-403f-7346-b899-d34dde0f3d01
-thumbnail=b9f4e6ac-647d-a767-b6d7-ec129d0b63a5
+head=42e763c0-ae0a-1204-24a8-73595f96b59b
+upper=a02169a3-739c-1176-7c37-25602e160620
+lower=7e34a173-1045-98b0-2eb9-305b118b3b6a
+thumbnail=42e763c0-ae0a-1204-24a8-73595f96b59b
 
-#
+# Linda Kellie Female 1 Business
 [skin2]
-head=
-upper=
-lower=
-thumbnail=
+head=42e763c0-ae0a-1204-24a8-73595f96b59b
+upper=34d6bb02-53bd-a329-f319-13afd28b81b1
+lower=63b32f03-ef12-4547-c0e5-717e75f4c950
+thumbnail=42e763c0-ae0a-1204-24a8-73595f96b59b
 
-# Linda Kellie Professional Lady 1 a
+# Linda Kellie Professional Lady 1a
 [skin3]
 head=9bf8540a-4376-9f70-f2ba-204580f46cc3
-upper=923cd77a-4592-f3f8-d7bf-387d12f04745
+upper=b1fcb0c5-4272-f027-d82b-70e7d049104a
 lower=09193426-f719-3479-c2bc-b5edd4f28d47
 thumbnail=9bf8540a-4376-9f70-f2ba-204580f46cc3
 
-#
+# Linda Kellie Professional Lady 1b
 [skin4]
-head=
-upper=
-lower=
-thumbnail=
+head=e84e0582-0162-1437-18c9-11d13697438a
+upper=6f08e779-f299-bcf2-95a8-631661a9c145
+lower=04374899-7396-684b-ccfe-51f55b5432f2
+thumbnail=e84e0582-0162-1437-18c9-11d13697438a
 
 #
 [skin5]
@@ -48,19 +48,26 @@ upper=fb9bbbc9-dadf-026f-bf87-7937ec470f5d
 lower=4f0aa9d0-1591-fd43-bae3-7e11a6c9c45d
 thumbnail=0585d463-b6e4-2c6c-46a3-19aa9c512a3c
 
-# Robin Wood Sylvia Vanilla
+# Robin Wood Sylvia Vanilla Licorice
 [skin7]
-head=a75e4723-87a6-608d-ade2-3a168d2e0398
+head=333404ef-d7ad-7747-a13f-48e5e36bcc41
 upper=4a44fbab-fbaf-5660-41a3-941d6a482dee
-lower=8e683613-07e4-098f-f136-243720b72782
-thumbnail=a75e4723-87a6-608d-ade2-3a168d2e0398
+lower=ba722c2a-06cb-c793-0e24-856aafdb7eb4
+thumbnail=333404ef-d7ad-7747-a13f-48e5e36bcc41
 
-# Robin Wood Sylvia Caramel
+# Robin Wood Sylvia Peach Licorice
 [skin8]
-head=ad6c4acf-4a4a-2ca8-f051-91593f417bad
-upper=38bac7ce-0f3d-4959-9ce4-ec354f3c422e
-lower=d81fd21f-6cda-5f4f-8dda-86a22e578a23
-thumbnail=c635fdd6-c9ac-d660-cfc9-ba3c9ce1b411
+head=75b49dde-e74a-fb2e-c83c-a7e746801d06
+upper=65752fa4-375b-1b32-e259-bc2e6835ddf9
+lower=da64384e-b84a-d33f-bc23-6d7892c34ad6
+thumbnail=75b49dde-e74a-fb2e-c83c-a7e746801d06
+
+# Robin Wood Sylvia Truffle Licorice
+[skin9]
+head=275ea342-b40a-48d5-e3e8-71d132a98d90
+upper=4db5ea5f-bb20-8b9e-0f36-976b49d6a4a2
+lower=97537b4a-49fc-8581-1483-d135b9700620
+thumbnail=275ea342-b40a-48d5-e3e8-71d132a98d90
 
 
 # Eye textures
@@ -94,7 +101,7 @@ thumbnail=ee8cd869-2e49-3424-76d7-46fc6040bdd5
 # Nail colors
 
 [nails]
-1=<0.76, 0.69, 0.57>
+1=<0.63, 0.40, 0.37>
 2=<0.97, 0.57, 0.97>
 3=<0.86, 0.14, 0.63>
 4=<0.78, 0.19, 0.41>
@@ -103,4 +110,4 @@ thumbnail=ee8cd869-2e49-3424-76d7-46fc6040bdd5
 7=<0.50, 0.00, 0.00>
 8=<0.25, 0.00, 0.00>
 9=<0.12, 0.12, 0.11>
-texture=f48f143c-c1d4-17ba-b6ea-fd442dac32cf
+texture=fe95e9e7-88bc-6789-af93-cd52a3f99040
