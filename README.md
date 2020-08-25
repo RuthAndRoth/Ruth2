@@ -22,7 +22,6 @@ https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
 
 Ruth2 v4 is currently being prepared and contributions are scattered until the release is ready.
 
-
 ## Previous Release
 
 Previous releases of Ruth2 may be found in the archive-ruth-rc2 and archice-ruth-rc3 branches of
