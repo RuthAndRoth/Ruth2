@@ -1,6 +1,6 @@
 # Ruth2 Mesh
 
-##HUD
+## HUD
 
 Mesh objects used in the Ruth2 and Roth2 HUDs
 
