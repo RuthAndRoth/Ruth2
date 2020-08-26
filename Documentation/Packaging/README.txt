@@ -1,5 +1,5 @@
 Ruth2 - Open Source Mesh Avatar for Virtual Worlds
-Prepared: 14-Aug-2020
+Prepared: 26-Aug-2020
 
 Ruth2 is a low-poly mesh body specifically designed for OpenSimulator. It is built to use standard Second Life(TM) UV maps using a scratch-built open source mesh by Shin Ingen, Ada Radius and other contributors from the OpenSimulator Community.
 
@@ -18,30 +18,35 @@ Ruth2 v4 uses a single combination HUD for alpha masking, skin and eye texture a
 ============================================================
 BOX CONTENTS
 
-Ruth2 v4 - Mesh Avatar - This is the normal distribution box and is designed so that once unpacked its contents can be "worn" and then adjusted to a user's needs.
+Ruth2 v4 - Mesh Avatar - This is the normal distribution box and is designed so
+that once unpacked its contents can be "worn" and then adjusted to a user's needs.
 * !README, !LICENSE and !CHANGES
 * Ruth2 v4 (Body+Hands+Head)
 * Ruth2 v4 Flat Feet (posable)
 * Ruth2 v4 Medium Feet (optional)
 * Ruth2 v4 High Feet (optional)
 * Ruth2 v4 Eyes
-* Ruth2 v4 Toenails (3 options)
-* Ruth2 v4 Fingernails (5 options)
+* Ruth2 v4 Eyelashes
+* Ruth2 v4 Toenails (3 options: for flat, medium and high feet)
+* Ruth2 v4 Fingernails (5 options: long, medium, oval, pointed, short)
 * Ruth2 v4 HUD
 * Initial skin, shape, basic eyes, basic hair, and basic hair tattoo
 * Basic underwear
 
 Ruth2 v4 - Mesh Avatar - Business
 
-A special version of Ruth2 v4 with smoother body shape. This is the normal Business-friendly distribution box and is designed so that once unpacked its contents can be "worn" and then adjusted to a user's needs.
+A special version of Ruth2 v4 with smoother body shape.
+This is the normal Business-friendly distribution box and is designed so that
+once unpacked its contents can be "worn" and then adjusted to a user's needs.
 * !README, !LICENSE and !CHANGES
 * Ruth2 v4 Business (Body+Hands+Head)
 * Ruth2 v4 Flat Feet (posable)
 * Ruth2 v4 Medium Feet (optional)
 * Ruth2 v4 High Feet (optional)
 * Ruth2 v4 Eyes
+* Ruth2 v4 Eyelashes
 * Ruth2 v4 Toenails (3 options: for flat, medium and high feet)
-* Ruth2 v4 Fingernails (2 options: short and oval)
+* Ruth2 v4 Fingernails (5 options: long, medium, oval, pointed, short)
 * Ruth2 v4 HUD
 * Initial skin, shape, basic eyes, basic hair, and basic hair tattoo
 * Basic underwear
@@ -63,14 +68,20 @@ Ruth2 v4 - Extras - This is a box of useful extra elements and options.
 * Sample alpha masks
 * Sample hair
 * Sample hair tattoos
+* Sample universal wearables for nail textures
 
-Ruth2 v4 - Resources - This box is not normally needed. It contains textures and other resources with original UUIDs as used within the other assets.. This can be useful of moving the assets across grid, or to repair elements.
+Ruth2 v4 - Resources - This box is not normally needed.
+It contains textures and other resources with original UUIDs as used within the other assets.
+This can be useful of moving the assets across grid, or to repair elements.
 * !README-RESOURCES and !LICENSE
-* All skin and eye textures used in default HUD
+* Skin and eye textures used in default HUD
 
-Ruth2 v4 - Mesh Uploads - This box is not normally needed.  It contains mesh for all Ruth2 v4 elements as originally uploaded and before attaching a root prim or any texturing.
+Ruth2 v4 - Mesh Uploads - This box is not normally needed.
+It contains mesh for all Ruth2 v4 elements as originally uploaded with LOD settings described in
+https://github.com/RuthAndRoth/Ruth2/wiki/Ruth2-v4-Assembly-Instructions
+and before attaching a root prim or any texturing and addition of scripts.
 * !README-MESH-UPLOADS and !LICENSE
-* Collada (.dae) Mesh for all Ruth2 v4 elements as originally uploaded and before part renaming, attaching a root prim or any texturing.
+* Collada (.dae) Mesh for all Ruth2 v4 elements as originally uploaded
 
 ============================================================
 APPEARANCE SLIDERS
@@ -92,8 +103,6 @@ http://wiki.secondlife.com/wiki/Project_Bento_Skeleton_Guide
 
 ============================================================
 KNOWN ISSUES AND TROUBLESHOOTING
-
-Not all the appearance sliders will work on the mesh body and parts.
 
 Ruth2 v4 with attached Bento head will work with most shapes. The headless body, to use with system head or other mesh head, will work well with the sliders except body fat, and extremes to neck length and thickness, because of the neck seam. There are a few head sliders that don't work: Head Shape, Ear Angle, Jowls, Chin Cleft. 
 
@@ -124,8 +133,9 @@ CREDITS
 * UV map is CC-BY Linden Lab.
 * Skin templates by Chip Midnight:  http://forums-archive.secondlife.com/109/72/40762/1.html
 * Skins included in the HUD:
-   - Eloh Elliot Skins
-   - Linda Kellie Skins
+   - Eloh Elliot Skins - MIT License
+   - Linda Kellie Skins - Creative Commons CC0 License
+   - U4U Skins - AGPL License
 * T-Shirt Texture by Robin (Soujourner) Wood: https://www.robinwood.com/Catalog/Technical/SL-Tuts/SLPages/RSW-TShirt.html
 * Linda Kellie Designs - Tintable Bra and Panties - Creative Commons CC0 https://zadaroo.com/wp-content/uploads/2012/12/templates-bra-and-panties.zip
 * HUD mesh, textures and scripts by Serie Sumei using modifications to original scripts by Shin Ingen.
