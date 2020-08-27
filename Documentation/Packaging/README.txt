@@ -4,6 +4,11 @@ Prepared: 26-Aug-2020
 Ruth2 is a low-poly mesh body specifically designed for OpenSimulator. It is built to use standard Second Life(TM) UV maps using a scratch-built open source mesh by Shin Ingen, Ada Radius and other contributors from the OpenSimulator Community.
 
 ============================================================
+USER GUIDE
+
+https://github.com/RuthAndRoth/Ruth2/wiki/User-Guide
+
+============================================================
 BAKES ON MESH
 
 Ruth2 v4 is designed to work well with Bakes on Mesh. It has a simple alpha masking capability without needing many separate mesh parts. Alpha masks can be worn to give more control over hidden areas. As an alternative to Bakes on Mesh skin textures may also be applied, but you should then add a full body alpha mask to hide the underlying system avatar.
@@ -106,7 +111,7 @@ KNOWN ISSUES AND TROUBLESHOOTING
 
 Ruth2 v4 with attached Bento head will work with most shapes. The headless body, to use with system head or other mesh head, will work well with the sliders except body fat, and extremes to neck length and thickness, because of the neck seam. There are a few head sliders that don't work: Head Shape, Ear Angle, Jowls, Chin Cleft. 
 
-Texture Alpha Mode - Alpha Blending or Alpha Masking? Ruth2 v4 is set initially with mode Alpha Masking with a mid cutoff of 128 (the cutoff range can be 0 to 255) as this may work well with the addition of clothing and hair that use Alpha Blending as transparent edges can appear if too many overlapping items use the same alpha mode.  But Alpha Blending can often look smoother.The Eyelashes are set to Alpha Blending mode for this reason since they act more like a hair attachment.
+Texture Alpha Mode - Alpha Blending or Alpha Masking? Ruth2 v4 is set initially with mode Alpha Masking with a mid cutoff of 128 (the cutoff range can be 0 to 255) as this may work well with the addition of clothing and hair that use Alpha Blending as transparent edges can appear if too many overlapping items use the same alpha mode.  But Alpha Blending can often look smoother. The Eyelashes are set to Alpha Blending mode for this reason since they act more like a hair attachment.
 
 Foot skin problems? For best result, paint over the system toenails and remove as much detail as you can from your foot skin that is probably designed for the system avatar's duck feet.
 
