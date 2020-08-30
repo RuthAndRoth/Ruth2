@@ -5,7 +5,7 @@
 // v3.0 02Apr2020 <seriesumei@avimail.org> - Based on ss-r from Control/Serie Sumei
 // v3.1 05May2020 <seriesumei@avimail.org> - Merge Ruth2 and Roth2 alpha HUD creation
 // v3.2 07Jun2020 <seriesumei@avimail.org> - Update Ruth alpha HUD
-// v3.3 15Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
+// v3.3 30Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh (for Ruth) or a new alpha HUD (for Roth) and adds panes
@@ -158,8 +158,8 @@ configure() {
             alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
             alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
             header_texture = "b2c45e77-282f-35b3-a148-c937e4076737";
-            options_texture = "cba58fc8-d4fd-82b5-1b11-ac9d877056c3";
-            fingernails_shape_texture = "fb6ee827-3c3e-99a8-0e33-47015c0845a9";
+            options_texture = "41ce40a7-526f-45e8-611f-8646c1dfc4d1";
+            fingernails_shape_texture = TEXTURE_TRANSPARENT;
         } else {
             alpha_button_texture = "b8028bca-fa71-ccf5-114d-e22fba30bd89";
             header_texture = "b2c45e77-282f-35b3-a148-c937e4076737";
@@ -187,8 +187,8 @@ configure() {
                 alpha_doll_texture = "45292011-feb6-4d0b-b4b0-5d1464943fdd";
                 alpha_button_texture = "475f423a-4975-455e-9f46-4b0394dbc43f";
                 header_texture = "f299c09d-284a-4b0e-931e-52a776a654b0";
-                options_texture = "d05082f4-86d7-4816-97f8-6db0f2ace14b";
-                fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
+                options_texture = "3a1ed932-d181-428c-9499-62c442f945bc";
+                fingernails_shape_texture = TEXTURE_TRANSPARENT;
             } else {
                 alpha_button_texture = "290f0f22-594c-480b-8cb8-e542621b5c8e";
                 header_texture = "f299c09d-284a-4b0e-931e-52a776a654b0";
