@@ -5,12 +5,10 @@
   future improvements, which under the AGPL license should be made freely
   and publicly available.
 
-* Temporarily, the .blend file, Colada (DAE) exports of parts and the UV maps
-  are available in Ruth2/Contrib/Ada Radius.
+* The .blend file, Colada (DAE) exports of parts and the UV maps
+  are copied from Ruth2/Contrib/Ada Radius as at 30-Aug-2020.
 
-* Draft 11 is the current .blend file version.
+* The .blend file is based on Ada Radius Draft 11.
 
 * Most parts are unchanged since Draft 9, Eyelashes are unchanged
-  since Draft 10 and all n ails changed at Draft 11.
-
-* Temporarily, HUD elements are in Ruth2/Contrib/Serie Sumei
+  since Draft 10 and all nails changed at Draft 11.
