@@ -35,7 +35,7 @@ that once unpacked its contents can be "worn" and then adjusted to a user's need
 * Ruth2 v4 Toenails (3 options: for flat, medium and high feet)
 * Ruth2 v4 Fingernails (5 options: long, medium, oval, pointed, short)
 * Ruth2 v4 HUD
-* Initial skin, shape, basic eyes, basic hair, and basic hair tattoo
+* Initial skin, shape, basic eyes, basic hair, etc.
 * Basic underwear
 
 Ruth2 v4 - Mesh Avatar - Business
@@ -52,8 +52,8 @@ once unpacked its contents can be "worn" and then adjusted to a user's needs.
 * Ruth2 v4 Eyelashes
 * Ruth2 v4 Toenails (3 options: for flat, medium and high feet)
 * Ruth2 v4 Fingernails (5 options: long, medium, oval, pointed, short)
-* Ruth2 v4 HUD
-* Initial skin, shape, basic eyes, basic hair, and basic hair tattoo
+* Ruth2 v4 HUD Business
+* Initial skin, shape, basic eyes, basic hair, etc.
 * Basic underwear
 
 Ruth2 v4 - Extras - This is a box of useful extra elements and options.
@@ -91,7 +91,6 @@ and before attaching a root prim or any texturing and addition of scripts.
 R2 Skins - Female
 Textures for skins used in the Ruth2 v4 HUD and alternatives from
 https://github.com/RuthAndRoth/Skins
-
 * Skin Textures
 * Assembled skins
 
