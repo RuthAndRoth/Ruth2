@@ -1,7 +1,8 @@
 Ruth2 v2 - Open Source Mesh Avatar for Virtual Worlds - a single layer mesh that is designed to work well with Bakes on Mesh. Compared to Ruth2.0 RC#3 (now also known as Ruth2 v3) it has a simplified alpha capability. Skin textures may still be applied, but in Bakes on Mesh mode system layer alpha masks can be worn to give more control over hidden areas.
 
-2020-08-23
-   - DRAFT Release Box and Contents Preparation
+2020-08-30
+  - HUD and scripting updated by Serie Sumei (ss-200830)
+  - Release Box and Contents Preparation
    
 2020-08-23
   - HUD and scripting from Serie Sumei (ss-200822)
