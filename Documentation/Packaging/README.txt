@@ -1,5 +1,5 @@
 Ruth2 - Open Source Mesh Avatar for Virtual Worlds
-Prepared: 26-Aug-2020
+Prepared: 30-Aug-2020
 
 Ruth2 is a low-poly mesh body specifically designed for OpenSimulator. It is built to use standard Second Life(TM) UV maps using a scratch-built open source mesh by Shin Ingen, Ada Radius and other contributors from the OpenSimulator Community.
 
@@ -88,6 +88,13 @@ and before attaching a root prim or any texturing and addition of scripts.
 * !README-MESH-UPLOADS and !LICENSE
 * Collada (.dae) Mesh for all Ruth2 v4 elements as originally uploaded
 
+R2 Skins - Female
+Textures for skins used in the Ruth2 v4 HUD and alternatives from
+https://github.com/RuthAndRoth/Skins
+
+* Skin Textures
+* Assembled skins
+
 ============================================================
 APPEARANCE SLIDERS
 
@@ -113,7 +120,11 @@ Ruth2 v4 with attached Bento head will work with most shapes. The headless body,
 
 Texture Alpha Mode - Alpha Blending or Alpha Masking? Ruth2 v4 is set initially with mode Alpha Masking with a mid cutoff of 128 (the cutoff range can be 0 to 255) as this may work well with the addition of clothing and hair that use Alpha Blending as transparent edges can appear if too many overlapping items use the same alpha mode.  But Alpha Blending can often look smoother. The Eyelashes are set to Alpha Blending mode for this reason since they act more like a hair attachment.
 
-Foot skin problems? For best result, paint over the system toenails and remove as much detail as you can from your foot skin that is probably designed for the system avatar's duck feet.
+The Ruth2 v4 mesh near the toes is adjusted to avoid the toenail area of the skin, as many skins bake in toenails. Ruth2 v4 is designed to make use of separate mesh toenails. For best result, paint over the system toenails and remove as much detail as you can from your foot skin that is probably designed for the system avatar's duck feet.
+
+The HUD Options Tab allows for the posable flat foot pose to be altered and an "ankle lock" facility attempts to keep animations from moving a joint or two. The ankle lock is sometimes needed to counter-act an interaction between some poses/animations and non-flat feet that otherwise bends the foot back another 45-60 degrees. Not every raised foot needs it due to variations in rigging and if the feet were posed with animations already or not.
+
+Multiple fingernail shapes are available. The HUD is not currently enabled to support selection between these. Just add and remove the option you wish to use.
 
 ============================================================
 RUTHANDROTH COMMUNITY
