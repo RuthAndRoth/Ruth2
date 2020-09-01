@@ -63,7 +63,7 @@ Ruth2 v4 - Extras - This is a box of useful extra elements and options.
 * Ruth2 v4 Body (only)
 * Ruth2 v4 Hands
 * Ruth2 v4 Head
-* Ruth2 v4 Headless (Body+Feet+Hands)
+* Ruth2 v4 Headless (Body+Hands)
 * Ruth2 v4 Head+Vneck (section of body)
 * Ruth2 v4 Elf Ears
 * Basic underwear alternatives
