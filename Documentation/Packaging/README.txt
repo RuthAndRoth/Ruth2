@@ -58,8 +58,8 @@ once unpacked its contents can be "worn" and then adjusted to a user's needs.
 
 Ruth2 v4 - Extras - This is a box of useful extra elements and options.
 * !README-EXTRAS and !LICENSE
-* Ruth2 v4 Business (Body+Feet+Hands+Head)
-* Ruth2 v4 Business Headless (Body+Feet+Hands)
+* Ruth2 v4 Business (Body+Hands+Head)
+* Ruth2 v4 Business Headless (Body+Hands)
 * Ruth2 v4 Body (only)
 * Ruth2 v4 Hands
 * Ruth2 v4 Head
