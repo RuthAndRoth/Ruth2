@@ -125,7 +125,7 @@ The HUD Options Tab allows for the posable flat foot pose to be altered and an "
 
 Multiple fingernail shapes are available. The HUD is not currently enabled to support selection between these. Just add and remove the option you wish to use.
 
-Due to the scripting facilities used in the HUD, Ruth2 V4 scripts will not work on early versions of OpenSim such as 0.8.2.1 (now five years old). Please update.
+Due to the scripting facilities used in the HUD, Ruth2 v4 scripts will not work on early versions of OpenSim such as 0.8.2.1 (now five years old). Please update.
 
 ============================================================
 RUTHANDROTH COMMUNITY
