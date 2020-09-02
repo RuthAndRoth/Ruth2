@@ -63,7 +63,7 @@ Ruth2 v4 - Extras - This is a box of useful extra elements and options.
 * Ruth2 v4 Body (only)
 * Ruth2 v4 Hands
 * Ruth2 v4 Head
-* Ruth2 v4 Headless (Body+Feet+Hands)
+* Ruth2 v4 Headless (Body+Hands)
 * Ruth2 v4 Head+Vneck (section of body)
 * Ruth2 v4 Elf Ears
 * Basic underwear alternatives
@@ -124,6 +124,8 @@ The Ruth2 v4 mesh near the toes is adjusted to avoid the toenail area of the ski
 The HUD Options Tab allows for the posable flat foot pose to be altered and an "ankle lock" facility attempts to keep animations from moving a joint or two. The ankle lock is sometimes needed to counter-act an interaction between some poses/animations and non-flat feet that otherwise bends the foot back another 45-60 degrees. Not every raised foot needs it due to variations in rigging and if the feet were posed with animations already or not.
 
 Multiple fingernail shapes are available. The HUD is not currently enabled to support selection between these. Just add and remove the option you wish to use.
+
+Due to the scripting facilities used in the HUD, Ruth2 v4 scripts will not work on early versions of OpenSim such as 0.8.2.1 (now five years old). Please update.
 
 ============================================================
 RUTHANDROTH COMMUNITY
