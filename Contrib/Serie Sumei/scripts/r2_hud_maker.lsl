@@ -150,15 +150,15 @@ configure() {
         skin_texture = "206804f6-908a-8efb-00de-fe00b2604906";
         if (ROTH) {
             alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
-            alpha_button_texture = "3105f8fe-3219-fd83-33f3-aafa2c4b802b";
+            alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
             header_texture = "c54a2e5d-398e-2c1d-77ab-5353a20cbc23";
             options_texture = "43ec4359-6750-8c8a-4098-c8f79243eb25";
         }
         else if (!RUTH_V3) {
             alpha_doll_texture = "f7d81224-3b66-081c-21a8-eab787e8e9a7";
-            alpha_button_texture = "3105f8fe-3219-fd83-33f3-aafa2c4b802b";
+            alpha_button_texture = "97e894f2-aee2-a479-0fa8-49d049bfb718";
             header_texture = "b2c45e77-282f-35b3-a148-c937e4076737";
-            options_texture = "2b14406c-0821-955e-0492-4fc7d0122e63";
+            options_texture = "41ce40a7-526f-45e8-611f-8646c1dfc4d1";
             fingernails_shape_texture = TEXTURE_TRANSPARENT;
         } else {
             alpha_button_texture = "b8028bca-fa71-ccf5-114d-e22fba30bd89";
@@ -179,15 +179,15 @@ configure() {
             skin_texture = "64184dac-b33b-4a1b-b200-7d09d8928b64";
             if (ROTH) {
                 alpha_doll_texture = "831b6b63-6934-4db7-9473-9058e0410e17";
-                alpha_button_texture = "d7389b96-54de-4824-90f8-7af8dac01a99";
+                alpha_button_texture = "4e97068e-7570-47c2-af2f-e7965c5d5078";
                 header_texture = "0bd02931-21e8-4b81-90d1-aca4349c0679";
                 options_texture = "e89ff0c8-03a4-410d-bf0a-1352610cb701";
             }
             else if (!RUTH_V3) {
                 alpha_doll_texture = "45292011-feb6-4d0b-b4b0-5d1464943fdd";
-                alpha_button_texture = "d7389b96-54de-4824-90f8-7af8dac01a99";
+                alpha_button_texture = "475f423a-4975-455e-9f46-4b0394dbc43f";
                 header_texture = "f299c09d-284a-4b0e-931e-52a776a654b0";
-                options_texture = "d2ab2c47-2607-4658-9dcf-405ad147ca80";
+                options_texture = "3a1ed932-d181-428c-9499-62c442f945bc";
                 fingernails_shape_texture = TEXTURE_TRANSPARENT;
             } else {
                 alpha_button_texture = "290f0f22-594c-480b-8cb8-e542621b5c8e";

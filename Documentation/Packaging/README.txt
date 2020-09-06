@@ -1,5 +1,5 @@
 Ruth2 - Open Source Mesh Avatar for Virtual Worlds
-Prepared: 2-Sep-2020
+Prepared: 30-Aug-2020
 
 Ruth2 is a low-poly mesh body specifically designed for OpenSimulator. It is built to use standard Second Life(TM) UV maps using a scratch-built open source mesh by Shin Ingen, Ada Radius and other contributors from the OpenSimulator Community.
 

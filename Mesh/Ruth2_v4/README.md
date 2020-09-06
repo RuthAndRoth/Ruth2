@@ -6,8 +6,9 @@
   and publicly available.
 
 * The .blend file, Colada (DAE) exports of parts and the UV maps
-  are copied from Ruth2/Contrib/Ada Radius as at 2-Sep-2020.
+  are copied from Ruth2/Contrib/Ada Radius as at 30-Aug-2020.
 
 * The .blend file is equivalent to Ada Radius Draft 11.
 
-* Most parts are unchanged since Draft 9, elements with head part changed at Draft 10. Eyelashes are unchanged since Draft 10 and all nails changed at Draft 11.
+* Most parts are unchanged since Draft 9, Eyelashes are unchanged
+  since Draft 10 and all nails changed at Draft 11.
