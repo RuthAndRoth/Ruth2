@@ -1,6 +1,6 @@
 ## Ruth2 v4 Mesh
 
-* **Ruth2v4.blend**: This blender file is a compilation of all the parts
+* **Ruth2v4Dev.blend**: This blender file is a compilation of all the parts
   used for Ruth2 v4. All collaborators should use this file as a basis for
   future improvements, which under the AGPL license should be made freely
   and publicly available.
@@ -10,4 +10,4 @@
 
 * The .blend file is equivalent to Ada Radius Draft 11.
 
-* Most parts are unchanged since Draft 9, elements with head part changed at Draft 10. Eyelashes are unchanged since Draft 10 and all nails changed at Draft 11.
+* Most parts are unchanged since Draft 9. Elements with head part changed at Draft 10. Eyelashes changed at Draft 10. All nails changed at Draft 11.
