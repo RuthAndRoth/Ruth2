@@ -17,12 +17,12 @@ OpenSimulator Community.
 
 ## Current Release
 
-Ruth2 v3 is the current release and is best obtained from the Ruth repository (not this Ruth2 one) via the "archive-ruth-rc3" branch.
-https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
-
-Ruth2 v4 is currently being prepared and contributions are scattered until the release is ready.
+Ruth2 v4 the current release.
 
 ## Previous Release
+
+Ruth2 v3 is the current release and is best obtained from the Ruth repository (not this Ruth2 one) via the "archive-ruth-rc3" branch.
+https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
 
 Previous releases of Ruth2 may be found in the archive-ruth-rc2 and archice-ruth-rc3 branches of
 the old Ruth repo on Github and in a number of places both in Second Life and OSGrid as listed above.
@@ -33,6 +33,10 @@ We have moved all personal directories under the new top-level directory
 'Contrib'.  These continue to be used as they always have, as a place for
 team members to put things that are still under development before (or until)
 they are merged into the master release directories.
+
+Directories for contributors that have fallen inactive will be periodically removed
+from the current master (usually around release time) but will always be available
+in the archive release branches.
 
 ## Upload Artifacts
 
