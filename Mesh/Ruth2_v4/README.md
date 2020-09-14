@@ -12,4 +12,4 @@
 
 * Most parts are unchanged since Draft 9. Elements with head part changed at Draft 10. Eyelashes changed at Draft 10. All nails changed at Draft 11.
 
-* Ruth2v4Dev.blend has a complete set of the objects and no armature. Sevrak forums reported issues in using Blender 2.83. Upgrading to Blender 2.9, appending whatever is needed from Ruth2v4Dev.blend into a clean file and adding in a clean armature (either Avastar or one of the armatures Ada Radius built from avatar_skeleton.xml) works okay. Ada decided to avoid including an armature in the Dev file - a simpler set of objects in a blend file is more useful to designers, long term, as Blender upgrades and Avastar either does or does not catch up.
+* Ruth2v4Dev.blend objects were built in Blender 2.83. Armatures and custom properties have been removed. The objects in the file are UV mapped to the legacy 2005 Second Life UV map island edges and vertex weighted to be compatible with the Second Life/OpenSim 2016 "Bento" armature, using Avastar tools from its beta 2.81.35. 
