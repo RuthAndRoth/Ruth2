@@ -38,11 +38,11 @@ Directories for contributors that have fallen inactive will be periodically remo
 from the current master (usually around release time) but will always be available
 in the archive release branches.
 
-## Upload Artifacts
+## Upload Meshes and Artifacts
 
-Since not everyone is prepared to perform Blender exports to get the Collada
-files for uploading we maintain recent exported .dae files in the Artifacts
-directory.  These correspond to the .blend files in the Mesh directory.
+Since not everyone is set up to perform Blender exports to get the Collada files
+for uploading we maintain recent exported .dae files.  These correspond to the
+.blend files in the Mesh directory.
 
 There is also an IAR file that can be uset to pre-load OpenSim grids.  These are
 usually updated at releases.  They will maintain consistent UUIDs for the
