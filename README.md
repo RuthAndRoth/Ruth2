@@ -37,6 +37,7 @@ they are merged into the master release directories.
 Directories for contributors that have fallen inactive will be periodically removed
 from the current master (usually around release time) but will always be available
 in the archive release branches.
+https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3/Contrib
 
 ## Upload Meshes and Artifacts
 
