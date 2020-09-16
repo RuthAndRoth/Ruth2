@@ -21,11 +21,10 @@ Ruth2 v4 the current release.
 
 ## Previous Release
 
-Ruth2 v3 is the current release and is best obtained from the Ruth repository (not this Ruth2 one) via the "archive-ruth-rc3" branch.
-https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
+Previous releases of Ruth2 may be found in the "archive-ruth-rc2" and "archive-ruth-rc3" branches of the old Ruth repo on Github (not this Ruth2 one) and in a number of places both in Second Life and OSGrid as listed above.
 
-Previous releases of Ruth2 may be found in the archive-ruth-rc2 and archice-ruth-rc3 branches of
-the old Ruth repo on Github and in a number of places both in Second Life and OSGrid as listed above.
+* https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc2
+* https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
 
 ## Personal Directories
 
