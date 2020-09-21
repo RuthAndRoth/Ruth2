@@ -17,7 +17,7 @@ OpenSimulator Community.
 
 ## Current Release
 
-Ruth2 v4 the current release.
+Ruth2 v4 the current release. The main Blender development kit is in the Mesh directory.
 
 ## Previous Release
 
