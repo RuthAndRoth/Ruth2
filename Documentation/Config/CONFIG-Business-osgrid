@@ -1,39 +1,43 @@
-# Ruth2 v4 applier textures - OSGrid
+# Ruth2 v4 applier textures - OSGrid - Business G-Rated
 
-# Note that the numbers in the section names do not determine where
+ Note that the numbers in the section names do not determine where
 # the thumbnails appear on the HUD, they will appear in the order listed.
 # To leave a gap use an empty section.
 
 
 # Skin textures
 
-# Eloh_Eliot_Starlight_Light
+# Eloh_Eliot_Starlight_Light_G-rated
 [skin1]
 head=0f7490d9-6b9d-428e-9dc4-2d77046b04a5
-upper=ff70fd91-2b07-46f2-bc97-3d791f863502
-lower=d476b3c7-bc91-4523-b51c-98405a5b1354
-thumbnail=f66797a6-b13f-42a7-b2fc-74ce74aefe9b
+upper=d07b046d-0be9-4268-aa90-918617b2d307
+lower=5a290688-caf9-46c6-9de0-1aedf3da3f50
+thumbnail=d34816a2-0b92-401f-be41-d4162f91d932
+# thumbnail=f66797a6-b13f-42a7-b2fc-74ce74aefe9b  (alt with no green flash)
 
-# Eloh_Eliot_Starlight_Medium
+# Eloh_Eliot_Starlight_Medium_G-rated
 [skin2]
 head=3b67e34a-2ff0-40df-9991-a78c40c07f07
-upper=3504166e-81e0-4c2b-aef4-3b5176f7d50d
-lower=b4cdea48-b45f-4ad2-ad04-1da10d7072f7
-thumbnail=37654681-35a9-44b2-8850-42cd20d781db
+upper=1e139d47-416d-4758-94e0-46b67d482f2a
+lower=c3895b9b-4c8a-41df-8cca-c00156ee8c42
+thumbnail=81ac40dc-5093-40cb-ac62-32e902c3178f
+# thumbnail=37654681-35a9-44b2-8850-42cd20d781db  (alt with no green flash)
 
-# Eloh_Eliot_Starlight_Dark
+# Eloh_Eliot_Starlight_Dark_G-rated
 [skin3]
 head=2d199676-e553-4a7b-803f-567d33352abe
-upper=eea3e964-2afb-4b0e-a5ef-a081760eda05
-lower=85b2df35-7313-4107-9bd5-6cbeb9230a0d
-thumbnail=1f8165a9-d0d4-4587-8428-999b498b89ab
+upper=b5f76a7c-dba2-4dee-8766-6c42915e59d6
+lower=d3357a93-edf3-49b1-811e-25dbb5fa549b
+thumbnail=2f12d574-c12e-4f1f-ac4f-3d4f95ff2d57
+# thumbnail=1f8165a9-d0d4-4587-8428-999b498b89ab (alt with no green flash)
 
-# Eloh_Eliot_Starlight_Darker
+# Eloh_Eliot_Starlight_Darker_G-rated
 [skin4]
-head=c7acf3dc-4c39-4ee2-a096-18222ecea86c
-upper=e277eb54-7b40-454d-9434-f11143142d2d
-lower=2df1a1e2-f733-4a85-91b5-0568658b5f91
-thumbnail=eaa381a3-ac7d-4e28-9d8b-fcd21d51204e
+head=eaa381a3-ac7d-4e28-9d8b-fcd21d51204e
+upper=4400025e-a33b-4f1a-aa28-6224acf61870
+lower=57787937-b83f-4745-a4d5-7c723ad60766
+thumbnail=9fac8b15-9a94-4d78-9c39-a3cc7ee2f124
+# thumbnail=eaa381a3-ac7d-4e28-9d8b-fcd21d51204e (alt with no green flash)
 
 #
 [skin5]
@@ -49,19 +53,19 @@ upper=16b78e85-c6b5-4b81-b62e-9ec59e5a6995
 lower=81af005e-8e09-4bc5-b1fd-3a5f26144b90
 thumbnail=94acc967-abc6-40cc-9cf3-a0d34f07d5e2
 
-# U4U Skin from Ruth2 v3 HUD Slot 1
+#
 [skin7]
-head=626abd63-4aa8-434b-b9ab-7ad3b8a71482
-upper=0d9956c0-98f5-4914-984b-382644ee502d
-lower=24cdde95-4afd-4bfa-b172-a09b2ec71281
-thumbnail=3a6359e1-d4e2-4132-884e-74e144e2ded7
+head=
+upper=
+lower=
+thumbnail=
 
-# U4U Skin from Ruth2 v3 HUD Slot 5
+#
 [skin8]
-head=30259672-69ac-477a-b0c9-dccca78c20d1
-upper=6aade859-4f2d-4d1f-b98d-929e8f5c0fe0
-lower=74600efc-af08-42de-a121-d712a51b1386
-thumbnail= 00ac60ef-43a0-4f59-9ca6-b364f0b64886
+head=
+upper=
+lower=
+thumbnail=
 
 #
 [skin9]
@@ -77,12 +81,14 @@ upper=
 lower=
 thumbnail=
 
-# Linda Kellie Female 1 Natural
+# Linda Kellie Female 1 Business
 [skin11]
-head=7c3c318d-2d83-4d96-8b60-3d5fe4cf02e5
-upper=5a2121f4-aece-4b7f-9bd0-c5ea9ba8a058
-lower=a047f34a-35d8-4cb9-a0d8-8a4719b52140
-thumbnail=b7103aab-69f4-4f79-9541-df19d3230d68
+head=91398058-8f69-4676-9bf3-14b10463adc5
+upper=396e4252-794e-4a45-b7b9-f1af05226f38
+lower=1269652d-2f10-4776-910c-672cf7b8d31a
+thumbnail=d4e31122-0157-4da0-9bcd-5f673547f22e
+# thumbnail=b7103aab-69f4-4f79-9541-df19d3230d68 (alt with no green flash)
+
 
 # Eye textures
 
