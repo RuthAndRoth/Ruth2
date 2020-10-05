@@ -10,6 +10,7 @@
 // v3.4 20May2020 <seriesumei@avimail.org> - Only listen when attached by default
 // v3.5 19Jun2020 <seriesumei@avimail.org> - Changes for OpenSim 0.8 compatibility
 // v3.6 16Aug2020 <seriesumei@avimail.org> - Rename fingernail and toenail regions
+// v3.7 04Oct2020 <seriesumei@avimail.org> - Add a workaround for Halcyon
 
 // This is a heavily modified version of Shin's RC3 receiver scripts for
 // head, body, hands and feet combined into one.
@@ -442,6 +443,13 @@ default {
             if (data == EOF) {
                 // Do end work here
                 reading_notecard = FALSE;
+
+                // Add a work-aound for Halcyon behaviour in llList2ListStrided()
+                // that we seen when the config notecard only has a single data
+                // line in a section.  By adding a list element that will otherwise
+                // be ignored we avoid passing in a list of length 1.
+                element_map += [0];
+
                 late_init();
                 llOwnerSay("Finished reading notecard " + notecard_name);
                 llOwnerSay("Free memory " + (string)llGetFreeMemory() + "  Limit: " + (string)MEM_LIMIT);
