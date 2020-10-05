@@ -6,6 +6,7 @@
 // v3.1 05May2020 <seriesumei@avimail.org> - Merge Ruth2 and Roth2 alpha HUD creation
 // v3.2 07Jun2020 <seriesumei@avimail.org> - Update Ruth alpha HUD
 // v3.3 30Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
+// v3.4 25Sep2020 <seriesumei@avimail.org> - Add Halcyon UUIDs
 
 // This builds a multi-paned HUD for Ruth/Roth that includes the existing
 // alpha HUD mesh (for Ruth) or a new alpha HUD (for Roth) and adds panes
@@ -111,7 +112,7 @@ string GetGridName() {
     string grid_name;
     // Comment out this line to run in SecondLife, un-comment it to run in OpenSim
     grid_name = osGetGridName();
-    if (is_SL()) {
+    if (is_SL() || grid_name == "") {
         grid_name = llGetEnv("sim_channel");
     }
     llOwnerSay("grid: " + grid_name);
@@ -168,7 +169,8 @@ configure() {
         }
         alpha_doll_pos = <0.0, 0.57, 0.18457>;
     } else {
-        if (GetGridName() == "OSGrid") {
+        string grid_name = GetGridName();
+        if (grid_name == "OSGrid") {
             // Textures in OSGrid
             // TODO: Bad assumption that OpenSim == OSGrid, how do we detect
             //       which grid?  osGetGridName() is an option but does not
@@ -196,7 +198,31 @@ configure() {
                 fingernails_shape_texture = "fe777245-4fa2-4834-b794-0c29fa3e1fcf";
             }
             alpha_doll_pos = <0.0, 0.75, 0.0>;
-        } else {
+        }
+        else if (grid_name == "Halcyon Server") {
+            hud_texture = "a56e7b7a-ca22-49a9-b927-ac537794dc12";               // r2_hud_gradient
+            skin_texture = "43fdf8b4-0016-40bf-91c4-979732b68c5a";              // r2_hud_skin
+            if (ROTH) {
+                alpha_doll_texture = "";
+                alpha_button_texture = "";
+                header_texture = "";
+                options_texture = "";
+            }
+            else if (!RUTH_V3) {
+                alpha_doll_texture = "6588ee6e-2f51-471e-9107-7a18f954b0fa";    // ru2_hud_alpha_doll
+                alpha_button_texture = "c717dbb2-a95a-485e-99a2-ee384b821ba8";  // r2_hud_alpha_buttons
+                header_texture = "ee3550de-988b-4c67-93aa-c5615a2c3484";        // ru2_v3_header
+                options_texture = "47483788-6b42-4470-96ae-f06bfa3d6d09";       // ru2_hud_options
+                fingernails_shape_texture = TEXTURE_TRANSPARENT;
+            } else {
+                alpha_button_texture = "";      // r2_hud_alpha_buttons
+                header_texture = "";            // ru2_v3_header
+                options_texture = "";           // ru2_hud_options
+                fingernails_shape_texture = "";
+            }
+            alpha_doll_pos = <0.0, 0.75, 0.0>;
+        }
+        else {
             log("OpenSim detected but grid " + GetGridName() + " unknown, using blank textures");
             hud_texture = TEXTURE_BLANK;
             header_texture = TEXTURE_BLANK;
