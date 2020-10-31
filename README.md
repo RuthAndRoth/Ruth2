@@ -17,15 +17,14 @@ OpenSimulator Community.
 
 ## Current Release
 
-Ruth2 v4 the current release.
+Ruth2 v4 the current release. The main Blender development kit is in the Mesh directory.
 
 ## Previous Release
 
-Ruth2 v3 is the current release and is best obtained from the Ruth repository (not this Ruth2 one) via the "archive-ruth-rc3" branch.
-https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
+Previous releases of Ruth2 may be found in the "archive-ruth-rc2" and "archive-ruth-rc3" branches of the old Ruth repo on Github (not this Ruth2 one) and in a number of places both in Second Life and OSGrid as listed above.
 
-Previous releases of Ruth2 may be found in the archive-ruth-rc2 and archice-ruth-rc3 branches of
-the old Ruth repo on Github and in a number of places both in Second Life and OSGrid as listed above.
+* https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc2
+* https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3
 
 ## Personal Directories
 
@@ -37,6 +36,7 @@ they are merged into the master release directories.
 Directories for contributors that have fallen inactive will be periodically removed
 from the current master (usually around release time) but will always be available
 in the archive release branches.
+https://github.com/RuthAndRoth/Ruth/tree/archive-ruth-rc3/Contrib
 
 ## Upload Meshes and Artifacts
 
@@ -53,28 +53,6 @@ files.
 
 Ruth2 is AGPL licensed, other contents of this repository are also
 AGPL licensed unless otherwise indicated.  See LICENSE.md for specific details.
-
-# Changes from Ruth 2.0
-
-The Ruth2 and Roth2 repositories have been extracted from the original Ruth 2.0
-repo, retaining all Git history of the files that have been moved.  Some common
-files will be moved later to a common repo.  Below is the list of changes for the
-files present in this repo:
-
-* Animations -> Accessories/Animations
-* Clothing -> Accessories/Clothing
-* Contrib/Shin Ingen/Ruth/Uploads -> Artifacts/Collada
-* Licenses.txt -> LICENSE.md
-* Mesh/Avatar Ruth -> Mesh
-  * Mesh/OSRuth2_CurrentRelease_DevKit_RC3.blend -> Mesh/ru2_DevKit_v3.blend
-  * Mesh/OSRuth2_CurrentRelease_Source_RC3.blend -> Mesh/ru2_Source_v3.blend
-* Mesh/Avatar Ruth/IARs -> Artifacts/IAR
-  * Artifacts/IAR/R2-Ruth-RC3.iar -> Artifacts/IAR/Ruth2-v3.iar
-* Mesh/Avatar Ruth/Scripts -> Scripts
-* Mesh/Avatar Ruth/Textures -> Textures
-* Mesh/Avatar Ruth/Uploads -> Artifacts/Collada
-* Shapes -> Accessories/Shapes
-* Skins -> Accessories/Skins
 
 ## Reference Files
 

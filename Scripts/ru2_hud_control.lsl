@@ -8,6 +8,7 @@
 // v2.2 13May2020 <seriesumei@avimail.org> - Rework skin panel
 // v2.3 21Jun2020 <seriesumei@avimail.org> - Updates to compile on OpenSimulator 0.8
 // v2.4 22Aug2020 <seriesumei@avimail.org> - Update for Ruth2 v4
+// v2.5 26Sep2020 <seriesumei@avimail.org> - Set the IMG_USE_BAKED_* constants
 
 // This is a heavily modified version of Shin's RC3 HUD scripts for alpha
 // and skin selections.
@@ -42,6 +43,13 @@ string nail_texture;
 // Save last selected color
 vector fingernail_color = ZERO_VECTOR;
 vector toenail_color = ZERO_VECTOR;
+
+// Halcyon and older OpenSimulator builds may not have the Bakes on Mesh
+// constants defined.  If you get a compiler error that these are not defined
+// uncomment the following lines:
+// string IMG_USE_BAKED_AUX1 = "9742065b-19b5-297c-858a-29711d539043";
+// string IMG_USE_BAKED_AUX2 = "03642e83-2bd1-4eb9-34b4-4c47ed586d2d";
+// string IMG_USE_BAKED_AUX3 = "edd51b77-fc10-ce7a-4b3d-011dfc349e4f";
 
 // Nail BoM channels
 string FINGERNAILS_BOM = IMG_USE_BAKED_AUX1;

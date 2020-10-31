@@ -5,6 +5,7 @@
 // v2.0 - 09May2020 <seriesumei@avimail.org> - New applier script
 // v2.1 - 21Jun2020 <seriesumei@avimail.org> - Rework skin data to not use JSON functions
 // v2.2 - 22Aug2020 <seriesumei@avimail.org> - Add nail colors to config notecard
+// v2.3 - 26Sep2020 <seriesumei@avimail.org> - Set the IMG_USE_BAKED_* constants
 
 // This script loads a notecard with skin and eye texture UUIDs
 // and listens for link messages with button names to
@@ -28,10 +29,10 @@
 // Halcyon and older OpenSimulator builds may not have the Bakes on Mesh
 // constants defined.  If you get a compiler error that these are not defined
 // uncomment the following lines:
-// string IMG_USE_BAKED_UPPER = "";
-// string IMG_USE_BAKED_LOWER = "" ;
-// string IMG_USE_BAKED_HEAD = "";
-// string IMG_USE_BAKED_EYES = "";
+// string IMG_USE_BAKED_HEAD = "5a9f4a74-30f2-821c-b88d-70499d3e7183";
+// string IMG_USE_BAKED_UPPER = "ae2de45c-d252-50b8-5c6e-19f39ce79317";
+// string IMG_USE_BAKED_LOWER = "24daea5f-0539-cfcf-047f-fbc40b2786ba" ;
+// string IMG_USE_BAKED_EYES = "52cc6bb6-2ee5-e632-d3ad-50197b1dcb8a";
 
 integer DEFAULT_APP_ID = 20181024;
 integer app_id;

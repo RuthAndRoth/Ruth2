@@ -1,0 +1,127 @@
+# Ruth2 v4 applier textures - OSGrid
+
+# Note that the numbers in the section names do not determine where
+# the thumbnails appear on the HUD, they will appear in the order listed.
+# To leave a gap use an empty section.
+
+
+# Skin textures
+
+# Eloh_Eliot_Starlight_Light
+[skin1]
+head=0f7490d9-6b9d-428e-9dc4-2d77046b04a5
+upper=ff70fd91-2b07-46f2-bc97-3d791f863502
+lower=d476b3c7-bc91-4523-b51c-98405a5b1354
+thumbnail=f66797a6-b13f-42a7-b2fc-74ce74aefe9b
+
+# Eloh_Eliot_Starlight_Medium
+[skin2]
+head=3b67e34a-2ff0-40df-9991-a78c40c07f07
+upper=3504166e-81e0-4c2b-aef4-3b5176f7d50d
+lower=b4cdea48-b45f-4ad2-ad04-1da10d7072f7
+thumbnail=37654681-35a9-44b2-8850-42cd20d781db
+
+# Eloh_Eliot_Starlight_Dark
+[skin3]
+head=2d199676-e553-4a7b-803f-567d33352abe
+upper=eea3e964-2afb-4b0e-a5ef-a081760eda05
+lower=85b2df35-7313-4107-9bd5-6cbeb9230a0d
+thumbnail=1f8165a9-d0d4-4587-8428-999b498b89ab
+
+# Eloh_Eliot_Starlight_Darker
+[skin4]
+head=c7acf3dc-4c39-4ee2-a096-18222ecea86c
+upper=e277eb54-7b40-454d-9434-f11143142d2d
+lower=2df1a1e2-f733-4a85-91b5-0568658b5f91
+thumbnail=eaa381a3-ac7d-4e28-9d8b-fcd21d51204e
+
+#
+[skin5]
+head=
+upper=
+lower=
+thumbnail=
+
+# CMFF Template
+[skin6]
+head=08f57720-2b0f-4812-85d3-44575da48ff6
+upper=16b78e85-c6b5-4b81-b62e-9ec59e5a6995
+lower=81af005e-8e09-4bc5-b1fd-3a5f26144b90
+thumbnail=94acc967-abc6-40cc-9cf3-a0d34f07d5e2
+
+# U4U Skin from Ruth2 v3 HUD Slot 1
+[skin7]
+head=626abd63-4aa8-434b-b9ab-7ad3b8a71482
+upper=0d9956c0-98f5-4914-984b-382644ee502d
+lower=24cdde95-4afd-4bfa-b172-a09b2ec71281
+thumbnail=3a6359e1-d4e2-4132-884e-74e144e2ded7
+
+# U4U Skin from Ruth2 v3 HUD Slot 5
+[skin8]
+head=30259672-69ac-477a-b0c9-dccca78c20d1
+upper=6aade859-4f2d-4d1f-b98d-929e8f5c0fe0
+lower=74600efc-af08-42de-a121-d712a51b1386
+thumbnail= 00ac60ef-43a0-4f59-9ca6-b364f0b64886
+
+#
+[skin9]
+head=
+upper=
+lower=
+thumbnail=
+
+#
+[skin10]
+head=
+upper=
+lower=
+thumbnail=
+
+# Linda Kellie Female 1 Natural
+[skin11]
+head=7c3c318d-2d83-4d96-8b60-3d5fe4cf02e5
+upper=5a2121f4-aece-4b7f-9bd0-c5ea9ba8a058
+lower=a047f34a-35d8-4cb9-a0d8-8a4719b52140
+thumbnail=b7103aab-69f4-4f79-9541-df19d3230d68
+
+# Eye textures
+
+# Ada Radius Aqua
+[eyes1]
+eyes=888159d1-9a76-428b-8bd4-09bbe839ad4d
+thumbnail=a249e37c-9fcd-4db6-858d-d76ed58f5666
+
+# Ada Radius Green
+[eyes2]
+eyes=998384dd-1355-4c1e-8922-786cd8ac4f27
+thumbnail=e01740d9-4d10-4805-afcc-a46730affcd8
+
+# Ada Radius Indigo
+[eyes3]
+eyes=5e449887-e7db-43ae-96b9-f6eff575063e
+thumbnail=fc8d8e1b-0678-4eb0-b649-e7f359da5488
+
+# Ada Radius Gray
+[eyes4]
+eyes=3bcab2c3-f2db-4a49-8d75-fe5d12191f4e
+thumbnail=6150ef20-ede4-44e2-9f7e-74ea4f9b77c6
+
+# Ada Radius Black
+[eyes5]
+eyes=3f9e2555-7d39-4b00-86c5-ba9f717d0552
+thumbnail=0c5bcc87-1cce-433e-b26e-5bf700bb08a0
+
+
+# Nail colors
+
+[nails]
+1=<0.63, 0.40, 0.37>
+2=<0.97, 0.57, 0.97>
+3=<0.86, 0.14, 0.63>
+4=<0.78, 0.19, 0.41>
+5=<1.00, 0.00, 0.00>
+6=<0.75, 0.00, 0.00>
+7=<0.50, 0.00, 0.00>
+8=<0.25, 0.00, 0.00>
+9=<0.12, 0.12, 0.11>
+texture=7aa8a1f6-b1d1-4395-a335-f4ac58c37381
