@@ -5,7 +5,7 @@
   future improvements, which under the AGPL license should be made freely
   and publicly available.
 
-* The .blend file, Colada (DAE) exports of parts and the UV maps
+* The .blend file, Collada (DAE) exports of parts and the UV maps
   are copied from Ruth2/Contrib/Ada Radius as at 2-Sep-2020.
 
 * The .blend file is equivalent to Ada Radius Draft 11.
