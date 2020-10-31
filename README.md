@@ -49,6 +49,10 @@ usually updated at releases.  They will maintain consistent UUIDs for the
 assets to minimize duplication when uploading multiple releases for unchanged
 files.
 
+## Clothing Creator Guide
+
+Ruth2 v4 needs both the Blender mesh and a suitable avatar armature to allow for rigging and skinning in order to produce fitted mesh clothing. For assistance, see https://github.com/RuthAndRoth/Ruth2/wiki/Clothing-Creator-Guide
+
 ## Licenses
 
 Ruth2 is AGPL licensed, other contents of this repository are also
