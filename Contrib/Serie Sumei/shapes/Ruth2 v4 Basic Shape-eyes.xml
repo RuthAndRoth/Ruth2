@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<linden_genepool version="1.0">
+  <archetype name="???">
+      <param id="98" name="eye lightness" display="Eye Lightness" value="0.100" u8="25" type="param_color" wearable="eyes" group="0"/>    
+      <param id="99" name="eye color" display="Eye Color" value="0.500" u8="127" type="param_color" wearable="eyes" group="0"/>    
+    </archetype>
+</linden_genepool>

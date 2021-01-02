@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<linden_genepool version="1.0">
+  <archetype name="???">
+      <param id="16" name="pointy_eyebrows" display="Eyebrow Points" value="0.000" u8="36" type="param_driver" wearable="hair" group="0"/>    
+      <param id="31" name="arced_eyebrows" display="Eyebrow Arc" value="0.500" u8="63" type="param_driver" wearable="hair" group="0"/>    
+      <param id="112" name="rainbow color" display="Rainbow Color" value="0.000" u8="0" type="param_color" wearable="hair" group="0"/>    
+      <param id="113" name="red hair" display="Red Hair" value="0.000" u8="0" type="param_color" wearable="hair" group="0"/>    
+      <param id="114" name="blonde hair" display="Blonde Hair" value="0.500" u8="127" type="param_color" wearable="hair" group="0"/>    
+      <param id="115" name="white hair" display="White Hair" value="0.000" u8="0" type="param_color" wearable="hair" group="0"/>    
+      <param id="119" name="eyebrow size" display="Eyebrow Size" value="0.500" u8="127" type="param_driver" wearable="hair" group="0"/>    
+      <param id="130" name="front fringe" display="Front Fringe" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="131" name="side fringe" display="Side Fringe" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="132" name="back fringe" display="Back Fringe" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="133" name="hair front" display="Hair Front" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="134" name="hair sides" display="Hair Sides" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="135" name="hair back" display="Hair Back" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="136" name="hair sweep" display="Hair Sweep" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="137" name="hair tilt" display="Hair Tilt" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="140" name="hair_part_middle" display="Middle Part" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="141" name="hair_part_right" display="Right Part" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="142" name="hair_part_left" display="Left Part" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="143" name="hair_sides_full" display="Full Hair Sides" value="-4.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="177" name="hair_rumpled" display="Rumpled Hair" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="181" name="hair_big_front" display="Big Hair Front" value="-1.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="182" name="hair_big_top" display="Big Hair Top" value="-1.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="183" name="hair_big_back" display="Big Hair Back" value="-1.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="184" name="hair_spiked" display="Spiked Hair" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="192" name="bangs_part_middle" display="Part Bangs" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="674" name="hair_shear_back" display="Shear Back" value="-1.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="750" name="eyebrow density" display="Eyebrow Density" value="0.700" u8="178" type="param_driver" wearable="hair" group="0"/>    
+      <param id="754" name="hair_taper_back" display="Taper Back" value="-1.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="755" name="hair_taper_front" display="Taper Front" value="-1.500" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="757" name="lower_eyebrows" display="Eyebrow Height" value="-1.000" u8="127" type="param_driver" wearable="hair" group="0"/>    
+      <param id="762" name="hair_shear_front" display="Shear Front" value="0.000" u8="0" type="param_morph" wearable="hair" group="0"/>    
+      <param id="763" name="hair volume" display="Hair Volume" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="785" name="pigtails" display="Pigtails" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+      <param id="789" name="ponytail" display="Ponytail" value="0.000" u8="0" type="param_driver" wearable="hair" group="0"/>    
+    </archetype>
+</linden_genepool>

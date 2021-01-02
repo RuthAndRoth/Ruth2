@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<linden_genepool version="1.0">
+  <archetype name="???">
+      <param id="1" name="big_brow" display="Brow Size" value="0.000" u8="33" type="param_driver" wearable="shape" group="0"/>    
+      <param id="2" name="nose_big_out" display="Nose Size" value="0.000" u8="61" type="param_driver" wearable="shape" group="0"/>    
+      <param id="4" name="broad_nostrils" display="Nostril Width" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="5" name="cleft_chin" display="Chin Cleft" value="0.000" u8="23" type="param_morph" wearable="shape" group="0"/>    
+      <param id="6" name="bulbous_nose_tip" display="Nose Tip Shape" value="0.000" u8="58" type="param_driver" wearable="shape" group="0"/>    
+      <param id="7" name="weak_chin" display="Chin Angle" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="8" name="double_chin" display="Chin-Neck" value="0.000" u8="63" type="param_driver" wearable="shape" group="0"/>    
+      <param id="10" name="sunken_cheeks" display="Lower Cheeks" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="11" name="noble_nose_bridge" display="Upper Bridge" value="0.000" u8="63" type="param_driver" wearable="shape" group="0"/>    
+      <param id="12" name="jowls" display="Jowls" value="0.000" u8="42" type="param_morph" wearable="shape" group="0"/>    
+      <param id="13" name="cleft_chin_upper" display="Upper Chin Cleft" value="0.000" u8="0" type="param_morph" wearable="shape" group="0"/>    
+      <param id="14" name="high_cheek_bones" display="Cheek Bones" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="15" name="ears_out" display="Ear Angle" value="0.000" u8="63" type="param_driver" wearable="shape" group="0"/>    
+      <param id="17" name="square_jaw" display="Jaw Shape" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="18" name="puffy_upper_cheeks" display="Upper Cheeks" value="0.000" u8="95" type="param_driver" wearable="shape" group="0"/>    
+      <param id="19" name="upturned_nose_tip" display="Nose Tip Angle" value="0.000" u8="153" type="param_driver" wearable="shape" group="0"/>    
+      <param id="20" name="bulbous_nose" display="Nose Thickness" value="0.000" u8="63" type="param_driver" wearable="shape" group="0"/>    
+      <param id="21" name="upper_eyelid_fold" display="Upper Eyelid Fold" value="0.000" u8="34" type="param_driver" wearable="shape" group="0"/>    
+      <param id="22" name="attached_earlobes" display="Attached Earlobes" value="0.000" u8="0" type="param_morph" wearable="shape" group="0"/>    
+      <param id="23" name="baggy_eyes" display="Eye Bags" value="0.000" u8="63" type="param_driver" wearable="shape" group="0"/>    
+      <param id="24" name="wide_eyes" display="Eye Opening" value="0.000" u8="109" type="param_driver" wearable="shape" group="0"/>    
+      <param id="25" name="wide_lip_cleft" display="Lip Cleft" value="0.000" u8="88" type="param_driver" wearable="shape" group="0"/>    
+      <param id="27" name="wide_nose_bridge" display="Bridge Width" value="0.000" u8="132" type="param_driver" wearable="shape" group="0"/>    
+      <param id="35" name="big_ears" display="Ear Size" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="155" name="lip width" display="Lip Width" value="0.000" u8="104" type="param_driver" wearable="shape" group="0"/>    
+      <param id="185" name="deep_chin" display="Chin Depth" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="186" name="egg_head" display="Egg Head" value="0.000" u8="144" type="param_morph" wearable="shape" group="1"/>    
+      <param id="193" name="head shape" display="Head Shape" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="196" name="eye spacing" display="Eye Spacing" value="0.000" u8="170" type="param_driver" wearable="shape" group="0"/>    
+      <param id="505" name="lip thickness" display="Lip Thickness" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="506" name="mouth_height" display="Mouth Position" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="517" name="wide_nose" display="Nose Width" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="518" name="eyelashes_long" display="Eyelash Length" value="0.000" u8="42" type="param_morph" wearable="shape" group="0"/>    
+      <param id="629" name="forehead angle" display="Forehead Angle" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="647" name="squash_stretch_head" display="Head Stretch" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="650" name="eyelid_corner_up" display="Outer Eye Corner" value="0.000" u8="132" type="param_driver" wearable="shape" group="0"/>    
+      <param id="653" name="tall_lips" display="Lip Fullness" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="656" name="crooked_nose" display="Crooked Nose" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="659" name="mouth corner" display="Mouth Corner" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="662" name="face shear" display="Face Shear" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="663" name="shift_mouth" display="Shift Mouth" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="664" name="pop_eye" display="Eye Pop" value="0.000" u8="127" type="param_morph" wearable="shape" group="0"/>    
+      <param id="665" name="jaw_jut" display="Jaw Jut" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="682" name="head size" display="Head Size" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="690" name="eye size" display="Eye Size" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="758" name="lower_bridge_nose" display="Lower Bridge" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="759" name="low_septum_nose" display="Nostril Division" value="0.500" u8="153" type="param_driver" wearable="shape" group="0"/>    
+      <param id="760" name="jaw_angle" display="Jaw Angle" value="0.000" u8="95" type="param_driver" wearable="shape" group="0"/>    
+      <param id="764" name="lip_cleft_deep" display="Lip Cleft Depth" value="0.000" u8="74" type="param_driver" wearable="shape" group="0"/>    
+      <param id="765" name="puffy_lower_lids" display="Puffy Eyelids" value="0.000" u8="27" type="param_driver" wearable="shape" group="0"/>    
+      <param id="769" name="eye depth" display="Eye Depth" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="773" name="head length" display="Head Length" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="796" name="pointy_ears" display="Ear Tips" value="0.000" u8="30" type="param_driver" wearable="shape" group="0"/>    
+      <param id="799" name="lip ratio" display="Lip Ratio" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="880" name="eyelid_inner_corner_up" display="Inner Eye Corner" value="0.000" u8="132" type="param_driver" wearable="shape" group="0"/>    
+    </archetype>
+</linden_genepool>

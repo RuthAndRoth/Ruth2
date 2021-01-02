@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<linden_genepool version="1.0">
+  <archetype name="???">
+      <param id="33" name="height" display="Height" value="0.000" u8="136" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="34" name="thickness" display="Body Thickness" value="0.000" u8="81" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="36" name="shoulders" display="Shoulders" value="-0.500" u8="103" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="37" name="hip width" display="Hip Width" value="0.000" u8="136" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="38" name="torso length" display="Torso Length" value="0.000" u8="127" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="80" name="male" display="male" value="0.000" u8="0" type="param_driver" wearable="shape" group="0"/>    
+      <param id="105" name="breast size" display="Breast Size" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="151" name="big_butt_legs" display="Butt Size" value="0.000" u8="0" type="param_morph" wearable="shape" group="1"/>    
+      <param id="152" name="muscular_legs" display="Leg Muscles" value="0.000" u8="0" type="param_morph" wearable="shape" group="1"/>    
+      <param id="157" name="belly size" display="Belly Size" value="0.000" u8="0" type="param_driver" wearable="shape" group="0"/>    
+      <param id="507" name="breast_gravity" display="Breast Buoyancy" value="0.000" u8="109" type="param_morph" wearable="shape" group="0"/>    
+      <param id="515" name="foot_size" display="Foot Size" value="0.000" u8="63" type="param_morph" wearable="shape" group="0"/>    
+      <param id="637" name="body fat" display="Body Fat" value="0.000" u8="0" type="param_driver" wearable="shape" group="0"/>    
+      <param id="649" name="torso muscles" display="Torso Muscles" value="0.500" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="675" name="hand size" display="Hand Size" value="0.000" u8="127" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="676" name="love_handles" display="Love Handles" value="0.000" u8="85" type="param_driver" wearable="shape" group="0"/>    
+      <param id="683" name="neck thickness" display="Neck Thickness" value="-0.150" u8="106" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="684" name="breast_female_cleavage" display="Breast Cleavage" value="0.000" u8="47" type="param_morph" wearable="shape" group="0"/>    
+      <param id="692" name="leg length" display="Leg Length" value="0.000" u8="127" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="693" name="arm length" display="Arm Length" value="0.600" u8="204" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="753" name="saddlebags" display="Saddle Bags" value="0.000" u8="36" type="param_driver" wearable="shape" group="0"/>    
+      <param id="756" name="neck length" display="Neck Length" value="0.000" u8="127" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="841" name="bowed_legs" display="Knee Angle" value="0.000" u8="127" type="param_driver" wearable="shape" group="0"/>    
+      <param id="842" name="hip length" display="Hip Length" value="0.000" u8="127" type="param_skeleton" wearable="shape" group="0"/>    
+      <param id="11001" name="hover" display="Hover" value="0.000" u8="127" type="param_skeleton" wearable="shape" group="0"/>    
+    </archetype>
+</linden_genepool>
