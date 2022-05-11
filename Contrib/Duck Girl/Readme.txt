@@ -5,7 +5,8 @@ Uploaded: 2020-03-27 04:49:27 File size: 5.15MB
 
 Ruth2.0 RC#3 DAE mesh with adjusted vertices to allow for better fit of available fitted mesh clothing
 
-https://www.mediafire.com/file/7prhyo1g7lqgdgn/RuthRC3_BakesOnMesh_Slim_2.dae/file
+DAE file from https://www.mediafire.com/file/7prhyo1g7lqgdgn/RuthRC3_BakesOnMesh_Slim_2.dae/file
+which is a temporary link. .DAE file in this directory is identical.
 
 Full body, feet, hands and head. Upload with simple physics using 00_PhysicsCube.dae
 
