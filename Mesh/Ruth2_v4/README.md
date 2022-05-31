@@ -14,6 +14,6 @@
 
 * Ruth2v4Dev.blend objects were built in Blender 2.83. Armatures and custom properties have been removed. The objects in the file are UV mapped to the legacy 2005 Second Life UV map island edges and vertex weighted to be compatible with the Second Life/OpenSim 2016 "Bento" armature, using Avastar tools from its beta 2.81.35. 
 
-* A version with a custom armature is available as of 2022-05-10, using Blender 3.0.1: Ruth2v4DevWithArmature.blend. Please see notes in the Blend file (text editor) 
+* A version with a custom armature is available as of 2022-05-10, using Blender 3.0.1: **Ruth2v4DevWithArmature.blend**. Please see notes in the Blend file (text editor) 
 
 * More information on use of the model in Blender, rigging and weighting and use with the Avastar plugin are in this Wiki page... https://github.com/RuthAndRoth/Ruth2/wiki/Blender-and-Rigging
