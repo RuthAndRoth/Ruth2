@@ -2,7 +2,7 @@ This is a further development by Pricella Paravane of Duck Girl's RuthRC3_BakesO
 
 Lower body and upper body with hands and finger nails as Collada (.dae).
 
-This can be used with the previous Duck Girl "Slim" version of the head, and three heights of feet plus toenails.
+This can be used with the previous Duck Girl "Slim" version of the Bento head, and any of the three heights of feet plus toenails.
 
 AGPL License - https://github.com/RuthAndRoth/Ruth2/tree/master/Licenses
 
