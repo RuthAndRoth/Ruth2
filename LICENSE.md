@@ -27,6 +27,7 @@ Various Authors and contributors to the Git Repo in alphabetical order are:
 * Kayaker Magic
 * Lelani Carver
 * Leona Morro
+* Linden Lab
 * Mike Dickson
 * Noxluna Nightfire
 * Sean Heavy
