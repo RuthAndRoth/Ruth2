@@ -1,0 +1,26 @@
+JustCruising
+31-Oct-2024
+
+File: Ruth2v4Dev_FeetOnly_UVMAP_to_SLMAP.blend
+
+This fixes the different UV mapping used for Ruth2 feet. (UVMAP to SLMAP). It assumes the default blender settings for 3.65 . It also can be done in 4.2 but you may have to mess with image selection in the UV workspace.
+
+The process:
+
+A) Go to UV Editing workspace, viewport shading set to 'Material preview'.
+B) Outliner editor panel/window (view layer option set) select 'Ruth2v4'.
+C) 3D Viewport editor panel/window, tab to Edit mode, deselect everything, tab to Object mode.
+
+1: Outliner panel select 'Ruth2v4FeetFlat'.
+2: 3D Viewport panel tab to Edit mode, ensure all (feet vertices) selected.
+3: UV Editor panel, menu option 'UV', click 'Copy UVs'.
+4: 3D Viewport tab to Object mode, select 'Ruth2v4FeetFlat', shift select body 'Ruth2v4', Ctrl-J to join.
+5: Tab to edit mode, ensure feet selected, 'U' to UV Mapping, select 'Unwrap'.
+6: UV Editor panel, 'A' select all, menu option 'UV", click 'Paste UV's'.
+7: Properties panel, Data tab, 'UV Maps' dropdown, select and delete 'UVMAP' leaving 'SLMAP'.
+8: 3D Viewport press P select 'Selection', tab to Object mode.
+9: Outliner panel select 'Ruth2v4.001' rename as 'Ruth2v4FeetFlat'.
+
+Repeat steps 1 to 9 replacing Ruth2v4FeetFlat with Ruth2v4FeetHigh and then Ruth2v4FeetMedium.
+
+I guess this method can be used for anything else has a UV map that is not the SLMAP used by the majority of the project. Hope this is useful.
